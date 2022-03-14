@@ -35,3 +35,4 @@ if (function_exists('is_multisite') && is_multisite()) {
 }
 
 require_once(plugin_dir_path( __FILE__ ) . 'includes/gopaySDK/factory.php');
+require_once(plugin_dir_path( __FILE__ ) . 'includes/WooCommerce_GoPay_Gateway.php');
