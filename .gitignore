@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/sublimetext
 # Edit at https://www.toptal.com/developers/gitignore?templates=sublimetext
 
+# folders
+vendor/
+.idea/
+
 ### macOS ###
 # General
 .DS_Store
