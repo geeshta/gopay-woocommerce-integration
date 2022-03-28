@@ -48,6 +48,7 @@ function init_woocommerce_gopay_gateway()
       $this->supported_shipping_methods = Woocommerce_Gopay_Options::supported_shipping_methods();
       $this->supported_payment_methods = Woocommerce_Gopay_Options::supported_payment_methods();
       $this->supported_banks = Woocommerce_Gopay_Options::supported_banks();
+      $this->iso2_to_iso3 = Woocommerce_Gopay_Options::iso2_to_iso3();
 
       $this->init_form_fields();
       $this->init_settings();
@@ -342,26 +343,78 @@ function init_woocommerce_gopay_gateway()
      */
     public function process_payment($order_id)
     {
-      $order = wc_get_order($order_id);
+        $order = wc_get_order($order_id);
+        $test = $this->test == "yes" ? true : false;
 
-      $options = get_option("woocommerce_wc_gopay_gateway_settings");
-      $goid = $options["goid"];
-      $client_id = $options["client_id"];
-      $client_secret = $options["client_secret"];
-      $test = $options["test"] == "yes" ? true : false;
+        $gopay = GoPay\payments([
+            "goid" => $this->goid,
+            "clientId" => $this->client_id,
+            "clientSecret" => $this->client_secret,
+            "isProductionMode" => $test,
+            "scope" => GoPay\Definition\TokenScope::ALL,
+            "language" => GoPay\Definition\Language::ENGLISH,
+            "timeout" => 30,
+        ]);
 
-      $gopay = GoPay\payments([
-        "goid" => $goid,
-        "clientId" => $client_id,
-        "clientSecret" => $client_secret,
-        "isProductionMode" => $test,
-        "scope" => GoPay\Definition\TokenScope::ALL,
-        "language" => GoPay\Definition\Language::ENGLISH,
-        "timeout" => 30,
+        error_log(print_r($gopay, true));
+
+        if (isset($_POST["gopay_payment_method"])) {
+            $default_payment_instrument = $_POST["gopay_payment_method"];
+        } else {
+            $default_payment_instrument = "PAYMENT_CARD";
+        }
+
+        $items = array();
+        foreach($order->get_items() as $item){
+            $items[] = [
+                'type' => $item['type'],
+                'name' => $item['name'],
+                'product_url' => get_permalink($item['product_id']),
+                'amount' => $item['total'],
+                'count' => $item['quantity'],
+                'vat_rate' => 'RATE_4' // Change it - select the correct rate
+            ];
+        }
+
+        $callback = [
+            'return_url' => add_query_arg(array(
+                'order-pay' => $order->get_id(),
+                'key' => $order->get_order_key()
+            )),
+            'notification_url' => 'https://wordpress.test/' // Change it
+        ];
+
+      $response = $gopay->createPayment([
+        'payer' => [
+            'default_payment_instrument' => $default_payment_instrument,
+            'allowed_payment_instruments' => $this->enable_gopay_payment_methods,
+            'default_swift' => 'FIOBCZPP', // Change it to be the one chosen by the user
+            'allowed_swifts' => $this->enable_banks,
+            'contact' => [
+                'first_name' => $order->billing_first_name,
+                'last_name' => $order->billing_last_name,
+                'email' => $order->billing_email,
+                'phone_number' => $order->billing_phone,
+                'city' => $order->billing_city,
+                'street' => $order->billing_address_1,
+                'postal_code' => $order->billing_postcode,
+                'country_code' => $this->iso2_to_iso3[$order->billing_country]
+            ]
+        ],
+        'amount' => $order->total,
+        'currency' => $order->get_currency(), // Change it - check if the currency is one of the allowed currencies
+        'order_number' => $order->get_order_number(),
+        'order_description' => 'order',
+        'items' => $items,
+        'additional_params' => [
+          ['name' => 'invoicenumber',
+            'value' => $order->get_order_number()
+        ]],
+        'callback' => $callback,
+        'lang' => GoPay\Definition\Language::ENGLISH // Change it to the one specified
       ]);
 
-      error_log("TEST");
-      error_log(print_r($gopay, true));
+      error_log(print_r($response, true));
     }
 
     /**
