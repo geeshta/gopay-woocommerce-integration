@@ -73,6 +73,7 @@ function init_woocommerce_gopay_gateway()
       $this->enable_banks = $this->get_option("enable_banks", []);
 
       #add_filter('woocommerce_currencies', array('Woocommerce_Gopay_Options', 'supported_currencies'));
+      add_action('plugins_loaded', array('Woocommerce_Gopay_Admin_Menu', 'create_menu'));
       add_action("woocommerce_update_options_payment_gateways_" . $this->id, [
         $this,
         "process_admin_options",
@@ -391,7 +392,7 @@ function init_woocommerce_gopay_gateway()
         }
 
         $callback = [
-            'return_url' => wc_get_checkout_url(), // $this->get_return_url($order),
+            'return_url' => $this->get_return_url($order), // wc_get_checkout_url(),
             'notification_url' => get_home_url() // Change it
         ];
 
@@ -427,6 +428,9 @@ function init_woocommerce_gopay_gateway()
 
       // Change it - Check status of the response, if ok continue, otherwise status failed
 
+      #$order->set_status('on-hold');
+      $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
+      $order->save();
       return [
           "result" => "success",
           "redirect" => $response->json['gw_url']

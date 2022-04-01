@@ -85,15 +85,80 @@ function woocommerce_gopay_deactivation()
 }
 
 // Load files
-require_once WOOCOMMERCE_GOPAY_DIR . "vendor/autoload.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
-  "includes/class-woocommerce-gopay-options.php";
+    "vendor/autoload.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
-  "includes/class-woocommerce-gopay-notices.php";
+    "admin/class-woocommerce-gopay-admin.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
-  "includes/class-woocommerce-gopay-activator.php";
+    "includes/class-woocommerce-gopay-options.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
-  "includes/class-woocommerce-gopay-deactivator.php";
-require_once WOOCOMMERCE_GOPAY_DIR . "includes/class-woocommerce-gopay.php";
+    "includes/class-woocommerce-gopay-notices.php";
+require_once WOOCOMMERCE_GOPAY_DIR .
+    "includes/class-woocommerce-gopay-activator.php";
+require_once WOOCOMMERCE_GOPAY_DIR .
+    "includes/class-woocommerce-gopay-deactivator.php";
+require_once WOOCOMMERCE_GOPAY_DIR .
+    "includes/class-woocommerce-gopay.php";
+
+// Scheduling a task to be executed and check if order was paid
+// Change it - Create a new class file/class to hold the functions below
+function gopay_cron_schedules($schedules){
+    if(!isset($schedules["10sec"])){
+        $schedules["10sec"] = array(
+            'interval' => 10,
+            'display' => __('Once every 10 seconds',
+                WOOCOMMERCE_GOPAY_DOMAIN)
+        );
+    }
+    return $schedules;
+}
+add_filter('cron_schedules','gopay_cron_schedules');
+if(!wp_next_scheduled('wc_gopay_check_status', array(false))){
+    wp_schedule_event(time(), '10sec', 'wc_gopay_check_status', array(false));
+}
+function check_payment_status(){
+    $options = get_option('woocommerce_wc_gopay_gateway_settings');
+    $test = ($options['test'] == "yes") ? false : true;
+
+    $gopay = GoPay\payments([
+        "goid" => $options['goid'],
+        "clientId" => $options['client_id'],
+        "clientSecret" => $options['client_secret'],
+        "isProductionMode" => $test,
+        "scope" => GoPay\Definition\TokenScope::ALL,
+        "language" => GoPay\Definition\Language::ENGLISH,
+        "timeout" => 30,
+    ]);
+
+    $orders = wc_get_orders(array(
+            'limit'=>-1,
+            'type'=> 'shop_order',
+            'status'=> array('wc-processing', 'wc-pending')
+        )
+    );
+    foreach ($orders as $order){
+        $GoPay_Transaction_id = get_post_meta($order->get_id(), 'GoPay_Transaction_id', true);
+        $response = $gopay->getStatus($GoPay_Transaction_id);
+        if ($response->json['state'] == 'PAID'){
+            // Check if all products are either virtual or downloadable
+            $all_virtual_downloadable = true;
+            foreach ($order->get_items() as $item) {
+                $product = wc_get_product($item["product_id"]);
+                if (!$product->is_virtual() && !$product->is_downloadable()) {
+                    $all_virtual_downloadable = false;
+                    break;
+                }
+            }
+
+            if ($all_virtual_downloadable) {
+                $order->set_status('completed');
+            } else {
+                $order->set_status('processing');
+            }
+        }
+        $order->save();
+    }
+}
+add_action('wc_gopay_check_status', 'check_payment_status');
 
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');
