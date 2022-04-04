@@ -35,6 +35,7 @@ define("WOOCOMMERCE_GOPAY_DOMAIN", "woocommerce-gopay");
 define("WOOCOMMERCE_GOPAY_URL", plugin_dir_url(__FILE__));
 define("WOOCOMMERCE_GOPAY_DIR", plugin_dir_path(__FILE__));
 define("WOOCOMMERCE_GOPAY_BASENAME", plugin_basename(__FILE__));
+define("TABLE_NAME", "woocommerce_gopay_log");
 
 // Check if WooCommerce is active
 $message = __(
@@ -90,6 +91,8 @@ require_once WOOCOMMERCE_GOPAY_DIR .
 require_once WOOCOMMERCE_GOPAY_DIR .
     "admin/class-woocommerce-gopay-admin.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
+    "includes/class-woocommerce-gopay-log.php";
+require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay-options.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay-notices.php";
@@ -99,6 +102,15 @@ require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay-deactivator.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay.php";
+
+// Register activation/deactivation hook
+register_activation_hook(__FILE__, array("Woocommerce_Gopay_Activator", "activate"));
+register_deactivation_hook(__FILE__, array("Woocommerce_Gopay_Deactivator", "deactivate"));
+
+// Load Woocommerce GoPay gateway admin page
+if (is_admin() && (!defined( 'DOING_AJAX') || !DOING_AJAX)) {
+    new Woocommerce_Gopay_Admin_Menu();
+}
 
 // Scheduling a task to be executed and check if order was paid
 // Change it - Create a new class file/class to hold the functions below

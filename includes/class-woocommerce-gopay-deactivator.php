@@ -12,12 +12,11 @@
 class Woocommerce_Gopay_Deactivator {
 
   /**
-   * Activation
+   * Deactivation
    *
-   * @since    1.0.0
+   * @since 1.0.0
    */
   public static function deactivate() {
-
   }
 
 }

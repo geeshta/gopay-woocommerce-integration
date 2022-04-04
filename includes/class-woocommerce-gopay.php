@@ -302,10 +302,11 @@ function init_woocommerce_gopay_gateway()
         //end check shipping methods
 
         // Check currency matches one of the supported currencies
-//        if (!get_woocommerce_currency() || !array_key_exists(get_woocommerce_currency(), $this->enable_currencies)) {
-//            wc_add_notice(__('Currency is not supported on GoPay', WOOCOMMERCE_GOPAY_DOMAIN), "error");
-//            return false;
-//        }
+        if (!get_woocommerce_currency() || !array_key_exists(get_woocommerce_currency(), $this->enable_currencies)) {
+            // Change it - notice is showing more than once
+            wc_add_notice(__('Currency is not supported on GoPay', WOOCOMMERCE_GOPAY_DOMAIN), "error");
+            return false;
+        }
         // end check currency
       }
 
@@ -427,7 +428,7 @@ function init_woocommerce_gopay_gateway()
       ]);
 
       // Change it - Check status of the response, if ok continue, otherwise status failed
-
+        Woocommerce_Gopay_Log::insert_log(); // Change it - pass data to be saved
       #$order->set_status('on-hold');
       $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
       $order->save();

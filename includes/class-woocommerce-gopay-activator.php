@@ -12,12 +12,36 @@
 class Woocommerce_Gopay_Activator {
 
   /**
-   * Activation and check if PHP version is higher than 5.4
-   * and woocommerce is active
+   * Run when plugin is activated
    *
-   * @since    1.0.0
+   * @since 1.0.0
    */
   public static function activate() {
+    self::create_log_table();
   }
+
+  /**
+   * Create log table if it does not exist
+   *
+   * @since 1.0.0
+   */
+  private static function create_log_table() {
+      global $wpdb;
+
+      $charset_collate = $wpdb->get_charset_collate();
+
+      $sql = "CREATE TABLE " . $wpdb->prefix . TABLE_NAME . " (
+                id bigint(255) NOT NULL AUTO_INCREMENT,
+                order_id bigint(255) NOT NULL,
+                transaction_id bigint(255) NOT NULL,
+                created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                log_level varchar(100) NOT NULL,
+                log longtext NOT NULL,
+                PRIMARY KEY  (id)
+                ) $charset_collate;";
+
+      require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+      maybe_create_table($wpdb->prefix . TABLE_NAME, $sql);
+    }
 
 }
