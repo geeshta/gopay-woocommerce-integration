@@ -1,0 +1,14 @@
+.woocommerce-gopay-menu {
+    display: block;
+    background-color: white;
+    position: center;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.woocommerce-gopay-menu h1 {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+

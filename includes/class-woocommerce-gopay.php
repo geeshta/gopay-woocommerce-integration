@@ -428,10 +428,20 @@ function init_woocommerce_gopay_gateway()
       ]);
 
       // Change it - Check status of the response, if ok continue, otherwise status failed
-        Woocommerce_Gopay_Log::insert_log(); // Change it - pass data to be saved
+
       #$order->set_status('on-hold');
       $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
       $order->save();
+
+      // Save log
+      $log = [
+          'order_id' => $order_id,
+          'transaction_id' => $response->json['id'],
+          'log_level' => 'INFO',
+          'log' => $response->json
+      ];
+      Woocommerce_Gopay_Log::insert_log($log);
+
       return [
           "result" => "success",
           "redirect" => $response->json['gw_url']

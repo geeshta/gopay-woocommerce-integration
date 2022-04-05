@@ -30,12 +30,12 @@ if (!defined("WPINC")) {
 /**
  * Constants.
  */
-define("WOOCOMMERCE_GOPAY_VERSION", "1.0.0");
 define("WOOCOMMERCE_GOPAY_DOMAIN", "woocommerce-gopay");
+define("WOOCOMMERCE_GOPAY_FULLPATH", __FILE__);
 define("WOOCOMMERCE_GOPAY_URL", plugin_dir_url(__FILE__));
 define("WOOCOMMERCE_GOPAY_DIR", plugin_dir_path(__FILE__));
 define("WOOCOMMERCE_GOPAY_BASENAME", plugin_basename(__FILE__));
-define("TABLE_NAME", "woocommerce_gopay_log");
+define("WOOCOMMERCE_GOPAY_LOG_TABLE_NAME", "woocommerce_gopay_log");
 
 // Check if WooCommerce is active
 $message = __(
@@ -145,13 +145,15 @@ function check_payment_status(){
     $orders = wc_get_orders(array(
             'limit'=>-1,
             'type'=> 'shop_order',
-            'status'=> array('wc-processing', 'wc-pending')
+            'status'=> 'wc-pending' //array('wc-pending', 'wc-on-hold')
         )
     );
     foreach ($orders as $order){
         $GoPay_Transaction_id = get_post_meta($order->get_id(), 'GoPay_Transaction_id', true);
         $response = $gopay->getStatus($GoPay_Transaction_id);
+        error_log($order->get_id());
         if ($response->json['state'] == 'PAID'){
+            error_log(print_r($response,true));
             // Check if all products are either virtual or downloadable
             $all_virtual_downloadable = true;
             foreach ($order->get_items() as $item) {
@@ -167,6 +169,15 @@ function check_payment_status(){
             } else {
                 $order->set_status('processing');
             }
+
+            // Save log
+            $log = [
+                'order_id' => $order->get_id(),
+                'transaction_id' => $response->json['id'],
+                'log_level' => 'INFO',
+                'log' => $response->json
+            ];
+            Woocommerce_Gopay_Log::insert_log($log);
         }
         $order->save();
     }

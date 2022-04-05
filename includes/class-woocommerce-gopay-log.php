@@ -11,16 +11,21 @@ class Woocommerce_Gopay_Log {
     {
     }
 
-    public static function insert_log(){ // Change it - pass as arguments data to be saved
+    public static function insert_log($log){
         global $wpdb;
 
-        $response = $wpdb->insert($wpdb->prefix . TABLE_NAME,
+        $response = $wpdb->insert($wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
             [
-                'order_id' => 0,
-                'transaction_id' => 0,
+                'order_id' => $log['order_id'],
+                'transaction_id' => $log['transaction_id'],
                 'created_at' => gmdate('Y-m-d H:i:s'),
-                'log_level' => 'TEST',
-                'log' => 'INSERTED'
+                'gmt_offset' => get_option('gmt_offset'),
+                'log_level' => $log['log_level'],
+                'log' => json_encode($log['log'])
             ]);
+
+        if ($response) {
+            error_log("LOG INSERTED");
+        }
     }
 }

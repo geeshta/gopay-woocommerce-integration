@@ -11,6 +11,51 @@ class Woocommerce_Gopay_Admin_Menu {
     {
         #$this->$options = $options;
         add_action('admin_menu', array($this, 'create_menu'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_styles'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_styles'));
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_scripts'));
+    }
+
+    /**
+     * Admin enqueue styles
+     *
+     * @since 1.0.0
+     */
+    public function admin_enqueue_styles() {
+        wp_enqueue_style( WOOCOMMERCE_GOPAY_DOMAIN .'-menu-styles',
+            WOOCOMMERCE_GOPAY_URL . 'admin/css/menu.css');
+    }
+
+    /**
+     * Admin enqueue scripts
+     *
+     * @since 1.0.0
+     */
+    public function admin_enqueue_scripts() {
+        wp_enqueue_script(WOOCOMMERCE_GOPAY_DOMAIN .'-menu-scripts',
+            WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js', array('jquery'),
+            null, true);
+    }
+
+    /**
+     * Admin enqueue bootstrap styles
+     *
+     * @since 1.0.0
+     */
+    public function admin_enqueue_bootstrap_styles() {
+        wp_enqueue_style( WOOCOMMERCE_GOPAY_DOMAIN .'-menu-bootstrap',
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" );
+    }
+
+    /**
+     * Admin enqueue bootstrap scripts
+     *
+     * @since 1.0.0
+     */
+    public function admin_enqueue_bootstrap_scripts() {
+        wp_enqueue_script( WOOCOMMERCE_GOPAY_DOMAIN .'-menu-bootstrap',
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" );
     }
 
     /**

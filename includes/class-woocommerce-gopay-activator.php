@@ -30,18 +30,19 @@ class Woocommerce_Gopay_Activator {
 
       $charset_collate = $wpdb->get_charset_collate();
 
-      $sql = "CREATE TABLE " . $wpdb->prefix . TABLE_NAME . " (
+      $sql = "CREATE TABLE " . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . " (
                 id bigint(255) NOT NULL AUTO_INCREMENT,
                 order_id bigint(255) NOT NULL,
                 transaction_id bigint(255) NOT NULL,
                 created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+                gmt_offset int NOT NULL,
                 log_level varchar(100) NOT NULL,
-                log longtext NOT NULL,
+                log JSON NOT NULL,
                 PRIMARY KEY  (id)
                 ) $charset_collate;";
 
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-      maybe_create_table($wpdb->prefix . TABLE_NAME, $sql);
+      maybe_create_table($wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME, $sql);
     }
 
 }

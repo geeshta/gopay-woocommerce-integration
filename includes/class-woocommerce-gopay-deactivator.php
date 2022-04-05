@@ -17,6 +17,18 @@ class Woocommerce_Gopay_Deactivator {
    * @since 1.0.0
    */
   public static function deactivate() {
+      #self::delete_log_table();
   }
+
+    /**
+     * Delete log table if it exists
+     *
+     * @since 1.0.0
+     */
+    private static function delete_log_table() {
+        global $wpdb;
+
+        $wpdb->query( "DROP TABLE IF EXISTS " .  $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME);
+    }
 
 }
