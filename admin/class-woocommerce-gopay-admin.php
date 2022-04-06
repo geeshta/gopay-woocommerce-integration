@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * WooCommerce GoPay admin menu
+ *
+ * Initialize plugin admin menu
+ *
+ * @package WooCommerce GoPay gateway
+ * @author argo22
+ * @link https://www.argo22.com
+ * @copyright 2022 argo22
+ * @since 1.0.0
+ */
+
 class Woocommerce_Gopay_Admin_Menu {
 
     /**

@@ -2,12 +2,11 @@
 /**
  * Messages to be loaded in the admin dashboard as notices
  *
- * @link       https://argo22.com/
- * @since      1.0.0
- *
- * @package    woocommerce-gopay
- * @subpackage woocommerce-gopay/includes
- * @author    argo22
+ * @package WooCommerce GoPay gateway
+ * @author argo22
+ * @link https://www.argo22.com
+ * @copyright 2022 argo22
+ * @since 1.0.0
  */
 class Woocommerce_Gopay_Notices {
 

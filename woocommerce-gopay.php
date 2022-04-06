@@ -31,6 +31,7 @@ if (!defined("WPINC")) {
  * Constants.
  */
 define("WOOCOMMERCE_GOPAY_DOMAIN", "woocommerce-gopay");
+define("WOOCOMMERCE_GOPAY_ID", "wc_gopay_gateway");
 define("WOOCOMMERCE_GOPAY_FULLPATH", __FILE__);
 define("WOOCOMMERCE_GOPAY_URL", plugin_dir_url(__FILE__));
 define("WOOCOMMERCE_GOPAY_DIR", plugin_dir_path(__FILE__));
@@ -101,6 +102,8 @@ require_once WOOCOMMERCE_GOPAY_DIR .
 require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay-deactivator.php";
 require_once WOOCOMMERCE_GOPAY_DIR .
+    "includes/class-woocommerce-gopay-api.php";
+require_once WOOCOMMERCE_GOPAY_DIR .
     "includes/class-woocommerce-gopay.php";
 
 // Register activation/deactivation hook
@@ -129,7 +132,7 @@ if(!wp_next_scheduled('wc_gopay_check_status', array(false))){
     wp_schedule_event(time(), '10sec', 'wc_gopay_check_status', array(false));
 }
 function check_payment_status(){
-    $options = get_option('woocommerce_wc_gopay_gateway_settings');
+    $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
     $test = ($options['test'] == "yes") ? false : true;
 
     $gopay = GoPay\payments([
@@ -151,9 +154,7 @@ function check_payment_status(){
     foreach ($orders as $order){
         $GoPay_Transaction_id = get_post_meta($order->get_id(), 'GoPay_Transaction_id', true);
         $response = $gopay->getStatus($GoPay_Transaction_id);
-        error_log($order->get_id());
         if ($response->json['state'] == 'PAID'){
-            error_log(print_r($response,true));
             // Check if all products are either virtual or downloadable
             $all_virtual_downloadable = true;
             foreach ($order->get_items() as $item) {

@@ -5,14 +5,11 @@
  *
  * Initialize the payment gateway between WooCommerce and GoPay
  *
- * @link              https://argo22.com/
- * @since             1.0.0
- * @package           woocommerce-gopay
- *
- * @package   WooCommerce GoPay gateway
- * @author    argo22
- * @link      www.argo22.com
+ * @package WooCommerce GoPay gateway
+ * @author argo22
+ * @link https://www.argo22.com
  * @copyright 2022 argo22
+ * @since 1.0.0
  */
 
 add_action("plugins_loaded", "init_woocommerce_gopay_gateway");
@@ -28,7 +25,7 @@ function init_woocommerce_gopay_gateway()
      */
     public function __construct()
     {
-      $this->id = "wc_gopay_gateway";
+      $this->id = WOOCOMMERCE_GOPAY_ID;
       // to show an image next to the gateway’s name on the frontend.
 //      $this->icon = apply_filters(
 //        "woocommerce_gopay_icon",
@@ -59,13 +56,14 @@ function init_woocommerce_gopay_gateway()
       $this->goid = $this->get_option("goid");
       $this->client_id = $this->get_option("client_id");
       $this->client_secret = $this->get_option("client_secret");
-      $this->test = $this->get_option("test");
+      $this->test = $this->get_option("test") ? false : true;
       $this->instructions = $this->get_option("instructions");
       $this->enable_shipping_methods = $this->get_option(
         "enable_shipping_methods",
         []
       );
       $this->enable_countries = $this->get_option("enable_countries", []);
+      $this->simplified_payment_method = $this->get_option("simplified_payment_method") == "yes" ? true : false;
       $this->enable_gopay_payment_methods = $this->get_option(
         "enable_gopay_payment_methods",
         []
@@ -324,22 +322,24 @@ function init_woocommerce_gopay_gateway()
 
       $enabled_payment_methods = "";
       $checked = 'checked="checked"';
-      foreach ($this->enable_gopay_payment_methods as $key => $payment_method) {
-        $enabled_payment_methods .=
-          '
+      if (!$this->simplified_payment_method) {
+          foreach ($this->enable_gopay_payment_methods as $key => $payment_method) {
+              $enabled_payment_methods .=
+                  '
         <div class="payment_method_wc_gopay_gateway_selection">
           <input class="payment_method_wc_gopay_gateway_input" name="gopay_payment_method" type="radio" id="' .
-          $payment_method .
-          '" value="' .
-          $payment_method .
-          '" ' .
-          $checked .
-          ' />
+                  $payment_method .
+                  '" value="' .
+                  $payment_method .
+                  '" ' .
+                  $checked .
+                  ' />
           <span>' .
-          $this->supported_payment_methods[$payment_method] .
-          '</span>
+                  $this->supported_payment_methods[$payment_method] .
+                  '</span>
         </div>';
-        $checked = "";
+              $checked = "";
+          }
       }
 
       echo $enabled_payment_methods;
@@ -354,7 +354,6 @@ function init_woocommerce_gopay_gateway()
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
-        $test = ($this->test == "yes") ? false : true;
 
         if (!$order->get_currency() || !array_key_exists($order->get_currency(), $this->enable_currencies)) {
             wc_add_notice(__('Currency is not supported on GoPay', WOOCOMMERCE_GOPAY_DOMAIN), "error");
@@ -364,68 +363,8 @@ function init_woocommerce_gopay_gateway()
             ];
         }
 
-        $gopay = GoPay\payments([
-            "goid" => $this->goid,
-            "clientId" => $this->client_id,
-            "clientSecret" => $this->client_secret,
-            "isProductionMode" => $test,
-            "scope" => GoPay\Definition\TokenScope::ALL,
-            "language" => GoPay\Definition\Language::ENGLISH,
-            "timeout" => 30,
-        ]);
-
-        if (isset($_POST["gopay_payment_method"])) {
-            $default_payment_instrument = $_POST["gopay_payment_method"];
-        } else {
-            $default_payment_instrument = "PAYMENT_CARD";
-        }
-
-        $items = array();
-        foreach($order->get_items() as $item){
-            $items[] = [
-                'type' => 'ITEM', // Change it
-                'name' => $item['name'],
-                'product_url' => get_permalink($item['product_id']),
-                'amount' => $item['total'] * 100,
-                'count' => $item['quantity'],
-                'vat_rate' => '0' // Change it - select the correct rate
-            ];
-        }
-
-        $callback = [
-            'return_url' => $this->get_return_url($order), // wc_get_checkout_url(),
-            'notification_url' => get_home_url() // Change it
-        ];
-
-      $response = $gopay->createPayment([
-        'payer' => [
-            'default_payment_instrument' => $default_payment_instrument, // Change the first 4 options - If enable simplified payment method selection remove them because customers cannot choose any specific payment method
-            'allowed_payment_instruments' => [$default_payment_instrument],
-            'default_swift' => 'FIOBCZPP', // Change it to be the one chosen by the user
-            'allowed_swifts' => $this->enable_banks,
-            'contact' => [
-                'first_name' => $order->billing_first_name,
-                'last_name' => $order->billing_last_name,
-                'email' => $order->billing_email,
-                'phone_number' => $order->billing_phone,
-                'city' => $order->billing_city,
-                'street' => $order->billing_address_1,
-                'postal_code' => $order->billing_postcode,
-                'country_code' => $this->iso2_to_iso3[$order->billing_country]
-            ]
-        ],
-        'amount' => $order->total * 100,
-        'currency' => $order->get_currency(),
-        'order_number' => $order->get_order_number(),
-        'order_description' => 'order',
-        'items' => $items,
-        'additional_params' => [
-          ['name' => 'invoicenumber',
-            'value' => $order->get_order_number()
-        ]],
-        'callback' => $callback,
-        'lang' => GoPay\Definition\Language::ENGLISH // Change it to the one specified
-      ]);
+      $response = Woocommerce_Gopay_API::create_payment($_POST["gopay_payment_method"],
+                                                            $order, $this->get_return_url($order));
 
       // Change it - Check status of the response, if ok continue, otherwise status failed
 

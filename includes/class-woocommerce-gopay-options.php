@@ -8,10 +8,11 @@
  * payment methods, banks, shipping methods,
  * countries and currencies 
  * 
- * @package   WooCommerce GoPay gateway
- * @author    argo22
- * @link      www.argo22.com
+ * @package WooCommerce GoPay gateway
+ * @author argo22
+ * @link https://www.argo22.com
  * @copyright 2022 argo22
+ * @since 1.0.0
  */
 
 class Woocommerce_Gopay_Options {
