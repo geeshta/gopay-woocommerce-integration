@@ -141,7 +141,8 @@ class Woocommerce_Gopay_Options {
       'IEEAPLPA' => __('IdeaBank', WOOCOMMERCE_GOPAY_DOMAIN),
       'POCZPLP4' => __('Pocztowy24', WOOCOMMERCE_GOPAY_DOMAIN),
       'IVSEPLPP' => __('Plus Bank', WOOCOMMERCE_GOPAY_DOMAIN),
-      'TOBAPLPW' => __('Toyota Bank', WOOCOMMERCE_GOPAY_DOMAIN)
+      'TOBAPLPW' => __('Toyota Bank', WOOCOMMERCE_GOPAY_DOMAIN),
+      'OTHERS' => __('Another bank', WOOCOMMERCE_GOPAY_DOMAIN)
     ];
   }
 

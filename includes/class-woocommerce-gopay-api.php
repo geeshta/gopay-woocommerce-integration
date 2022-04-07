@@ -15,7 +15,7 @@
 class Woocommerce_Gopay_API
 {
     /**
-     * Constructor for the plugin log
+     * Constructor for the plugin GoPay api
      *
      * @since 1.0.0
      */
@@ -119,5 +119,38 @@ class Woocommerce_Gopay_API
         ]);
 
         return $response;
+    }
+
+    /**
+     * GoPay get enabled payments methods
+     *
+     * @since  1.0.0
+     * @return array
+     */
+    public static function get_enabled_payment_methods(){
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+
+        $enabledPayments = $gopay->getPaymentInstruments($options["goid"], get_woocommerce_currency());
+
+        $paymentInstruments = array();
+        if ($enabledPayments->statusCode == 200){
+            foreach ($enabledPayments->json["enabledPaymentInstruments"] as $key => $paymentMethod){
+                if ($paymentMethod["paymentInstrument"] == "BANK_ACCOUNT"){
+                    $paymentInstruments[$paymentMethod["paymentInstrument"]] = array(
+                        "image" => $paymentMethod["image"]["normal"], "swifts" => array());
+                    $enabledSwifts = $paymentMethod["enabledSwifts"];
+                    foreach ($enabledSwifts as $_ => $bank) {
+                        $paymentInstruments[$paymentMethod[
+                            "paymentInstrument"]]["swifts"][$bank["swift"]] = $bank["image"]["normal"];
+                    }
+                } else {
+                    $paymentInstruments[$paymentMethod[
+                        "paymentInstrument"]] = array("image" => $paymentMethod["image"]["normal"]);
+                }
+            }
+        }
+
+        return $paymentInstruments;
     }
 }

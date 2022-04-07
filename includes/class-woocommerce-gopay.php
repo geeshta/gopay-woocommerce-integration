@@ -27,10 +27,10 @@ function init_woocommerce_gopay_gateway()
     {
       $this->id = WOOCOMMERCE_GOPAY_ID;
       // to show an image next to the gateway’s name on the frontend.
-//      $this->icon = apply_filters(
-//        "woocommerce_gopay_icon",
-//        WOOCOMMERCE_GOPAY_URL . "includes/assets/gopay.png"
-//      );
+      $this->icon = apply_filters(
+        "woocommerce_gopay_icon",
+        WOOCOMMERCE_GOPAY_URL . "includes/assets/gopay.png"
+      );
       $this->has_fields = false;
       $this->method_title = __(
         "GoPay payment gateway",
@@ -50,6 +50,12 @@ function init_woocommerce_gopay_gateway()
 
       $this->init_form_fields();
       $this->init_settings();
+
+      add_action("woocommerce_update_options_payment_gateways_" . $this->id, [
+          $this,
+          "process_admin_options",
+          ]
+      );
 
       $this->title = $this->get_option("title");
       $this->description = $this->get_option("description");
@@ -72,10 +78,6 @@ function init_woocommerce_gopay_gateway()
 
       #add_filter('woocommerce_currencies', array('Woocommerce_Gopay_Options', 'supported_currencies'));
       add_action('plugins_loaded', array('Woocommerce_Gopay_Admin_Menu', 'create_menu'));
-      add_action("woocommerce_update_options_payment_gateways_" . $this->id, [
-        $this,
-        "process_admin_options",
-      ]);
       add_action("woocommerce_thankyou_" . $this->id, [$this, "thankyou_page"]);
       add_filter(
         "woocommerce_payment_complete_order_status",
@@ -92,126 +94,212 @@ function init_woocommerce_gopay_gateway()
      */
     public function init_form_fields()
     {
-      $this->form_fields = [
-        "enabled" => [
-          "title" => __("Enable/Disable", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "checkbox",
-          "label" => __(
-            "Enable GoPay payment gateway",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "default" => "yes",
-        ],
-        "title" => [
-          "title" => __("Title", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "text",
-          "description" => __(
-            "Name of the payment method that is displayed at the checkout",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "default" => __("GoPay", WOOCOMMERCE_GOPAY_DOMAIN),
-          "css" => "width: 500px;",
-        ],
-        "description" => [
-          "title" => __("Description", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "textarea",
-          "description" => __(
-            "Description of the payment method that is displayed at the checkout",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "default" => __(
-            "Payment via GoPay gateway",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "css" => "width: 500px; min-height: 100px;",
-        ],
-        "goid" => [
-          "title" => __("GoId", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "text",
-          "css" => "width: 500px;",
-        ],
-        "client_id" => [
-          "title" => __("Client Id", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "text",
-          "css" => "width: 500px;",
-        ],
-        "client_secret" => [
-          "title" => __("Client secret", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "text",
-          "css" => "width: 500px;",
-        ],
-        "test" => [
-          "title" => __("Test mode", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "checkbox",
-          "label" => __(
-            "Enable GoPay payment gateway test mode",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "default" => "yes",
-        ],
-        "enable_shipping_methods" => [
-          "title" => __("Enable shipping methods", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "multiselect",
-          "class" => "chosen_select",
-          "options" => $this->supported_shipping_methods,
-          "desc_tip" => true,
-          "css" => "width: 500px; min-height: 50px;",
-        ],
-        "enable_countries" => [
-          "title" => __("Enable countries", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "multiselect",
-          "class" => "chosen_select",
-          "options" => $this->supported_countries,
-          "desc_tip" => true,
-          "css" => "width: 500px; min-height: 50px;",
-        ],
-        "simplified_payment_method" => [
-          "title" => __("Payment method selection", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "checkbox",
-          "label" => __(
-            "Enable simplified payment method selection",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "description" => __(
-            "If enabled, customers cannot choose any specific payment method at the checkout but they have to select the payment method once the GoPay payment gateway is invoked.",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-        ],
-        "enable_gopay_payment_methods" => [
-          "title" => __(
-            "Enable GoPay payment methods",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "type" => "multiselect",
-          "class" => "chosen_select",
-          "options" => $this->supported_payment_methods,
-          "desc_tip" => true,
-          "css" => "width: 500px; min-height: 50px;",
-        ],
-        "enable_banks" => [
-          "title" => __("Enable banks", WOOCOMMERCE_GOPAY_DOMAIN),
-          "type" => "multiselect",
-          "class" => "chosen_select",
-          "options" => $this->supported_banks,
-          "desc_tip" => true,
-          "css" => "width: 500px; min-height: 50px;",
-        ],
-        "payment_retry" => [
-          "title" => __(
-            "Payment retry payment method",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "type" => "checkbox",
-          "label" => __(
-            "Enable payment retry using the same payment metyhod",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-          "description" => __(
-            "If enabled, payment retry of a failed payment will be done using the same payment method that was selected when customer was placing an order.",
-            WOOCOMMERCE_GOPAY_DOMAIN
-          ),
-        ],
-      ];
+
+        $this->init_settings();
+        if (empty($this->settings["goid"]) ||
+            empty($this->settings["client_id"]) ||
+            empty($this->settings["client_secret"])) {
+            $this->update_option('enabled',"no");
+        }
+
+        $this->form_fields = [
+            "enabled" => [
+                "title" => __("Enable/Disable", WOOCOMMERCE_GOPAY_DOMAIN),
+                "type" => "checkbox",
+                "label" => __(
+                    "Inform goid, client id and secret to enable the other options",
+                    WOOCOMMERCE_GOPAY_DOMAIN
+                ),
+                "css" => "display: none;",
+                "default" => "no",
+            ],
+            "goid" => [
+                "title" => __("GoId", WOOCOMMERCE_GOPAY_DOMAIN),
+                "type" => "text",
+                "css" => "width: 500px;",
+            ],
+            "client_id" => [
+                "title" => __("Client Id", WOOCOMMERCE_GOPAY_DOMAIN),
+                "type" => "text",
+                "css" => "width: 500px;",
+            ],
+            "client_secret" => [
+                "title" => __("Client secret", WOOCOMMERCE_GOPAY_DOMAIN),
+                "type" => "text",
+                "css" => "width: 500px;",
+            ]
+        ];
+
+        if (!empty($this->settings["goid"]) &&
+            !empty($this->settings["client_id"]) &&
+            !empty($this->settings["client_secret"])) {
+
+            // Payments methods enabled on GoPay account
+            $paymentInstruments = Woocommerce_Gopay_API::get_enabled_payment_methods();
+
+            $this->supported_payment_methods = array_intersect_key(
+                Woocommerce_Gopay_Options::supported_payment_methods(), $paymentInstruments);
+            $enable_gopay_payment_methods = $this->get_option("enable_gopay_payment_methods", []);
+            $enable_gopay_payment_methods = array_intersect_key($this->supported_payment_methods,
+                array_flip($enable_gopay_payment_methods));
+            $this->update_option('enable_gopay_payment_methods', array_keys($enable_gopay_payment_methods));
+
+            $this->supported_banks = array_intersect_key(
+                Woocommerce_Gopay_Options::supported_banks(), $paymentInstruments["BANK_ACCOUNT"]["swifts"]);
+            $enable_banks = $this->get_option("enable_banks", []);
+            $enable_banks = array_intersect_key($this->supported_banks,
+                array_flip($enable_banks));
+            $this->update_option('enable_banks', array_keys($enable_banks));
+
+//            if (array_key_exists("BANK_ACCOUNT", $enable_gopay_payment_methods)) {
+//                $this->supported_banks = array_intersect_key(
+//                    Woocommerce_Gopay_Options::supported_banks(), $paymentInstruments["BANK_ACCOUNT"]["swifts"]);
+//                $enable_banks = $this->get_option("enable_banks", []);
+//                $enable_banks = array_intersect_key($this->supported_banks,
+//                    array_flip($enable_banks));
+//                $this->update_option('enable_banks', array_flip($enable_banks));
+//            } else {
+//                $this->supported_banks = [];
+//                $this->update_option('enable_banks', []);
+//            }
+            // end
+
+            // Set default parameters
+            if (empty($this->settings["enabled"])) {
+                $this->update_option('enabled',"yes");
+            }
+            if (empty($this->settings["title"])) {
+                $this->update_option('title',"GoPay");
+            }
+            if (empty($this->settings["description"])) {
+                $this->update_option('description',"Payment via GoPay gateway");
+            }
+            if (empty($this->settings["test"])) {
+                $this->update_option('test',"yes");
+            }
+            // end
+
+            $this->form_fields = [
+                "enabled" => [
+                    "title" => __("Enable/Disable", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "checkbox",
+                    "label" => __(
+                        "Enable GoPay payment gateway",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "default" => "yes",
+                ],
+                "title" => [
+                    "title" => __("Title", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "text",
+                    "description" => __(
+                        "Name of the payment method that is displayed at the checkout",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "default" => __("GoPay", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "css" => "width: 500px;",
+                ],
+                "description" => [
+                    "title" => __("Description", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "textarea",
+                    "description" => __(
+                        "Description of the payment method that is displayed at the checkout",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "default" => __(
+                        "Payment via GoPay gateway",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "css" => "width: 500px; min-height: 100px;",
+                ],
+                "goid" => [
+                    "title" => __("GoId", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "text",
+                    "css" => "width: 500px;",
+                ],
+                "client_id" => [
+                    "title" => __("Client Id", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "text",
+                    "css" => "width: 500px;",
+                ],
+                "client_secret" => [
+                    "title" => __("Client secret", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "text",
+                    "css" => "width: 500px;",
+                ],
+                "test" => [
+                    "title" => __("Test mode", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "checkbox",
+                    "label" => __(
+                        "Enable GoPay payment gateway test mode",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "default" => "yes",
+                ],
+                "enable_shipping_methods" => [
+                    "title" => __("Enable shipping methods", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "multiselect",
+                    "class" => "chosen_select",
+                    "options" => $this->supported_shipping_methods,
+                    "desc_tip" => true,
+                    "css" => "width: 500px; min-height: 50px;",
+                ],
+                "enable_countries" => [
+                    "title" => __("Enable countries", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "multiselect",
+                    "class" => "chosen_select",
+                    "options" => $this->supported_countries,
+                    "desc_tip" => true,
+                    "css" => "width: 500px; min-height: 50px;",
+                ],
+                "simplified_payment_method" => [
+                    "title" => __("Payment method selection", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "checkbox",
+                    "label" => __(
+                        "Enable simplified payment method selection",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "description" => __(
+                        "If enabled, customers cannot choose any specific payment method at the checkout but they have to select the payment method once the GoPay payment gateway is invoked.",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                ],
+                "enable_gopay_payment_methods" => [
+                    "title" => __(
+                        "Enable GoPay payment methods",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "type" => "multiselect",
+                    "class" => "chosen_select",
+                    "options" => $this->supported_payment_methods,
+                    "desc_tip" => true,
+                    "css" => "width: 500px; min-height: 50px;",
+                ],
+                "enable_banks" => [
+                    "title" => __("Enable banks", WOOCOMMERCE_GOPAY_DOMAIN),
+                    "type" => "multiselect",
+                    "class" => "chosen_select",
+                    "options" => $this->supported_banks,
+                    "desc_tip" => true,
+                    "css" => "width: 500px; min-height: 50px;",
+                ],
+                "payment_retry" => [
+                    "title" => __(
+                        "Payment retry payment method",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "type" => "checkbox",
+                    "label" => __(
+                        "Enable payment retry using the same payment metyhod",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                    "description" => __(
+                        "If enabled, payment retry of a failed payment will be done using the same payment method that was selected when customer was placing an order.",
+                        WOOCOMMERCE_GOPAY_DOMAIN
+                    ),
+                ],
+            ];
+        }
     }
 
     /**
@@ -287,7 +375,9 @@ function init_woocommerce_gopay_gateway()
             WC()->session->get("chosen_shipping_methods")
             as $key => $value
           ) {
-            $chosen_shipping_methods[$key] = explode(":", $value)[0];
+              if (!is_null($value)) {
+                  $chosen_shipping_methods[$key] = explode(":", $value)[0];
+              }
           }
 
           if (
@@ -326,18 +416,12 @@ function init_woocommerce_gopay_gateway()
           foreach ($this->enable_gopay_payment_methods as $key => $payment_method) {
               $enabled_payment_methods .=
                   '
-        <div class="payment_method_wc_gopay_gateway_selection">
-          <input class="payment_method_wc_gopay_gateway_input" name="gopay_payment_method" type="radio" id="' .
-                  $payment_method .
-                  '" value="' .
-                  $payment_method .
-                  '" ' .
-                  $checked .
-                  ' />
-          <span>' .
-                  $this->supported_payment_methods[$payment_method] .
-                  '</span>
-        </div>';
+                  <div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
+                    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
+                        '_input" name="gopay_payment_method" type="radio" id="' .
+                        $payment_method . '" value="' . $payment_method . '" ' . $checked . ' />
+                    <span>' . $this->supported_payment_methods[$payment_method] . '</span>
+                  </div>';
               $checked = "";
           }
       }
@@ -363,28 +447,28 @@ function init_woocommerce_gopay_gateway()
             ];
         }
 
-      $response = Woocommerce_Gopay_API::create_payment($_POST["gopay_payment_method"],
+        $response = Woocommerce_Gopay_API::create_payment($_POST["gopay_payment_method"],
                                                             $order, $this->get_return_url($order));
 
-      // Change it - Check status of the response, if ok continue, otherwise status failed
+        // Change it - Check status of the response, if ok continue, otherwise status failed
 
-      #$order->set_status('on-hold');
-      $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
-      $order->save();
+        #$order->set_status('on-hold');
+        $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
+        $order->save();
 
-      // Save log
-      $log = [
-          'order_id' => $order_id,
-          'transaction_id' => $response->json['id'],
-          'log_level' => 'INFO',
-          'log' => $response->json
-      ];
-      Woocommerce_Gopay_Log::insert_log($log);
+        // Save log
+        $log = [
+            'order_id' => $order_id,
+            'transaction_id' => $response->json['id'],
+            'log_level' => 'INFO',
+            'log' => $response->json
+        ];
+        Woocommerce_Gopay_Log::insert_log($log);
 
-      return [
-          "result" => "success",
-          "redirect" => $response->json['gw_url']
-      ];
+        return [
+            "result" => "success",
+            "redirect" => $response->json['gw_url']
+        ];
     }
 
     /**
@@ -409,11 +493,19 @@ function init_woocommerce_gopay_gateway()
      */
     public function complete_order_status($status, $order_id, $order = false)
     {
-      if ($order && "wc_gopay_gateway" === $order->get_payment_method()) {
+      if ($order &&  WOOCOMMERCE_GOPAY_ID === $order->get_payment_method()) {
         return "completed";
       }
       return $status;
     }
+
+      public function process_admin_options() {
+
+          $saved = parent::process_admin_options();
+          $this->init_form_fields();
+          return $saved;
+
+      }
   }
 
   /**
