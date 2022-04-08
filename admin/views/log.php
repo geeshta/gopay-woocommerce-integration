@@ -22,7 +22,7 @@ $log_data = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . WOOCOMMERCE_GO
             foreach ($log_data as $_ => $log){
                 $order = wc_get_order($log->order_id);
                 $order_url = ($order && $order->get_edit_order_url()) ? $order->get_edit_order_url() : "#";
-                $gw_url = ($log->log && json_decode($log->log)->gw_url) ? json_decode($log->log)->gw_url : "#";
+                $gw_url = ($log->log && property_exists(json_decode($log->log), "gw_url")) ? json_decode($log->log)->gw_url : "#";
                 $gmt_offset = $log->gmt_offset > 0 ? '+'. $log->gmt_offset : $log->gmt_offset;
 
                 echo '<tr>';

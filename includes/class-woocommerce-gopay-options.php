@@ -90,6 +90,9 @@ class Woocommerce_Gopay_Options {
    * @return array
    */
   public static function supported_banks() {
+
+      // Change it - A few swift codes are causing errors, check available swifts
+    // Supported banks according to https://doc.gopay.com/#swift
     return [
       'GIBACZPX' => __('Česká Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN),
       'KOMBCZPP' => __('Komerční Banka', WOOCOMMERCE_GOPAY_DOMAIN),
