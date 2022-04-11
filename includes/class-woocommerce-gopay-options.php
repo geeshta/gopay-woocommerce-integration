@@ -91,7 +91,6 @@ class Woocommerce_Gopay_Options {
    */
   public static function supported_banks() {
 
-      // Change it - A few swift codes are causing errors, check available swifts
     // Supported banks according to https://doc.gopay.com/#swift
     return [
       'GIBACZPX' => __('Česká Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN),
@@ -109,7 +108,7 @@ class Woocommerce_Gopay_Options {
       'EXPNCZPP' => __('Expobank', WOOCOMMERCE_GOPAY_DOMAIN),
       'OBKLCZ2X' => __('OberBank AG', WOOCOMMERCE_GOPAY_DOMAIN),
       'SUBACZPP' => __('Všeobecná Úvěrová Banka - pobočka Praha', WOOCOMMERCE_GOPAY_DOMAIN),
-      'BPPFCZP1' => __('Hello! Bank', WOOCOMMERCE_GOPAY_DOMAIN),
+      #'BPPFCZP1' => __('Hello! Bank', WOOCOMMERCE_GOPAY_DOMAIN),
       'TATRSKBX' => __('Tatra Banka', WOOCOMMERCE_GOPAY_DOMAIN),
       'SUBASKBX' => __('Všeobecná Úverová Banka', WOOCOMMERCE_GOPAY_DOMAIN),
       'UNCRSKBX' => __('UniCredit Bank SK', WOOCOMMERCE_GOPAY_DOMAIN),

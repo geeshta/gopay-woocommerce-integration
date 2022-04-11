@@ -17,6 +17,10 @@ class Woocommerce_Gopay_Deactivator {
    */
   public static function deactivate() {
       #self::delete_log_table();
+
+      // Unschedule event
+      wp_unschedule_event(wp_next_scheduled('wc_gopay_check_status', array(false)),
+          'wc_gopay_check_status', array(false));
   }
 
     /**

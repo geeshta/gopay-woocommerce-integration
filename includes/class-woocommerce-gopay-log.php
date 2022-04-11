@@ -36,8 +36,8 @@ class Woocommerce_Gopay_Log {
                 'log' => json_encode($log['log'])
             ]);
 
-        if ($response) {
-            error_log("LOG INSERTED");
-        }
+//        if ($response) {
+//            error_log("LOG INSERTED");
+//        }
     }
 }

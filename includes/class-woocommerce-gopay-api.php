@@ -31,13 +31,18 @@ class Woocommerce_Gopay_API
      * @return GoPay object
      */
     private static function auth_GoPay($options){
+
+        // Change it - compare with supported languages
+        $language = get_locale() ? strtoupper(
+            explode("_", get_locale())[0]) : GoPay\Definition\Language::ENGLISH;
+
         $gopay = GoPay\payments([
             "goid" => $options["goid"],
             "clientId" => $options["client_id"],
             "clientSecret" => $options["client_secret"],
             "isProductionMode" => $options["test"] == "yes" ? false : true,
             "scope" => GoPay\Definition\TokenScope::ALL,
-            "language" => GoPay\Definition\Language::ENGLISH,
+            "language" => $language,
             "timeout" => 30,
         ]);
 
@@ -53,7 +58,7 @@ class Woocommerce_Gopay_API
      * @param  string $return_url url to be used when redirect from GoPay.
      * @return response
      */
-    public static function create_payment($gopay_payment_method, $order, $return_url){
+    public static function create_payment($gopay_payment_method, $order, $return_url) {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -110,6 +115,10 @@ class Woocommerce_Gopay_API
                 'value' => $order->get_order_number()
             ]];
 
+        // Change it - compare with supported languages
+        $language = get_locale() ? strtoupper(
+            explode("_", get_locale())[0]) : GoPay\Definition\Language::ENGLISH;
+
         $response = $gopay->createPayment([
             'payer' => $payer,
             'amount' => $order->get_total() * 100,
@@ -119,7 +128,7 @@ class Woocommerce_Gopay_API
             'items' => $items,
             'additional_params' => $additional_params,
             'callback' => $callback,
-            'lang' => GoPay\Definition\Language::ENGLISH // Change it to the one specified
+            'lang' => $language
         ]);
 
         return $response;
@@ -168,16 +177,64 @@ class Woocommerce_Gopay_API
     public static function get_enabled_swifts()
     {
         $swifts = [];
-        foreach (["CZK", "EUR", "PLN"] as $currency => $value) {
+        foreach (["CZK", "EUR", "PLN"] as $key => $currency) {
             $paymentInstruments = self::get_enabled_payment_methods($currency);
 
             if (array_key_exists('BANK_ACCOUNT', $paymentInstruments)){
                 foreach ($paymentInstruments["BANK_ACCOUNT"]["swifts"] as $swift => $description) {
-                    $swifts[$swift] = $description;
+                    $swifts[$swift] = __($description, WOOCOMMERCE_GOPAY_DOMAIN);
                 }
             }
         }
 
         return $swifts;
+    }
+
+    /**
+     * Check payment status
+     *
+     * @since  1.0.0
+     */
+    public static function check_payment_status(){
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+
+        $orders = wc_get_orders(array(
+                'limit'=>-1,
+                'type'=> 'shop_order',
+                'status'=> 'wc-pending' //array('wc-pending', 'wc-on-hold')
+            )
+        );
+        foreach ($orders as $order){
+            $GoPay_Transaction_id = get_post_meta($order->get_id(), 'GoPay_Transaction_id', true);
+            $response = $gopay->getStatus($GoPay_Transaction_id);
+            if ($response->json['state'] == 'PAID'){
+                // Check if all products are either virtual or downloadable
+                $all_virtual_downloadable = true;
+                foreach ($order->get_items() as $item) {
+                    $product = wc_get_product($item["product_id"]);
+                    if (!$product->is_virtual() && !$product->is_downloadable()) {
+                        $all_virtual_downloadable = false;
+                        break;
+                    }
+                }
+
+                if ($all_virtual_downloadable) {
+                    $order->set_status('completed');
+                } else {
+                    $order->set_status('processing');
+                }
+
+                // Save log
+                $log = [
+                    'order_id' => $order->get_id(),
+                    'transaction_id' => $response->json['id'],
+                    'log_level' => 'INFO',
+                    'log' => $response->json
+                ];
+                Woocommerce_Gopay_Log::insert_log($log);
+            }
+            $order->save();
+        }
     }
 }
