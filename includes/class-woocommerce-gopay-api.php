@@ -30,7 +30,7 @@ class Woocommerce_Gopay_API
      * @param  array $options gopay gateway settings.
      * @return GoPay object
      */
-    private static function auth_GoPay($options){
+    private static function auth_GoPay($options) {
 
         // Change it - compare with supported languages
         $language = get_locale() ? strtoupper(
@@ -236,5 +236,41 @@ class Woocommerce_Gopay_API
             }
             $order->save();
         }
+    }
+
+    /**
+     * Get status of the transaction
+     *
+     * @since  1.0.0
+     */
+    public static function get_status($order_id) {
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+
+        $GoPay_Transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
+        $response = $gopay->getStatus($GoPay_Transaction_id);
+
+        // Change it - Handle any possible error and add log
+
+        return $response;
+    }
+
+    /**
+     * Refund payment
+     *
+     * @since  1.0.0
+     * @param int $transaction_id
+     * @param string $amount
+     * @return json $response
+     */
+    public static function refund_payment($transaction_id, $amount) {
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+        $response = $gopay->refundPayment($transaction_id, $amount);
+
+        // Change it - Handle any possible error and add log
+        // Add message add_order_note and wc_add_notice
+
+        return $response;
     }
 }

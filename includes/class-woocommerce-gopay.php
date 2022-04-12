@@ -40,6 +40,18 @@ function init_woocommerce_gopay_gateway()
         "Take payments via GoPay payment gateway.",
         WOOCOMMERCE_GOPAY_DOMAIN
       );
+      $this->supports = array(
+          'subscriptions',
+          'products',
+          'subscription_cancellation',
+          'subscription_reactivation',
+          'subscription_suspension',
+          'subscription_amount_changes',
+          'subscription_payment_method_change',
+          'subscription_date_changes',
+          'refunds',
+          'pre-orders'
+      );
 
       $this->enable_currencies = Woocommerce_Gopay_Options::supported_currencies();
       $this->supported_countries = Woocommerce_Gopay_Options::supported_countries();
@@ -62,14 +74,15 @@ function init_woocommerce_gopay_gateway()
       $this->goid = $this->get_option("goid");
       $this->client_id = $this->get_option("client_id");
       $this->client_secret = $this->get_option("client_secret");
-      $this->test = $this->get_option("test") ? false : true;
+      $this->test = !$this->get_option("test");
       $this->instructions = $this->get_option("instructions");
       $this->enable_shipping_methods = $this->get_option(
         "enable_shipping_methods",
         []
       );
       $this->enable_countries = $this->get_option("enable_countries", []);
-      $this->simplified_payment_method = $this->get_option("simplified_payment_method") == "yes" ? true : false;
+      $this->simplified_payment_method = $this->get_option("simplified_payment_method") == "yes";
+      $this->payment_retry = $this->get_option("payment_retry") == "yes";
       $this->enable_gopay_payment_methods = $this->get_option(
         "enable_gopay_payment_methods",
         []
@@ -426,7 +439,10 @@ function init_woocommerce_gopay_gateway()
 
       $enabled_payment_methods = "";
       $checked = 'checked="checked"';
-      if (!$this->simplified_payment_method) {
+      $payment_retry = ($this->payment_retry &&
+          is_page(wc_get_page_id("checkout")) &&
+          !empty(get_query_var("order-pay")));
+      if (!$this->simplified_payment_method && !$payment_retry) {
           $payment_methods = $this->get_option('enable_gopay_payment_methods_' . get_woocommerce_currency());
           foreach ($payment_methods as $key => $payment_method) {
               if ($payment_method == "BANK_ACCOUNT" &&
@@ -464,6 +480,17 @@ function init_woocommerce_gopay_gateway()
             return [
                 "result" => "failed",
                 "redirect" => wc_get_checkout_url()
+            ];
+        }
+
+        if ($this->payment_retry &&
+            is_page(wc_get_page_id("checkout")) &&
+            !empty(get_query_var("order-pay"))
+        ) {
+            $response = Woocommerce_Gopay_API::get_status($order_id);
+            return [
+                "result" => "success",
+                "redirect" => $response->json['gw_url']
             ];
         }
 
@@ -506,6 +533,36 @@ function init_woocommerce_gopay_gateway()
     }
 
     /**
+     * Process refund.
+     *
+     * @param int $order_id ID.
+     * @param float|null $amount amount.
+     * @param string $reason reason.
+     * @return boolean if succeeded, or a WP_Error object.
+     */
+    public function process_refund($order_id, $amount = null, $reason = '') {
+        $transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
+        $response = Woocommerce_Gopay_API::refund_payment($transaction_id, $amount * 100);
+
+        $log = [
+            'order_id' => $order_id,
+            'transaction_id' => $transaction_id,
+            'log_level' => 'info',
+            'log' => $response->json
+        ];
+
+        if ($response->statusCode != 200) {
+            $log['log_level'] = 'Error';
+            Woocommerce_Gopay_Log::insert_log($log);
+
+            return false;
+        }
+        Woocommerce_Gopay_Log::insert_log($log);
+
+        return true;
+    }
+
+    /**
      * Message order received page.
      * @since  1.0.0
      */
@@ -533,13 +590,18 @@ function init_woocommerce_gopay_gateway()
       return $status;
     }
 
-      public function process_admin_options() {
+    /**
+     * Process admin options.
+     *
+     * @since  1.0.0
+     * @return string
+     */
+    public function process_admin_options() {
+        $saved = parent::process_admin_options();
+        $this->init_form_fields();
 
-          $saved = parent::process_admin_options();
-          $this->init_form_fields();
-          return $saved;
-
-      }
+        return $saved;
+    }
   }
 
   /**
