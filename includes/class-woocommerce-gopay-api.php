@@ -52,13 +52,14 @@ class Woocommerce_Gopay_API
     /**
      * GoPay create payment
      *
-     * @since  1.0.0
-     * @param  string $gopay_payment_method payment method.
-     * @param  array $order order detail.
-     * @param  string $return_url url to be used when redirect from GoPay.
+     * @since 1.0.0
+     * @param string $gopay_payment_method payment method.
+     * @param array $order order detail.
+     * @param string $return_url url to be used when redirect from GoPay.
+     * @param string $end_date the end date of recurrence
      * @return response
      */
-    public static function create_payment($gopay_payment_method, $order, $return_url) {
+    public static function create_payment($gopay_payment_method, $order, $return_url, $end_date) {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -119,7 +120,7 @@ class Woocommerce_Gopay_API
         $language = get_locale() ? strtoupper(
             explode("_", get_locale())[0]) : GoPay\Definition\Language::ENGLISH;
 
-        $response = $gopay->createPayment([
+        $data = [
             'payer' => $payer,
             'amount' => $order->get_total() * 100,
             'currency' => $order->get_currency(),
@@ -129,7 +130,19 @@ class Woocommerce_Gopay_API
             'additional_params' => $additional_params,
             'callback' => $callback,
             'lang' => $language
-        ]);
+        ];
+
+        if (!empty($end_date)) {
+            $data["recurrence"] = [
+                "recurrence_cycle" => "ON_DEMAND",
+                "recurrence_date_to" => $end_date != 0 ? $end_date : date('Y-m-d', strtotime('+5 years'))];
+        }
+
+        error_log(print_r($data, true));
+
+        $response = $gopay->createPayment($data);
+
+        error_log(print_r($response, true));
 
         return $response;
     }

@@ -98,6 +98,8 @@ function init_woocommerce_gopay_gateway()
         10,
         3
       );
+      add_filter("woocommerce_thankyou_order_received_text",
+          array($this, "subscription_trial_period_thankyou_page"), 20, 2);
     }
 
     /**
@@ -483,6 +485,7 @@ function init_woocommerce_gopay_gateway()
             ];
         }
 
+        // Payment Retry
         if ($this->payment_retry &&
             is_page(wc_get_page_id("checkout")) &&
             !empty(get_query_var("order-pay"))
@@ -494,9 +497,39 @@ function init_woocommerce_gopay_gateway()
             ];
         }
 
+        // Check if total is equal to zero
+        $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($order);
+        if ($order->get_total() == 0) {
+            if (!empty($subscription)) {
+                return [
+                    "result" => "success",
+                    "redirect" => $this->get_return_url($order)
+                ];
+            } else {
+                foreach ($order->get_items() as $item) {
+                    $product = wc_get_product($item["product_id"]);
+                    if (!$product->is_virtual() && !$product->is_downloadable()) {
+                        $order->set_status('processing');
+                        break;
+                    }
+                }
+
+                if ($order->get_status() != 'processing') {
+                    $order->set_status('completed');
+                }
+                $order->save();
+
+                return [
+                    "result" => "success",
+                    "redirect" => $this->get_return_url($order)
+                ];
+            }
+        }
+
         $response = Woocommerce_Gopay_API::create_payment(
             array_key_exists("gopay_payment_method", $_POST) ?
-                $_POST["gopay_payment_method"] : null, $order, $this->get_return_url($order));
+                $_POST["gopay_payment_method"] : null, $order, $this->get_return_url($order),
+            !empty($subscription) ? $subscription->get_date("end") : "");
 
         if ($response->statusCode != 200) {
             $log = [
@@ -506,6 +539,8 @@ function init_woocommerce_gopay_gateway()
                 'log' => $response->json
             ];
             Woocommerce_Gopay_Log::insert_log($log);
+
+            wc_add_notice(__('Payment creation on GoPay not possible', WOOCOMMERCE_GOPAY_DOMAIN), "error");
 
             return [
                 "result" => "failed",
@@ -572,6 +607,21 @@ function init_woocommerce_gopay_gateway()
         echo wp_kses_post(wpautop(wptexturize($this->instructions)));
       }
     }
+
+      /**
+       * Message order received page for subscription in trial period.
+       * @since  1.0.0
+       */
+      public function subscription_trial_period_thankyou_page($thank_you, $order)
+      {
+          $message = __("Thank you. Your order has been received.", WOOCOMMERCE_GOPAY_DOMAIN);
+          $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($order);
+          if (!empty($subscription) && $order->get_total() == 0) {
+              return $message . __(" Please pay for your subscription after the trial period.", WOOCOMMERCE_GOPAY_DOMAIN);
+          }
+
+          return $message;
+      }
 
     /**
      * Complete order status for orders.

@@ -92,37 +92,6 @@ function woocommerce_gopay_deactivation()
   deactivate_plugins(WOOCOMMERCE_GOPAY_BASENAME);
 }
 
-// Check if WooCommerce Subscriptions is active then disable multiple checkout option
-if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.php")) {
-    add_action('plugins_loaded', 'disable_subscriptions_multiple_purchase');
-    add_action('update_option_woocommerce_subscriptions_multiple_purchase',
-        'disable_subscriptions_multiple_purchase');
-    add_action('add_option_woocommerce_subscriptions_multiple_purchase',
-        'disable_subscriptions_multiple_purchase');
-}
-
-/**
- * Disable woocommerce subscriptions multiple purchase option
- */
-function disable_subscriptions_multiple_purchase() {
-    if (!get_option('woocommerce_subscriptions_multiple_purchase') ||
-        get_option('woocommerce_subscriptions_multiple_purchase') == 'yes') {
-        add_action('admin_notices', 'admin_notice_error');
-        update_option('woocommerce_subscriptions_multiple_purchase', 'no');
-    }
-}
-
-/**
- * Show an error message about mixed checkout option was disabled
- */
-function admin_notice_error() {
-    $message = __(
-        "WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.",
-        WOOCOMMERCE_GOPAY_DOMAIN
-    );
-    echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
-}
-
 // Load files
 require_once WOOCOMMERCE_GOPAY_DIR .
     "vendor/autoload.php";
@@ -174,10 +143,45 @@ if(!wp_next_scheduled('wc_gopay_check_status', array(false))){
 }
 add_action('wc_gopay_check_status', array('Woocommerce_Gopay_API', 'check_payment_status'));
 
-// Check if only one subscription was added to the cart without adding any other products
-add_filter('woocommerce_add_to_cart_validation',
-    array('Woocommerce_Gopay_Subscriptions', 'subscriptions_check_add_to_cart'), 9, 3);
-add_filter('woocommerce_update_cart_validation',
-    array('Woocommerce_Gopay_Subscriptions', 'subscriptions_check_cart_update'), 10, 4);
+// Check if WooCommerce Subscriptions is active
+if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.php")) {
+
+    //Disable multiple checkout option
+    add_action('plugins_loaded', 'disable_subscriptions_multiple_purchase');
+    add_action('update_option_woocommerce_subscriptions_multiple_purchase',
+        'disable_subscriptions_multiple_purchase');
+    add_action('add_option_woocommerce_subscriptions_multiple_purchase',
+        'disable_subscriptions_multiple_purchase');
+
+    // When a subscription is added to the cart check if any other product/subscriptions was included
+    add_filter('woocommerce_add_to_cart_validation',
+        array('Woocommerce_Gopay_Subscriptions', 'subscriptions_check_add_to_cart'), 9, 3);
+    add_filter('woocommerce_update_cart_validation',
+        array('Woocommerce_Gopay_Subscriptions', 'subscriptions_check_cart_update'), 10, 4);
+    add_filter('woocommerce_cart_redirect_after_error',
+        array('Woocommerce_Gopay_Subscriptions', 'redirect_to_shop'));
+}
+
+/**
+ * Disable woocommerce subscriptions multiple purchase option
+ */
+function disable_subscriptions_multiple_purchase() {
+    if (!get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') ||
+        get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') == 'yes') {
+        add_action('admin_notices', 'admin_notice_error');
+        update_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no');
+    }
+}
+
+/**
+ * Show an error message about mixed checkout option was disabled
+ */
+function admin_notice_error() {
+    $message = __(
+        "WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.",
+        WOOCOMMERCE_GOPAY_DOMAIN
+    );
+    echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
+}
 
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');
