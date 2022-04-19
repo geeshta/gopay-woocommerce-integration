@@ -50,6 +50,30 @@ class Woocommerce_Gopay_API
     }
 
     /**
+     * Get items info
+     *
+     * @since 1.0.0
+     * @param object $order order detail.
+     * @return array
+     */
+    private static function get_items($order) {
+
+        $items = array();
+        foreach($order->get_items() as $item){
+            $items[] = [
+                'type' => 'ITEM', // Change it
+                'name' => $item['name'],
+                'product_url' => get_permalink($item['product_id']),
+                'amount' => $item['total'] * 100,
+                'count' => $item['quantity'],
+                'vat_rate' => '0' // Change it - select the correct rate
+            ];
+        }
+
+        return $items;
+    }
+
+    /**
      * GoPay create payment
      *
      * @since 1.0.0
@@ -69,17 +93,7 @@ class Woocommerce_Gopay_API
             $default_payment_instrument = "PAYMENT_CARD";
         }
 
-        $items = array();
-        foreach($order->get_items() as $item){
-            $items[] = [
-                'type' => 'ITEM', // Change it
-                'name' => $item['name'],
-                'product_url' => get_permalink($item['product_id']),
-                'amount' => $item['total'] * 100,
-                'count' => $item['quantity'],
-                'vat_rate' => '0' // Change it - select the correct rate
-            ];
-        }
+        $items = self::get_items($order);
 
         $callback = [
             'return_url' => $return_url, // wc_get_checkout_url(),
@@ -102,7 +116,7 @@ class Woocommerce_Gopay_API
             $payer = [
                 'default_payment_instrument' => $default_payment_instrument,
                 'allowed_payment_instruments' => [$default_payment_instrument],
-                'allowed_swifts' => $options['enable_banks_' . get_woocommerce_currency()],
+                'allowed_swifts' => $options['enable_banks_' . $order->get_currency()],
                 'contact' => $contact
             ];
         } else {
@@ -138,13 +152,37 @@ class Woocommerce_Gopay_API
                 "recurrence_date_to" => $end_date != 0 ? $end_date : date('Y-m-d', strtotime('+5 years'))];
         }
 
-        error_log(print_r($data, true));
-
         $response = $gopay->createPayment($data);
 
-        error_log(print_r($response, true));
+        return $response;
+    }
+
+    /**
+     * GoPay create recurrence
+     *
+     * @since 1.0.0
+     * @param object $order order detail.
+     * @return response
+     */
+    public static function create_recurrence($order) {
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+
+        $GoPay_Transaction_id = $order->get_meta('GoPay_Transaction_id', true);
+
+        $data = [
+            'amount' => $order->get_total() * 100,
+            'currency' => $order->get_currency(),
+            'order_number' => $order->get_order_number(),
+            'order_description' => 'subscription',
+            'items' => self::get_items($order),
+            'additional_params' => [['name' => 'invoicenumber', 'value' => $order->get_order_number()]]
+        ];
+
+        $response = $gopay->createRecurrence($GoPay_Transaction_id, $data);
 
         return $response;
+
     }
 
     /**
@@ -208,7 +246,7 @@ class Woocommerce_Gopay_API
      *
      * @since  1.0.0
      */
-    public static function check_payment_status(){
+    public static function check_payment_status() {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -219,8 +257,11 @@ class Woocommerce_Gopay_API
             )
         );
         foreach ($orders as $order){
-            $GoPay_Transaction_id = get_post_meta($order->get_id(), 'GoPay_Transaction_id', true);
-            $response = $gopay->getStatus($GoPay_Transaction_id);
+            $GoPay_Transaction_id_Recurrence = $order->get_meta('GoPay_Transaction_id_Recurrence', true);
+            $GoPay_Transaction_id = $order->get_meta('GoPay_Transaction_id', true);
+            $response = $gopay->getStatus(empty(
+                $GoPay_Transaction_id_Recurrence) ? $GoPay_Transaction_id : $GoPay_Transaction_id_Recurrence);
+
             if ($response->json['state'] == 'PAID'){
                 // Check if all products are either virtual or downloadable
                 $all_virtual_downloadable = true;

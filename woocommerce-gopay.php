@@ -160,6 +160,10 @@ if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.
         array('Woocommerce_Gopay_Subscriptions', 'subscriptions_check_cart_update'), 10, 4);
     add_filter('woocommerce_cart_redirect_after_error',
         array('Woocommerce_Gopay_Subscriptions', 'redirect_to_shop'));
+
+    // Process subscription payments
+    add_action('woocommerce_scheduled_subscription_payment_' . WOOCOMMERCE_GOPAY_ID,
+        array('Woocommerce_Gopay_Subscriptions', 'process_subscription_payment'), 5, 2);
 }
 
 /**

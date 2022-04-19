@@ -98,7 +98,7 @@ class Woocommerce_Gopay_Subscriptions {
                 wcs_order_contains_renewal($order_id));
 
             if ($is_subscription) {
-                $subscription = wcs_get_subscriptions_for_order($order_id);
+                $subscription = wcs_get_subscriptions_for_order($order_id, array('order_type' => 'any'));
                 $subscription_id = json_decode(end($subscription))->id;
 
                 return wcs_get_subscription($subscription_id);
@@ -106,6 +106,59 @@ class Woocommerce_Gopay_Subscriptions {
         }
 
         return [];
+    }
+
+    /**
+     * Is subscription present in the cart
+     *
+     * @since  1.0.0
+     * @return bool
+     */
+    public static function cart_contains_subscription(){
+
+        foreach (WC()->cart->get_cart() as $item) {
+            $product = wc_get_product($item["product_id"]);
+            if(class_exists('WC_Subscriptions_Product') &&
+                WC_Subscriptions_Product::is_subscription($product)) {
+                return TRUE;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Process subscription payment when triggered
+     * by the action on the anniversary
+     * of the original purchase or when triggered
+     * off-schedule by 3rd party code or
+     * store manager actions
+     *
+     * @since  1.0.0
+     * @param  float $renewal_total
+     * @param  object $renewal_order
+     */
+    public static function process_subscription_payment($renewal_total, $renewal_order) {
+
+        $response = Woocommerce_Gopay_API::create_recurrence($renewal_order);
+
+        if ($response->statusCode == 200) {
+            $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($renewal_order);
+            $renewal_order->update_meta_data('GoPay_Transaction_id_Recurrence', $response->json['id']);
+            $renewal_order->save();
+            if (!empty($subscription)) {
+                $subscription->update_meta_data('GoPay_Transaction_id_Recurrence', $response->json['id']);
+                $subscription->save();
+            }
+        }
+
+        $log = [
+            'order_id' => $renewal_order->get_id(),
+            'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : 0,
+            'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
+            'log' => $response->json
+        ];
+        Woocommerce_Gopay_Log::insert_log($log);
     }
 
 }

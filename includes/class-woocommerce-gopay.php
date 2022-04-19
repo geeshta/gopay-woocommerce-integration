@@ -446,6 +446,16 @@ function init_woocommerce_gopay_gateway()
           !empty(get_query_var("order-pay")));
       if (!$this->simplified_payment_method && !$payment_retry) {
           $payment_methods = $this->get_option('enable_gopay_payment_methods_' . get_woocommerce_currency());
+
+          // Check if subscription - only card payment is enabled
+          if (Woocommerce_Gopay_Subscriptions::cart_contains_subscription()) {
+              if (in_array("PAYMENT_CARD", $payment_methods)) {
+                  $payment_methods = array("PAYMENT_CARD");
+              } else {
+                  $payment_methods = array();
+              }
+          }
+
           foreach ($payment_methods as $key => $payment_method) {
               if ($payment_method == "BANK_ACCOUNT" &&
                   empty($this->get_option('enable_banks_' . get_woocommerce_currency()))){
@@ -548,9 +558,14 @@ function init_woocommerce_gopay_gateway()
             ];
         }
 
+        // Add GoPay transaction id to order (and subscription if it exists)
         #$order->set_status('on-hold');
         $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
         $order->save();
+        if (!empty($subscription)) {
+            $subscription->update_meta_data('GoPay_Transaction_id', $response->json['id']);
+            $subscription->save();
+        }
 
         // Save log
         $log = [
