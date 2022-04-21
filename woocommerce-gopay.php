@@ -146,7 +146,7 @@ add_action('wc_gopay_check_status', array('Woocommerce_Gopay_API', 'check_paymen
 // Check if WooCommerce Subscriptions is active
 if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.php")) {
 
-    //Disable multiple checkout option
+    // Disable multiple checkout option
     add_action('plugins_loaded', 'disable_subscriptions_multiple_purchase');
     add_action('update_option_woocommerce_subscriptions_multiple_purchase',
         'disable_subscriptions_multiple_purchase');
@@ -161,9 +161,13 @@ if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.
     add_filter('woocommerce_cart_redirect_after_error',
         array('Woocommerce_Gopay_Subscriptions', 'redirect_to_shop'));
 
-    // Process subscription payments
+    // Process/Cancel subscription payments
     add_action('woocommerce_scheduled_subscription_payment_' . WOOCOMMERCE_GOPAY_ID,
         array('Woocommerce_Gopay_Subscriptions', 'process_subscription_payment'), 5, 2);
+    add_action('woocommerce_subscription_status_updated',
+        array('Woocommerce_Gopay_Subscriptions', 'cancel_subscription_payment'), 4, 3);
+    add_action('woocommerce_scheduled_subscription_payment_retry',
+        array('Woocommerce_Gopay_Subscriptions', 'retry_subscription_payment'), 20, 1);
 }
 
 /**

@@ -562,10 +562,6 @@ function init_woocommerce_gopay_gateway()
         #$order->set_status('on-hold');
         $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
         $order->save();
-        if (!empty($subscription)) {
-            $subscription->update_meta_data('GoPay_Transaction_id', $response->json['id']);
-            $subscription->save();
-        }
 
         // Save log
         $log = [

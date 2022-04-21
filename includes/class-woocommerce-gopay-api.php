@@ -168,7 +168,8 @@ class Woocommerce_Gopay_API
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
-        $GoPay_Transaction_id = $order->get_meta('GoPay_Transaction_id', true);
+        $parent_order = Woocommerce_Gopay_Subscriptions::get_parent_order($order);
+        $GoPay_Transaction_id = $parent_order->get_meta('GoPay_Transaction_id', true);
 
         $data = [
             'amount' => $order->get_total() * 100,
@@ -180,6 +181,25 @@ class Woocommerce_Gopay_API
         ];
 
         $response = $gopay->createRecurrence($GoPay_Transaction_id, $data);
+
+        return $response;
+
+    }
+
+    /**
+     * GoPay cancel recurrence
+     *
+     * @since 1.0.0
+     * @param object $subscription subscription detail.
+     * @return response
+     */
+    public static function cancel_recurrence($subscription) {
+        $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
+        $gopay = self::auth_GoPay($options);
+
+        $GoPay_Transaction_id = $subscription->get_parent()->get_meta('GoPay_Transaction_id', true);
+
+        $response = $gopay->voidRecurrence($GoPay_Transaction_id);
 
         return $response;
 
@@ -256,11 +276,14 @@ class Woocommerce_Gopay_API
                 'status'=> 'wc-pending' //array('wc-pending', 'wc-on-hold')
             )
         );
-        foreach ($orders as $order){
-            $GoPay_Transaction_id_Recurrence = $order->get_meta('GoPay_Transaction_id_Recurrence', true);
+        foreach ($orders as $order) {
             $GoPay_Transaction_id = $order->get_meta('GoPay_Transaction_id', true);
-            $response = $gopay->getStatus(empty(
-                $GoPay_Transaction_id_Recurrence) ? $GoPay_Transaction_id : $GoPay_Transaction_id_Recurrence);
+
+            if (empty($GoPay_Transaction_id)) {
+                continue;
+            }
+
+            $response = $gopay->getStatus($GoPay_Transaction_id);
 
             if ($response->json['state'] == 'PAID'){
                 // Check if all products are either virtual or downloadable
@@ -277,6 +300,13 @@ class Woocommerce_Gopay_API
                     $order->set_status('completed');
                 } else {
                     $order->set_status('processing');
+                }
+
+                // Update retry status
+                $retry = WCS_Retry_Manager::store()->get_last_retry_for_order(
+                    wcs_get_objects_property($order, 'id'));
+                if (!empty($retry)) {
+                    $retry->update_status('complete');
                 }
 
                 // Save log

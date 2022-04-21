@@ -109,6 +109,24 @@ class Woocommerce_Gopay_Subscriptions {
     }
 
     /**
+     * Get parent order
+     *
+     * @since  1.0.0
+     * @param  object $order
+     * @return object
+     */
+    public static function get_parent_order($order) {
+
+        $subscription = self::get_subscription_data($order);
+
+        if (!empty($subscription)) {
+            return $subscription->get_parent();
+        }
+
+        return [];
+    }
+
+    /**
      * Is subscription present in the cart
      *
      * @since  1.0.0
@@ -140,16 +158,15 @@ class Woocommerce_Gopay_Subscriptions {
      */
     public static function process_subscription_payment($renewal_total, $renewal_order) {
 
+        $renewal_order->update_status('pending');
         $response = Woocommerce_Gopay_API::create_recurrence($renewal_order);
 
         if ($response->statusCode == 200) {
-            $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($renewal_order);
-            $renewal_order->update_meta_data('GoPay_Transaction_id_Recurrence', $response->json['id']);
+            $renewal_order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
             $renewal_order->save();
-            if (!empty($subscription)) {
-                $subscription->update_meta_data('GoPay_Transaction_id_Recurrence', $response->json['id']);
-                $subscription->save();
-            }
+        } else {
+            $renewal_order->update_status('failed');
+            $renewal_order->save();
         }
 
         $log = [
@@ -161,4 +178,56 @@ class Woocommerce_Gopay_Subscriptions {
         Woocommerce_Gopay_Log::insert_log($log);
     }
 
+    /**
+     * Cancel subscription payment when
+     * the status is changed
+     *
+     * @since  1.0.0
+     * @param  object $subscription
+     * @param  string $new_status
+     * @param  string $old_status
+     */
+    public static function cancel_subscription_payment($subscription, $new_status, $old_status) {
+
+        $status = array("cancelled", "expired", "pending-cancel");
+        if(in_array($new_status, $status)) {
+            $response = Woocommerce_Gopay_API::cancel_recurrence($subscription);
+
+            $order = $subscription->order;
+            if ($response->statusCode == 200) {
+                $order->set_status('cancelled');
+                $order->save();
+            } else {
+                $subscription->set_status('on-hold');
+                $subscription->save();
+            }
+
+            $log = [
+                'order_id' => $order->get_id(),
+                'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : 0,
+                'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
+                'log' => $response->json
+            ];
+            Woocommerce_Gopay_Log::insert_log($log);
+        }
+    }
+
+    /**
+     * Retry subscription payment
+     *
+     * @since  1.0.0
+     * @param  float $renewal_total
+     * @param  object $renewal_order
+     */
+    public static function retry_subscription_payment($last_order) {
+        if (!is_object($last_order)) {
+            $last_order = wc_get_order($last_order);
+        }
+
+        if (false === $last_order) {
+            return;
+        }
+
+        self::process_subscription_payment(0, $last_order);
+    }
 }
