@@ -60,13 +60,22 @@ class Woocommerce_Gopay_API
 
         $items = array();
         foreach($order->get_items() as $item){
+
+            $vat_rate = '0';
+            if ($item->get_tax_status() == 'taxable') {
+                $array = WC_Tax::get_base_tax_rates($item->get_tax_class());
+                if (!empty($array)) {
+                    $vat_rate = (string)end($array)['rate'];
+                }
+            }
+
             $items[] = [
-                'type' => 'ITEM', // Change it
+                'type' => 'ITEM',
                 'name' => $item['name'],
                 'product_url' => get_permalink($item['product_id']),
                 'amount' => $item['total'] * 100,
                 'count' => $item['quantity'],
-                'vat_rate' => '0' // Change it - select the correct rate
+                'vat_rate' => $vat_rate
             ];
         }
 
@@ -95,9 +104,12 @@ class Woocommerce_Gopay_API
 
         $items = self::get_items($order);
 
+        $notification_url = add_query_arg(array('gopay-api' => WOOCOMMERCE_GOPAY_ID . '_notification',
+                                                'order_id' => $order->get_id()), get_site_url());
+
         $callback = [
-            'return_url' => $return_url, // wc_get_checkout_url(),
-            'notification_url' => get_home_url() // Change it
+            'return_url' => $return_url,
+            'notification_url' => $notification_url
         ];
 
         $contact = [
@@ -285,7 +297,7 @@ class Woocommerce_Gopay_API
 
             $response = $gopay->getStatus($GoPay_Transaction_id);
 
-            if ($response->json['state'] == 'PAID'){
+            if ($response->json['state'] == 'PAID') {
                 // Check if all products are either virtual or downloadable
                 $all_virtual_downloadable = true;
                 foreach ($order->get_items() as $item) {
@@ -303,10 +315,12 @@ class Woocommerce_Gopay_API
                 }
 
                 // Update retry status
-                $retry = WCS_Retry_Manager::store()->get_last_retry_for_order(
-                    wcs_get_objects_property($order, 'id'));
-                if (!empty($retry)) {
-                    $retry->update_status('complete');
+                if (class_exists("WCS_Retry_Manager", false)) {
+                    $retry = WCS_Retry_Manager::store()->get_last_retry_for_order(
+                        wcs_get_objects_property($order, 'id'));
+                    if (!empty($retry)) {
+                        $retry->update_status('complete');
+                    }
                 }
 
                 // Save log

@@ -192,4 +192,24 @@ function admin_notice_error() {
     echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
 }
 
+// TEST
+/**
+ * Add template redirect
+ *
+ * @since 1.0.0
+ */
+add_action('template_redirect', 'check_status_gopay_redirect');
+function check_status_gopay_redirect() {
+//    global $wp;
+//
+//    $log = [
+//        'order_id' => 0,
+//        'transaction_id' => 0,
+//        'log_level' => home_url( $wp-> ),
+//        'log' => $_GET
+//    ];
+//    Woocommerce_Gopay_Log::insert_log($log);
+}
+// END
+
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');
