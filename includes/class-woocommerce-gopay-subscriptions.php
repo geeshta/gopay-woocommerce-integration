@@ -172,7 +172,9 @@ class Woocommerce_Gopay_Subscriptions {
         $log = [
             'order_id' => $renewal_order->get_id(),
             'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : 0,
-            'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
+            'message' => $response->statusCode == 200 ?
+                'Recurrence of previously created payment executed' : 'Recurring payment error',
+            'log_level' => $response->statusCode == 200 ? 'INFO' : 'ERROR',
             'log' => $response->json
         ];
         Woocommerce_Gopay_Log::insert_log($log);
@@ -189,9 +191,10 @@ class Woocommerce_Gopay_Subscriptions {
      */
     public static function cancel_subscription_payment($subscription, $new_status, $old_status) {
 
-        $status = array("cancelled", "expired", "pending-cancel");
-        if(in_array($new_status, $status)) {
+        $status_to_cancel = array("cancelled", "expired", "pending-cancel");
+        if(in_array($new_status, $status_to_cancel)) {
             $response = Woocommerce_Gopay_API::cancel_recurrence($subscription);
+            $status = Woocommerce_Gopay_API::get_status($subscription->get_parent()->get_id());
 
             $order = $subscription->order;
             if ($response->statusCode == 200) {
@@ -205,29 +208,12 @@ class Woocommerce_Gopay_Subscriptions {
             $log = [
                 'order_id' => $order->get_id(),
                 'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : 0,
+                'message' => $response->statusCode == 200 ?
+                    'Recurrence of previously created payment cancelled' : 'Cancel recurrence error',
                 'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
-                'log' => $response->json
+                'log' => $status->statusCode == 200 ? $status->json : $response->json
             ];
             Woocommerce_Gopay_Log::insert_log($log);
         }
-    }
-
-    /**
-     * Retry subscription payment
-     *
-     * @since  1.0.0
-     * @param  float $renewal_total
-     * @param  object $renewal_order
-     */
-    public static function retry_subscription_payment($last_order) {
-        if (!is_object($last_order)) {
-            $last_order = wc_get_order($last_order);
-        }
-
-        if (false === $last_order) {
-            return;
-        }
-
-        self::process_subscription_payment(0, $last_order);
     }
 }

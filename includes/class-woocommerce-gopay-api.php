@@ -92,20 +92,35 @@ class Woocommerce_Gopay_API
      * @param string $end_date the end date of recurrence
      * @return response
      */
-    public static function create_payment($gopay_payment_method, $order, $return_url, $end_date) {
+    public static function create_payment($gopay_payment_method, $order, $end_date, $is_retry) {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
-        if (isset($gopay_payment_method)) {
-            $default_payment_instrument = $gopay_payment_method;
+        $simplified = $options['simplified_payment_method'] == "yes" ? true : false;
+
+        $allowed_swifts = [];
+        if (array_key_exists($gopay_payment_method, Woocommerce_Gopay_Options::supported_banks())) {
+            $allowed_swifts = [$gopay_payment_method];
+            $gopay_payment_method = "BANK_ACCOUNT";
+        }
+
+        if (empty($order->get_meta('GoPay_payment_method', true)) || !$is_retry) {
+            if (!$simplified && isset($gopay_payment_method)) {
+                $default_payment_instrument = $gopay_payment_method;
+            } else {
+                $default_payment_instrument = "";
+            }
         } else {
-            $default_payment_instrument = "PAYMENT_CARD";
+            $default_payment_instrument = $order->get_meta('GoPay_payment_method', true);
+            $allowed_swifts = [$order->get_meta('GoPay_bank_swift', true)];
         }
 
         $items = self::get_items($order);
 
         $notification_url = add_query_arg(array('gopay-api' => WOOCOMMERCE_GOPAY_ID . '_notification',
                                                 'order_id' => $order->get_id()), get_site_url());
+        $return_url = add_query_arg(array('gopay-api' => WOOCOMMERCE_GOPAY_ID . '_return',
+            'order_id' => $order->get_id()), get_site_url());
 
         $callback = [
             'return_url' => $return_url,
@@ -123,12 +138,11 @@ class Woocommerce_Gopay_API
             'country_code' => Woocommerce_Gopay_Options::iso2_to_iso3()[$order->get_billing_country()]
         ];
 
-        $simplified = $options['simplified_payment_method'] == "yes" ? true : false;
-        if (!$simplified) {
+        if (!empty($default_payment_instrument)) {
             $payer = [
                 'default_payment_instrument' => $default_payment_instrument,
                 'allowed_payment_instruments' => [$default_payment_instrument],
-                'allowed_swifts' => $options['enable_banks_' . $order->get_currency()],
+                'allowed_swifts' => $allowed_swifts,
                 'contact' => $contact
             ];
         } else {
@@ -239,7 +253,8 @@ class Woocommerce_Gopay_API
                     $enabledSwifts = $paymentMethod["enabledSwifts"];
                     foreach ($enabledSwifts as $_ => $bank) {
                         $paymentInstruments[$paymentMethod[
-                            "paymentInstrument"]]["swifts"][$bank["swift"]] = $bank["label"]["cs"];
+                            "paymentInstrument"]]["swifts"][$bank["swift"]] = array(
+                                "label" => $bank["label"]["cs"], "image" => $bank["image"]["normal"]);
                     }
                 } else {
                     $paymentInstruments[$paymentMethod[
@@ -278,26 +293,40 @@ class Woocommerce_Gopay_API
      *
      * @since  1.0.0
      */
-    public static function check_payment_status() {
+    public static function check_payment_status($order_id, $GoPay_Transaction_id) {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
-        $orders = wc_get_orders(array(
-                'limit'=>-1,
-                'type'=> 'shop_order',
-                'status'=> 'wc-pending' //array('wc-pending', 'wc-on-hold')
-            )
-        );
-        foreach ($orders as $order) {
-            $GoPay_Transaction_id = $order->get_meta('GoPay_Transaction_id', true);
+        $response = $gopay->getStatus($GoPay_Transaction_id);
 
-            if (empty($GoPay_Transaction_id)) {
-                continue;
-            }
+        $orders = wc_get_orders( array(
+            'limit'        => 1,
+            'meta_key'     => 'GoPay_Transaction_id',
+            'meta_compare' => $GoPay_Transaction_id,
+        ));
 
-            $response = $gopay->getStatus($GoPay_Transaction_id);
+        if (!empty($orders)){
+            $order = $orders[0];
+        } else {
+            return;
+        }
 
-            if ($response->json['state'] == 'PAID') {
+        // Save log
+        $log = [
+            'order_id' => $order->get_id(),
+            'transaction_id' => $response->statusCode == 200 ?  $response->json['id'] : '0',
+            'message' => $response->statusCode == 200 ?  'Checking payment status' : 'Error checking payment status',
+            'log_level' => $response->statusCode == 200 ? 'INFO' : 'ERROR',
+            'log' => $response->json
+        ];
+        Woocommerce_Gopay_Log::insert_log($log);
+
+        if ($response->statusCode != 200) {
+            return;
+        }
+
+        switch ($response->json['state']) {
+            case 'PAID':
                 // Check if all products are either virtual or downloadable
                 $all_virtual_downloadable = true;
                 foreach ($order->get_items() as $item) {
@@ -323,16 +352,28 @@ class Woocommerce_Gopay_API
                     }
                 }
 
-                // Save log
-                $log = [
-                    'order_id' => $order->get_id(),
-                    'transaction_id' => $response->json['id'],
-                    'log_level' => 'INFO',
-                    'log' => $response->json
-                ];
-                Woocommerce_Gopay_Log::insert_log($log);
-            }
-            $order->save();
+                $order->save();
+                wp_redirect($order->get_checkout_order_received_url());
+
+                break;
+            case 'PAYMENT_METHOD_CHOSEN':
+            case 'AUTHORIZED':
+            case 'CREATED':
+                wp_redirect($order->get_checkout_order_received_url());
+
+                break;
+            case 'TIMEOUTED':
+            case 'CANCELED':
+                $order->set_status('failed');
+                $order->save();
+                wp_redirect($order->get_checkout_order_received_url());
+
+                break;
+            case 'REFUNDED':
+                $order->set_status('refunded');
+                $order->save();
+
+                break;
         }
     }
 

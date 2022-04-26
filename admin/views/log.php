@@ -14,6 +14,7 @@ $log_data = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . WOOCOMMERCE_GO
                 <th>Id</th>
                 <th>Order id</th>
                 <th>Transaction id</th>
+                <th>Message</th>
                 <th>Created at</th>
                 <th>Log level</th>
                 <th>Log</th>
@@ -30,6 +31,7 @@ $log_data = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . WOOCOMMERCE_GO
                 echo '<td>' . $log->id . '</td>';
                 echo '<td><a href="' . $order_url . '">' . $log->order_id . '</a></td>';
                 echo '<td><a href="' . $gw_url . '">' . $log->transaction_id . '</a></td>';
+                echo '<td>' . $log->message . '</td>';
                 echo '<td>' . $log->created_at . ' (UTC' . $gmt_offset . ')</td>';
                 echo '<td>' . $log->log_level . '</td>';
                 echo '<td>' . $log->log . '</td>';

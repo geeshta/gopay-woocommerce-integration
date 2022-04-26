@@ -123,26 +123,6 @@ if (is_admin() && (!defined( 'DOING_AJAX') || !DOING_AJAX)) {
     new Woocommerce_Gopay_Admin_Menu();
 }
 
-// Scheduling a task to be executed and check if order was paid
-/**
- * Cron execute every 10 seconds
- */
-function gopay_cron_schedules($schedules){
-    if(!isset($schedules["10sec"])){
-        $schedules["10sec"] = array(
-            'interval' => 10,
-            'display' => __('Once every 10 seconds',
-                WOOCOMMERCE_GOPAY_DOMAIN)
-        );
-    }
-    return $schedules;
-}
-add_filter('cron_schedules','gopay_cron_schedules');
-if(!wp_next_scheduled('wc_gopay_check_status', array(false))){
-    wp_schedule_event(time(), '10sec', 'wc_gopay_check_status', array(false));
-}
-add_action('wc_gopay_check_status', array('Woocommerce_Gopay_API', 'check_payment_status'));
-
 // Check if WooCommerce Subscriptions is active
 if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.php")) {
 
@@ -166,8 +146,6 @@ if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.
         array('Woocommerce_Gopay_Subscriptions', 'process_subscription_payment'), 5, 2);
     add_action('woocommerce_subscription_status_updated',
         array('Woocommerce_Gopay_Subscriptions', 'cancel_subscription_payment'), 4, 3);
-    add_action('woocommerce_scheduled_subscription_payment_retry',
-        array('Woocommerce_Gopay_Subscriptions', 'retry_subscription_payment'), 20, 1);
 }
 
 /**
@@ -192,24 +170,17 @@ function admin_notice_error() {
     echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
 }
 
-// TEST
 /**
- * Add template redirect
+ * Check Status of GoPay payment
  *
  * @since 1.0.0
  */
 add_action('template_redirect', 'check_status_gopay_redirect');
 function check_status_gopay_redirect() {
-//    global $wp;
-//
-//    $log = [
-//        'order_id' => 0,
-//        'transaction_id' => 0,
-//        'log_level' => home_url( $wp-> ),
-//        'log' => $_GET
-//    ];
-//    Woocommerce_Gopay_Log::insert_log($log);
+
+    if(!empty($_GET['gopay-api'])) {
+        Woocommerce_Gopay_API::check_payment_status($_GET['order_id'], $_GET['id']);
+    }
 }
-// END
 
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');

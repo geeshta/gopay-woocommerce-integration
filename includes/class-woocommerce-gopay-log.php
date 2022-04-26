@@ -26,15 +26,26 @@ class Woocommerce_Gopay_Log {
     public static function insert_log($log){
         global $wpdb;
 
-        $response = $wpdb->insert($wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
-            [
-                'order_id' => $log['order_id'],
-                'transaction_id' => $log['transaction_id'],
-                'created_at' => gmdate('Y-m-d H:i:s'),
-                'gmt_offset' => get_option('gmt_offset'),
-                'log_level' => $log['log_level'],
-                'log' => json_encode($log['log'])
-            ]);
+        $table_name = $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME;
+        $data = [
+            'order_id' => $log['order_id'],
+            'transaction_id' => $log['transaction_id'],
+            'message' => $log['message'],
+            'created_at' => gmdate('Y-m-d H:i:s'),
+            'gmt_offset' => get_option('gmt_offset'),
+            'log_level' => $log['log_level'],
+            'log' => json_encode($log['log'])
+        ];
+        $where = [
+            'order_id' => $log['order_id'],
+            'transaction_id' => $log['transaction_id'],
+            'message' => $log['message']
+        ];
+
+        $response = $wpdb->update($table_name, $data, $where);
+        if ($response === FALSE || $response < 1) {
+            $response = $wpdb->insert($table_name, $data);
+        }
 
 //        if ($response) {
 //            error_log("LOG INSERTED");

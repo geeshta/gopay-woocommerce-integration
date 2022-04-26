@@ -91,7 +91,6 @@ function init_woocommerce_gopay_gateway()
 
       #add_filter('woocommerce_currencies', array('Woocommerce_Gopay_Options', 'supported_currencies'));
       add_action('plugins_loaded', array('Woocommerce_Gopay_Admin_Menu', 'create_menu'));
-      add_action("woocommerce_thankyou_" . $this->id, [$this, "thankyou_page"]);
       add_filter(
         "woocommerce_payment_complete_order_status",
         [$this, "complete_order_status"],
@@ -99,7 +98,7 @@ function init_woocommerce_gopay_gateway()
         3
       );
       add_filter("woocommerce_thankyou_order_received_text",
-          array($this, "subscription_trial_period_thankyou_page"), 20, 2);
+          array($this, "thankyou_page"), 20, 2);
     }
 
     /**
@@ -413,8 +412,15 @@ function init_woocommerce_gopay_gateway()
 
         // Banks
         if (array_key_exists("BANK_ACCOUNT", $enable_gopay_payment_methods)) {
-            $supported_banks = array_intersect_key(
-                Woocommerce_Gopay_Options::supported_banks(), $paymentInstruments["BANK_ACCOUNT"]["swifts"]);
+
+            $supported_banks = [];
+            foreach ($paymentInstruments["BANK_ACCOUNT"]["swifts"] as $key => $value){
+                if (array_key_exists($key, Woocommerce_Gopay_Options::supported_banks())) {
+                    $supported_banks[$key] = $value;
+                    $supported_banks[$key][
+                    "description"] = Woocommerce_Gopay_Options::supported_banks()[$key];
+                }
+            }
             $enable_banks = $this->get_option("enable_banks", []);
             $enable_banks = array_intersect_key($supported_banks,
                 array_flip($enable_banks));
@@ -425,7 +431,7 @@ function init_woocommerce_gopay_gateway()
             $this->update_option('enable_banks_' . get_woocommerce_currency(), []);
         }
 
-        return $supported_payment_methods;
+        return [$supported_payment_methods, $supported_banks];
     }
 
     /**
@@ -437,7 +443,9 @@ function init_woocommerce_gopay_gateway()
     {
       echo wpautop(wptexturize($this->description));
 
-      $supported_payment_methods = $this->update_payments_methods_enabled();
+      $supported = $this->update_payments_methods_enabled();
+      $supported_payment_methods = $supported[0];
+      $supported_banks = $supported[1];
 
       $enabled_payment_methods = "";
       $checked = 'checked="checked"';
@@ -446,6 +454,7 @@ function init_woocommerce_gopay_gateway()
           !empty(get_query_var("order-pay")));
       if (!$this->simplified_payment_method && !$payment_retry) {
           $payment_methods = $this->get_option('enable_gopay_payment_methods_' . get_woocommerce_currency());
+          $banks = $this->get_option('enable_banks_' . get_woocommerce_currency());
 
           // Check if subscription - only card payment is enabled
           if (Woocommerce_Gopay_Subscriptions::cart_contains_subscription()) {
@@ -456,20 +465,38 @@ function init_woocommerce_gopay_gateway()
               }
           }
 
+          $input =
+              '
+              <div class="payment_method_' .
+              WOOCOMMERCE_GOPAY_ID . '_selection" style="border-bottom: 1px dashed; padding: 12px;">
+                <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
+                '_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
+                <span>%s</span>
+                <img src="%s" alt="ico" style="height: auto; width: auto;"/>
+              </div>';
+
+          $enabled_payment_methods .= '';
           foreach ($payment_methods as $key => $payment_method) {
-              if ($payment_method == "BANK_ACCOUNT" &&
-                  empty($this->get_option('enable_banks_' . get_woocommerce_currency()))){
-                  continue;
+              if ($payment_method == "BANK_ACCOUNT") {
+                  if (empty($this->get_option('enable_banks_' . get_woocommerce_currency()))) {
+                      continue;
+                  } else {
+                      foreach ($banks as $key => $bank) {
+                          $span = $supported_banks[$bank]["description"];
+                          $img = $supported_banks[$bank]["image"];
+
+                          $enabled_payment_methods .= sprintf($input, $payment_method,
+                              $bank, $checked, $span, $img);
+                      }
+                      continue;
+                  }
               }
-              $enabled_payment_methods .=
-                  '
-                  <div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection" style="border-bottom: 1px dashed; padding: 12px;">
-                    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
-                        '_input" name="gopay_payment_method" type="radio" id="' .
-                        $payment_method . '" value="' . $payment_method . '" ' . $checked . ' />
-                    <span>' . $supported_payment_methods[$payment_method]["description"] . '</span>
-                    <img src="' . $supported_payment_methods[$payment_method]["image"] . '" alt="ico" style="height: auto; width: auto;"/>
-                  </div>';
+
+              $span = $supported_payment_methods[$payment_method]["description"];
+              $img = $supported_payment_methods[$payment_method]["image"];
+
+              $enabled_payment_methods .= sprintf($input, $payment_method, $payment_method, $checked, $span, $img);
+
               $checked = "";
           }
       }
@@ -486,24 +513,14 @@ function init_woocommerce_gopay_gateway()
     public function process_payment($order_id)
     {
         $order = wc_get_order($order_id);
+        $order->set_status("pending");
+        $order->save();
 
         if (!$order->get_currency() || !array_key_exists($order->get_currency(), $this->enable_currencies)) {
             wc_add_notice(__('Currency is not supported on GoPay', WOOCOMMERCE_GOPAY_DOMAIN), "error");
             return [
                 "result" => "failed",
                 "redirect" => wc_get_checkout_url()
-            ];
-        }
-
-        // Payment Retry
-        if ($this->payment_retry &&
-            is_page(wc_get_page_id("checkout")) &&
-            !empty(get_query_var("order-pay"))
-        ) {
-            $response = Woocommerce_Gopay_API::get_status($order_id);
-            return [
-                "result" => "success",
-                "redirect" => $response->json['gw_url']
             ];
         }
 
@@ -536,16 +553,24 @@ function init_woocommerce_gopay_gateway()
             }
         }
 
+        $gopay_payment_method = array_key_exists("gopay_payment_method", $_POST) ?
+            $_POST["gopay_payment_method"] : null;
+        $is_retry = $this->payment_retry &&
+        is_page(wc_get_page_id("checkout")) &&
+        !empty(get_query_var("order-pay"));
+
         $response = Woocommerce_Gopay_API::create_payment(
-            array_key_exists("gopay_payment_method", $_POST) ?
-                $_POST["gopay_payment_method"] : null, $order, $this->get_return_url($order),
-            !empty($subscription) ? $subscription->get_date("end") : "");
+            $gopay_payment_method,
+            $order,
+            !empty($subscription) ? $subscription->get_date("end") : "",
+            $is_retry);
 
         if ($response->statusCode != 200) {
             $log = [
                 'order_id' => $order_id,
                 'transaction_id' => 0,
-                'log_level' => 'Error',
+                'message' => 'Process payment error',
+                'log_level' => 'ERROR',
                 'log' => $response->json
             ];
             Woocommerce_Gopay_Log::insert_log($log);
@@ -560,6 +585,14 @@ function init_woocommerce_gopay_gateway()
 
         // Add GoPay transaction id to order (and subscription if it exists)
         #$order->set_status('on-hold');
+        if (!empty($gopay_payment_method)) {
+            if (array_key_exists($gopay_payment_method, Woocommerce_Gopay_Options::supported_banks())) {
+                $order->update_meta_data('GoPay_bank_swift', $gopay_payment_method);
+                $order->update_meta_data('GoPay_payment_method', "BANK_ACCOUNT");
+            } else {
+                $order->update_meta_data('GoPay_payment_method', $gopay_payment_method);
+            }
+        }
         $order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
         $order->save();
 
@@ -567,6 +600,7 @@ function init_woocommerce_gopay_gateway()
         $log = [
             'order_id' => $order_id,
             'transaction_id' => $response->json['id'],
+            'message' => 'Payment created',
             'log_level' => 'INFO',
             'log' => $response->json
         ];
@@ -589,50 +623,60 @@ function init_woocommerce_gopay_gateway()
     public function process_refund($order_id, $amount = null, $reason = '') {
         $transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
         $response = Woocommerce_Gopay_API::refund_payment($transaction_id, $amount * 100);
+        $status = Woocommerce_Gopay_API::get_status($order_id);
 
         $log = [
             'order_id' => $order_id,
             'transaction_id' => $transaction_id,
-            'log_level' => 'info',
-            'log' => $response->json
+            'message' => 'Payment refund executed',
+            'log_level' => 'INFO',
+            'log' => $status->json
         ];
 
+        if ($status->statusCode != 200) {
+            $log['message'] = $status->json['state'] == 'PARTIALLY_REFUNDED' ?
+                'Payment partially refunded' : 'Payment refunded';
+        }
+
         if ($response->statusCode != 200) {
-            $log['log_level'] = 'Error';
+            $log['message'] = 'Process refund error';
+            $log['log_level'] = 'ERROR';
+            $log['log'] = $response->json;
             Woocommerce_Gopay_Log::insert_log($log);
 
             return false;
         }
         Woocommerce_Gopay_Log::insert_log($log);
 
-        return true;
+        if ($response->json['result'] == 'FINISHED') {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**
      * Message order received page.
      * @since  1.0.0
      */
-    public function thankyou_page()
+    public function thankyou_page($message, $order)
     {
-      if ($this->instructions) {
-        echo wp_kses_post(wpautop(wptexturize($this->instructions)));
-      }
+
+        $message = __("Thank you. Your order has been received.", WOOCOMMERCE_GOPAY_DOMAIN);
+        $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($order);
+        if (!empty($subscription) && $order->get_total() == 0) {
+            return $message . __(" Please pay for your subscription after the trial period.",
+                    WOOCOMMERCE_GOPAY_DOMAIN);
+        }
+
+        if ($order->has_status(['pending', 'on-hold'])) {
+            return $message . __(" However, we are still waiting for confirmation or payment rejection.",
+                    WOOCOMMERCE_GOPAY_DOMAIN);
+        }
+
+        return $message;
     }
-
-      /**
-       * Message order received page for subscription in trial period.
-       * @since  1.0.0
-       */
-      public function subscription_trial_period_thankyou_page($thank_you, $order)
-      {
-          $message = __("Thank you. Your order has been received.", WOOCOMMERCE_GOPAY_DOMAIN);
-          $subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data($order);
-          if (!empty($subscription) && $order->get_total() == 0) {
-              return $message . __(" Please pay for your subscription after the trial period.", WOOCOMMERCE_GOPAY_DOMAIN);
-          }
-
-          return $message;
-      }
 
     /**
      * Complete order status for orders.
