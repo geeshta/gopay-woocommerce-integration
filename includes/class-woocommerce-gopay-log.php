@@ -12,7 +12,8 @@
  * @since 1.0.0
  */
 
-class Woocommerce_Gopay_Log {
+class Woocommerce_Gopay_Log
+{
 
     /**
      * Constructor for the plugin log
@@ -23,7 +24,14 @@ class Woocommerce_Gopay_Log {
     {
     }
 
-    public static function insert_log($log){
+    /**
+     * Insert log into the database
+     *
+     * @since  1.0.0
+     * @param  array $log
+     */
+    public static function insert_log($log)
+    {
         global $wpdb;
 
         $table_name = $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME;
@@ -46,9 +54,5 @@ class Woocommerce_Gopay_Log {
         if ($response === FALSE || $response < 1) {
             $response = $wpdb->insert($table_name, $data);
         }
-
-//        if ($response) {
-//            error_log("LOG INSERTED");
-//        }
     }
 }

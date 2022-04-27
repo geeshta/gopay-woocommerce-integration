@@ -24,7 +24,7 @@
 // If this file is called directly, abort.
 // Preventing direct access to your WordPress.
 if (!defined("WPINC")) {
-  die();
+    die();
 }
 
 /**
@@ -41,7 +41,8 @@ define("WOOCOMMERCE_GOPAY_LOG_TABLE_NAME", "woocommerce_gopay_log");
 /**
  * Check if plugin is active
  */
-function check_is_plugin_active($path) {
+function check_is_plugin_active($path)
+{
     if (function_exists("is_multisite") && is_multisite()) {
         include_once ABSPATH . "wp-admin/includes/plugin.php";
 
@@ -59,8 +60,8 @@ function check_is_plugin_active($path) {
 
 // Check if WooCommerce is active
 $message = __(
-  "WooCommerce GoPay gateway plugin requires WooCommerce to be active.",
-  WOOCOMMERCE_GOPAY_DOMAIN
+    "WooCommerce GoPay gateway plugin requires WooCommerce to be active.",
+    WOOCOMMERCE_GOPAY_DOMAIN
 );
 if (!check_is_plugin_active("woocommerce/woocommerce.php")) {
     exit($message);
@@ -68,20 +69,20 @@ if (!check_is_plugin_active("woocommerce/woocommerce.php")) {
 
 // Deactivate woocommerce gopay plugin if woocommerce is deactivated
 register_deactivation_hook(
-  "woocommerce/woocommerce.php",
-  "woocommerce_deactivate_dependents"
+    "woocommerce/woocommerce.php",
+    "woocommerce_deactivate_dependents"
 );
 /**
  * When woocommerce is deactivated then deactivate woocommerce gopay as well
  */
 function woocommerce_deactivate_dependents()
 {
-  if (check_is_plugin_active(WOOCOMMERCE_GOPAY_BASENAME)) {
-    add_action(
-      "update_option_active_plugins",
-      "woocommerce_gopay_deactivation"
-    );
-  }
+    if (check_is_plugin_active(WOOCOMMERCE_GOPAY_BASENAME)) {
+        add_action(
+            "update_option_active_plugins",
+            "woocommerce_gopay_deactivation"
+        );
+    }
 }
 
 /**
@@ -89,7 +90,7 @@ function woocommerce_deactivate_dependents()
  */
 function woocommerce_gopay_deactivation()
 {
-  deactivate_plugins(WOOCOMMERCE_GOPAY_BASENAME);
+    deactivate_plugins(WOOCOMMERCE_GOPAY_BASENAME);
 }
 
 // Load files
@@ -119,7 +120,7 @@ register_activation_hook(__FILE__, array("Woocommerce_Gopay_Activator", "activat
 register_deactivation_hook(__FILE__, array("Woocommerce_Gopay_Deactivator", "deactivate"));
 
 // Load Woocommerce GoPay gateway admin page
-if (is_admin() && (!defined( 'DOING_AJAX') || !DOING_AJAX)) {
+if (is_admin() && (!defined('DOING_AJAX') || !DOING_AJAX)) {
     new Woocommerce_Gopay_Admin_Menu();
 }
 
@@ -151,7 +152,8 @@ if (check_is_plugin_active("woocommerce-subscriptions/woocommerce-subscriptions.
 /**
  * Disable woocommerce subscriptions multiple purchase option
  */
-function disable_subscriptions_multiple_purchase() {
+function disable_subscriptions_multiple_purchase()
+{
     if (!get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') ||
         get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') == 'yes') {
         add_action('admin_notices', 'admin_notice_error');
@@ -162,7 +164,8 @@ function disable_subscriptions_multiple_purchase() {
 /**
  * Show an error message about mixed checkout option was disabled
  */
-function admin_notice_error() {
+function admin_notice_error()
+{
     $message = __(
         "WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.",
         WOOCOMMERCE_GOPAY_DOMAIN
@@ -176,9 +179,10 @@ function admin_notice_error() {
  * @since 1.0.0
  */
 add_action('template_redirect', 'check_status_gopay_redirect');
-function check_status_gopay_redirect() {
+function check_status_gopay_redirect()
+{
 
-    if(!empty($_GET['gopay-api'])) {
+    if (!empty($_GET['gopay-api'])) {
         Woocommerce_Gopay_API::check_payment_status($_GET['order_id'], $_GET['id']);
     }
 }

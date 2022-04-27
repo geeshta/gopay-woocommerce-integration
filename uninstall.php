@@ -5,8 +5,6 @@
  *
  * @link       https://argo22.com/
  * @since      1.0.0
- *
- * @package    woocommerce-gopay
  */
 
 // If uninstall not called from WordPress, then exit.

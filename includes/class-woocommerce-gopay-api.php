@@ -26,11 +26,12 @@ class Woocommerce_Gopay_API
     /**
      * GoPay authentication
      *
+     * @param array $options gopay gateway settings.
+     * @return \GoPay\Payments object
      * @since  1.0.0
-     * @param  array $options gopay gateway settings.
-     * @return GoPay object
      */
-    private static function auth_GoPay($options) {
+    private static function auth_GoPay($options)
+    {
 
         // Change it - compare with supported languages
         $language = get_locale() ? strtoupper(
@@ -52,14 +53,15 @@ class Woocommerce_Gopay_API
     /**
      * Get items info
      *
-     * @since 1.0.0
      * @param object $order order detail.
      * @return array
+     * @since 1.0.0
      */
-    private static function get_items($order) {
+    private static function get_items($order)
+    {
 
         $items = array();
-        foreach($order->get_items() as $item){
+        foreach ($order->get_items() as $item) {
 
             $vat_rate = '0';
             if ($item->get_tax_status() == 'taxable') {
@@ -85,14 +87,15 @@ class Woocommerce_Gopay_API
     /**
      * GoPay create payment
      *
-     * @since 1.0.0
      * @param string $gopay_payment_method payment method.
      * @param array $order order detail.
      * @param string $return_url url to be used when redirect from GoPay.
      * @param string $end_date the end date of recurrence
-     * @return response
+     * @return \GoPay\Http\Response
+     * @since 1.0.0
      */
-    public static function create_payment($gopay_payment_method, $order, $end_date, $is_retry) {
+    public static function create_payment($gopay_payment_method, $order, $end_date, $is_retry)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -104,21 +107,21 @@ class Woocommerce_Gopay_API
             $gopay_payment_method = "BANK_ACCOUNT";
         }
 
-        if (empty($order->get_meta('GoPay_payment_method', true)) || !$is_retry) {
+        if (empty($order->get_meta('_GoPay_payment_method', true)) || !$is_retry) {
             if (!$simplified && isset($gopay_payment_method)) {
                 $default_payment_instrument = $gopay_payment_method;
             } else {
                 $default_payment_instrument = "";
             }
         } else {
-            $default_payment_instrument = $order->get_meta('GoPay_payment_method', true);
-            $allowed_swifts = [$order->get_meta('GoPay_bank_swift', true)];
+            $default_payment_instrument = $order->get_meta('_GoPay_payment_method', true);
+            $allowed_swifts = [$order->get_meta('_GoPay_bank_swift', true)];
         }
 
         $items = self::get_items($order);
 
         $notification_url = add_query_arg(array('gopay-api' => WOOCOMMERCE_GOPAY_ID . '_notification',
-                                                'order_id' => $order->get_id()), get_site_url());
+            'order_id' => $order->get_id()), get_site_url());
         $return_url = add_query_arg(array('gopay-api' => WOOCOMMERCE_GOPAY_ID . '_return',
             'order_id' => $order->get_id()), get_site_url());
 
@@ -186,11 +189,12 @@ class Woocommerce_Gopay_API
     /**
      * GoPay create recurrence
      *
-     * @since 1.0.0
      * @param object $order order detail.
-     * @return response
+     * @return \GoPay\Http\Response
+     * @since 1.0.0
      */
-    public static function create_recurrence($order) {
+    public static function create_recurrence($order)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -215,11 +219,12 @@ class Woocommerce_Gopay_API
     /**
      * GoPay cancel recurrence
      *
-     * @since 1.0.0
      * @param object $subscription subscription detail.
-     * @return response
+     * @return \GoPay\Http\Response
+     * @since 1.0.0
      */
-    public static function cancel_recurrence($subscription) {
+    public static function cancel_recurrence($subscription)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
@@ -234,31 +239,30 @@ class Woocommerce_Gopay_API
     /**
      * GoPay get enabled payments methods
      *
-     * @since  1.0.0
      * @param string $currency
      * @return array
+     * @since  1.0.0
      */
-    public static function get_enabled_payment_methods($currency){
+    public static function get_enabled_payment_methods($currency)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
         $enabledPayments = $gopay->getPaymentInstruments($options["goid"], $currency);
 
         $paymentInstruments = array();
-        if ($enabledPayments->statusCode == 200){
-            foreach ($enabledPayments->json["enabledPaymentInstruments"] as $key => $paymentMethod){
-                if ($paymentMethod["paymentInstrument"] == "BANK_ACCOUNT"){
+        if ($enabledPayments->statusCode == 200) {
+            foreach ($enabledPayments->json["enabledPaymentInstruments"] as $key => $paymentMethod) {
+                if ($paymentMethod["paymentInstrument"] == "BANK_ACCOUNT") {
                     $paymentInstruments[$paymentMethod["paymentInstrument"]] = array(
                         "image" => $paymentMethod["image"]["normal"], "swifts" => array());
                     $enabledSwifts = $paymentMethod["enabledSwifts"];
                     foreach ($enabledSwifts as $_ => $bank) {
-                        $paymentInstruments[$paymentMethod[
-                            "paymentInstrument"]]["swifts"][$bank["swift"]] = array(
-                                "label" => $bank["label"]["cs"], "image" => $bank["image"]["normal"]);
+                        $paymentInstruments[$paymentMethod["paymentInstrument"]]["swifts"][$bank["swift"]] = array(
+                            "label" => $bank["label"]["cs"], "image" => $bank["image"]["normal"]);
                     }
                 } else {
-                    $paymentInstruments[$paymentMethod[
-                        "paymentInstrument"]] = array("image" => $paymentMethod["image"]["normal"]);
+                    $paymentInstruments[$paymentMethod["paymentInstrument"]] = array("image" => $paymentMethod["image"]["normal"]);
                 }
             }
         }
@@ -269,8 +273,8 @@ class Woocommerce_Gopay_API
     /**
      * GoPay get enabled swifts
      *
-     * @since  1.0.0
      * @return array
+     * @since  1.0.0
      */
     public static function get_enabled_swifts()
     {
@@ -278,7 +282,7 @@ class Woocommerce_Gopay_API
         foreach (["CZK", "EUR", "PLN"] as $key => $currency) {
             $paymentInstruments = self::get_enabled_payment_methods($currency);
 
-            if (array_key_exists('BANK_ACCOUNT', $paymentInstruments)){
+            if (array_key_exists('BANK_ACCOUNT', $paymentInstruments)) {
                 foreach ($paymentInstruments["BANK_ACCOUNT"]["swifts"] as $swift => $description) {
                     $swifts[$swift] = __($description, WOOCOMMERCE_GOPAY_DOMAIN);
                 }
@@ -293,19 +297,20 @@ class Woocommerce_Gopay_API
      *
      * @since  1.0.0
      */
-    public static function check_payment_status($order_id, $GoPay_Transaction_id) {
+    public static function check_payment_status($order_id, $GoPay_Transaction_id)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
         $response = $gopay->getStatus($GoPay_Transaction_id);
 
-        $orders = wc_get_orders( array(
-            'limit'        => 1,
-            'meta_key'     => 'GoPay_Transaction_id',
+        $orders = wc_get_orders(array(
+            'limit' => 1,
+            'meta_key' => 'GoPay_Transaction_id',
             'meta_compare' => $GoPay_Transaction_id,
         ));
 
-        if (!empty($orders)){
+        if (!empty($orders)) {
             $order = $orders[0];
         } else {
             return;
@@ -314,8 +319,8 @@ class Woocommerce_Gopay_API
         // Save log
         $log = [
             'order_id' => $order->get_id(),
-            'transaction_id' => $response->statusCode == 200 ?  $response->json['id'] : '0',
-            'message' => $response->statusCode == 200 ?  'Checking payment status' : 'Error checking payment status',
+            'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : '0',
+            'message' => $response->statusCode == 200 ? 'Checking payment status' : 'Error checking payment status',
             'log_level' => $response->statusCode == 200 ? 'INFO' : 'ERROR',
             'log' => $response->json
         ];
@@ -382,14 +387,13 @@ class Woocommerce_Gopay_API
      *
      * @since  1.0.0
      */
-    public static function get_status($order_id) {
+    public static function get_status($order_id)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
 
         $GoPay_Transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
         $response = $gopay->getStatus($GoPay_Transaction_id);
-
-        // Change it - Handle any possible error and add log
 
         return $response;
     }
@@ -397,18 +401,16 @@ class Woocommerce_Gopay_API
     /**
      * Refund payment
      *
-     * @since  1.0.0
      * @param int $transaction_id
      * @param string $amount
-     * @return json $response
+     * @return \GoPay\Http\Response $response
+     * @since  1.0.0
      */
-    public static function refund_payment($transaction_id, $amount) {
+    public static function refund_payment($transaction_id, $amount)
+    {
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
         $response = $gopay->refundPayment($transaction_id, $amount);
-
-        // Change it - Handle any possible error and add log
-        // Add message add_order_note and wc_add_notice
 
         return $response;
     }

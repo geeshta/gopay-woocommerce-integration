@@ -1,5 +1,5 @@
 <?php
-$plugin_data = get_plugin_data( WOOCOMMERCE_GOPAY_FULLPATH );
+$plugin_data = get_plugin_data(WOOCOMMERCE_GOPAY_FULLPATH);
 $settings_url = admin_url("admin.php?page=wc-settings&tab=checkout&section=wc_gopay_gateway");
 ?>
 

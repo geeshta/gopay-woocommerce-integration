@@ -12,7 +12,8 @@
  * @since 1.0.0
  */
 
-class Woocommerce_Gopay_Subscriptions {
+class Woocommerce_Gopay_Subscriptions
+{
 
     /**
      * When a subscription is added to the cart then check cart add
@@ -20,23 +21,24 @@ class Woocommerce_Gopay_Subscriptions {
      * Check if only one subscription was added to the cart
      * without any other products/subscriptions
      *
-     * @since  1.0.0
-     * @param  bool $valid
-     * @param  int $product_id product id
-     * @param  int $quantity quantity of the item
+     * @param bool $valid
+     * @param int $product_id product id
+     * @param int $quantity quantity of the item
      * @return bool
+     * @since  1.0.0
      */
-    public static function subscriptions_check_add_to_cart($valid, $product_id, $quantity) {
+    public static function subscriptions_check_add_to_cart($valid, $product_id, $quantity)
+    {
         remove_filter("woocommerce_add_to_cart_validation",
             array("WC_Subscriptions_Cart_Validator", "maybe_empty_cart"));
 
         if (WC()->cart->get_cart_contents_count() != 0 &&
-            (WC_Subscriptions_Product::is_subscription(end( WC()->cart->cart_contents)['product_id']) ||
-            WC_Subscriptions_Product::is_subscription($product_id))
+            (WC_Subscriptions_Product::is_subscription(end(WC()->cart->cart_contents)['product_id']) ||
+                WC_Subscriptions_Product::is_subscription($product_id))
         ) {
 
             wc_add_notice(__("Products and subscriptions can not be purchased at the same time and " .
-                                    "only one subscription per checkout is possible.",
+                "only one subscription per checkout is possible.",
                 WOOCOMMERCE_GOPAY_DOMAIN), "notice");
             return false;
         }
@@ -49,14 +51,15 @@ class Woocommerce_Gopay_Subscriptions {
      *
      * Check if only one subscription was added to the cart
      *
-     * @since  1.0.0
-     * @param  bool $passed
-     * @param  string $cart_item_key
-     * @param  array $values values of the item
-     * @param  int $quantity quantity of the item
+     * @param bool $passed
+     * @param string $cart_item_key
+     * @param array $values values of the item
+     * @param int $quantity quantity of the item
      * @return bool
+     * @since  1.0.0
      */
-    public static function subscriptions_check_cart_update($passed, $cart_item_key, $values, $quantity) {
+    public static function subscriptions_check_cart_update($passed, $cart_item_key, $values, $quantity)
+    {
 
         if ($quantity > 1) {
             if (WC_Subscriptions_Product::is_subscription($values['product_id'])) {
@@ -73,21 +76,23 @@ class Woocommerce_Gopay_Subscriptions {
      * Redirect to the shop page if subscription was included
      * into the cart with any other product/subscription
      *
-     * @since  1.0.0
      * @return string
+     * @since  1.0.0
      */
-    public static function redirect_to_shop() {
+    public static function redirect_to_shop()
+    {
         return get_permalink(wc_get_page_id('shop'));
     }
 
     /**
      * Get subscription data from order
      *
+     * @param object $order
+     * @return array|false|WC_Subscription
      * @since  1.0.0
-     * @param  object $order
-     * @return object
      */
-    public static function get_subscription_data($order) {
+    public static function get_subscription_data($order)
+    {
 
         $is_subscriptions_plugin_active = in_array("woocommerce-subscriptions/woocommerce-subscriptions.php",
             apply_filters("active_plugins", get_option("active_plugins")));
@@ -111,11 +116,12 @@ class Woocommerce_Gopay_Subscriptions {
     /**
      * Get parent order
      *
+     * @param object $order
+     * @return array
      * @since  1.0.0
-     * @param  object $order
-     * @return object
      */
-    public static function get_parent_order($order) {
+    public static function get_parent_order($order)
+    {
 
         $subscription = self::get_subscription_data($order);
 
@@ -129,14 +135,15 @@ class Woocommerce_Gopay_Subscriptions {
     /**
      * Is subscription present in the cart
      *
-     * @since  1.0.0
      * @return bool
+     * @since  1.0.0
      */
-    public static function cart_contains_subscription(){
+    public static function cart_contains_subscription()
+    {
 
         foreach (WC()->cart->get_cart() as $item) {
             $product = wc_get_product($item["product_id"]);
-            if(class_exists('WC_Subscriptions_Product') &&
+            if (class_exists('WC_Subscriptions_Product') &&
                 WC_Subscriptions_Product::is_subscription($product)) {
                 return TRUE;
             }
@@ -152,11 +159,12 @@ class Woocommerce_Gopay_Subscriptions {
      * off-schedule by 3rd party code or
      * store manager actions
      *
+     * @param float $renewal_total
+     * @param object $renewal_order
      * @since  1.0.0
-     * @param  float $renewal_total
-     * @param  object $renewal_order
      */
-    public static function process_subscription_payment($renewal_total, $renewal_order) {
+    public static function process_subscription_payment($renewal_total, $renewal_order)
+    {
 
         $renewal_order->update_status('pending');
         $response = Woocommerce_Gopay_API::create_recurrence($renewal_order);
@@ -184,15 +192,16 @@ class Woocommerce_Gopay_Subscriptions {
      * Cancel subscription payment when
      * the status is changed
      *
+     * @param object $subscription
+     * @param string $new_status
+     * @param string $old_status
      * @since  1.0.0
-     * @param  object $subscription
-     * @param  string $new_status
-     * @param  string $old_status
      */
-    public static function cancel_subscription_payment($subscription, $new_status, $old_status) {
+    public static function cancel_subscription_payment($subscription, $new_status, $old_status)
+    {
 
         $status_to_cancel = array("cancelled", "expired", "pending-cancel");
-        if(in_array($new_status, $status_to_cancel)) {
+        if (in_array($new_status, $status_to_cancel)) {
             $response = Woocommerce_Gopay_API::cancel_recurrence($subscription);
             $status = Woocommerce_Gopay_API::get_status($subscription->get_parent()->get_id());
 
