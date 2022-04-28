@@ -481,11 +481,13 @@ function init_woocommerce_gopay_gateway()
                 $input =
                     '
               <div class="payment_method_' .
-                    WOOCOMMERCE_GOPAY_ID . '_selection" style="border-bottom: 1px dashed; padding: 12px;">
-                <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
-                    '_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
-                <span>%s</span>
-                <img src="%s" alt="ico" style="height: auto; width: auto;"/>
+                    WOOCOMMERCE_GOPAY_ID . '_selection" style="border-bottom: 1px dashed; padding: 12px; display: flex; flex-wrap: wrap;">
+                <div>
+                    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
+                        '_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
+                    <span>%s</span>
+                </div>
+                <img src="%s" alt="ico" style="height: auto; width: auto; margin-left: auto;"/>
               </div>';
 
                 $enabled_payment_methods .= '';
@@ -640,6 +642,7 @@ function init_woocommerce_gopay_gateway()
          */
         public function process_refund($order_id, $amount = null, $reason = '')
         {
+            $amount = wc_format_decimal($amount, 2);
             $transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
             $response = Woocommerce_Gopay_API::refund_payment($transaction_id, $amount * 100);
             $status = Woocommerce_Gopay_API::get_status($order_id);
@@ -647,15 +650,13 @@ function init_woocommerce_gopay_gateway()
             $log = [
                 'order_id' => $order_id,
                 'transaction_id' => $transaction_id,
-                'message' => 'Payment refund executed',
+                'message' => $status->statusCode == 200 ? ($status->json['state'] == 'PARTIALLY_REFUNDED' ?
+                    'Payment partially refunded' : 'Payment refunded') : 'Payment refund executed',
                 'log_level' => 'INFO',
                 'log' => $status->json
             ];
 
-            if ($status->statusCode == 200) {
-                $log['message'] = $status->json['state'] == 'PARTIALLY_REFUNDED' ?
-                    'Payment partially refunded' : 'Payment refunded';
-            } else {
+            if ($response->statusCode != 200) {
                 $log['message'] = 'Process refund error';
                 $log['log_level'] = 'ERROR';
                 $log['log'] = $response->json;

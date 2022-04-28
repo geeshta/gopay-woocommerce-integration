@@ -216,11 +216,12 @@ class Woocommerce_Gopay_Subscriptions
 
             $log = [
                 'order_id' => $order->get_id(),
-                'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : 0,
+                'transaction_id' => $response->statusCode == 200 ? $response->json['id'] :
+                    ($status->statusCode == 200 ? $status->json['id'] : 0),
                 'message' => $response->statusCode == 200 ?
                     'Recurrence of previously created payment cancelled' : 'Cancel recurrence error',
                 'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
-                'log' => $status->statusCode == 200 ? $status->json : $response->json
+                'log' => $response->statusCode != 200 ? $response->json : $status->json
             ];
             Woocommerce_Gopay_Log::insert_log($log);
         }

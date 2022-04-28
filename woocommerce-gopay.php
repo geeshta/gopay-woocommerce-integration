@@ -187,4 +187,24 @@ function check_status_gopay_redirect()
     }
 }
 
+add_action('woocommerce_create_refund', "calculate_refund_amount", 10, 2);
+function calculate_refund_amount($refund, $args) {
+
+    $amount = 0;
+    if (count($args['line_items']) > 0){
+        foreach ($args['line_items'] as $item_id => $item) {
+
+            $qty = isset($item['qty']) && $item['qty'] != 0 ? $item['qty'] : 1;
+            $refund_total = $item['refund_total'];
+            $refund_tax = isset($item['refund_tax']) ? array_sum($item['refund_tax']) : 0;
+
+            $amount += (int)$qty * (float)$refund_total + (float)$refund_tax;
+
+        }
+    }
+
+    $refund->set_amount($amount);
+    $refund->save();
+}
+
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');
