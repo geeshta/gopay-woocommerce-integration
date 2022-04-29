@@ -194,11 +194,10 @@ function calculate_refund_amount($refund, $args) {
     if (count($args['line_items']) > 0){
         foreach ($args['line_items'] as $item_id => $item) {
 
-            $qty = isset($item['qty']) && $item['qty'] != 0 ? $item['qty'] : 1;
             $refund_total = $item['refund_total'];
             $refund_tax = isset($item['refund_tax']) ? array_sum($item['refund_tax']) : 0;
 
-            $amount += (int)$qty * (float)$refund_total + (float)$refund_tax;
+            $amount += (float)$refund_total + (float)$refund_tax;
 
         }
     }

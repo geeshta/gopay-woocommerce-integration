@@ -183,7 +183,7 @@ class Woocommerce_Gopay_Subscriptions
             'message' => $response->statusCode == 200 ?
                 'Recurrence of previously created payment executed' : 'Recurring payment error',
             'log_level' => $response->statusCode == 200 ? 'INFO' : 'ERROR',
-            'log' => $response->json
+            'log' => $response
         ];
         Woocommerce_Gopay_Log::insert_log($log);
     }
@@ -221,7 +221,7 @@ class Woocommerce_Gopay_Subscriptions
                 'message' => $response->statusCode == 200 ?
                     'Recurrence of previously created payment cancelled' : 'Cancel recurrence error',
                 'log_level' => $response->statusCode == 200 ? 'INFO' : 'Error',
-                'log' => $response->statusCode != 200 ? $response->json : $status->json
+                'log' => $response->statusCode != 200 ? $response : $status
             ];
             Woocommerce_Gopay_Log::insert_log($log);
         }

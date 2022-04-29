@@ -183,7 +183,7 @@ class Woocommerce_Gopay_API
 
         $response = $gopay->createPayment($data);
 
-        return $response;
+        return self::decode_response($response);
     }
 
     /**
@@ -212,7 +212,7 @@ class Woocommerce_Gopay_API
 
         $response = $gopay->createRecurrence($GoPay_Transaction_id, $data);
 
-        return $response;
+        return self::decode_response($response);
 
     }
 
@@ -232,7 +232,7 @@ class Woocommerce_Gopay_API
 
         $response = $gopay->voidRecurrence($GoPay_Transaction_id);
 
-        return $response;
+        return self::decode_response($response);
 
     }
 
@@ -295,6 +295,8 @@ class Woocommerce_Gopay_API
     /**
      * Check payment status
      *
+     * @param string $order_id
+     * @param string $GoPay_Transaction_id
      * @since  1.0.0
      */
     public static function check_payment_status($order_id, $GoPay_Transaction_id)
@@ -322,7 +324,7 @@ class Woocommerce_Gopay_API
             'transaction_id' => $response->statusCode == 200 ? $response->json['id'] : '0',
             'message' => $response->statusCode == 200 ? 'Checking payment status' : 'Error checking payment status',
             'log_level' => $response->statusCode == 200 ? 'INFO' : 'ERROR',
-            'log' => $response->json
+            'log' => $response
         ];
         Woocommerce_Gopay_Log::insert_log($log);
 
@@ -395,7 +397,7 @@ class Woocommerce_Gopay_API
         $GoPay_Transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
         $response = $gopay->getStatus($GoPay_Transaction_id);
 
-        return $response;
+        return self::decode_response($response);
     }
 
     /**
@@ -411,6 +413,26 @@ class Woocommerce_Gopay_API
         $options = get_option('woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings');
         $gopay = self::auth_GoPay($options);
         $response = $gopay->refundPayment($transaction_id, $amount);
+
+        return self::decode_response($response);
+    }
+
+    /**
+     * Decode GoPay response and add raw body if
+     * different from json property
+     *
+     * @param \GoPay\Http\Response $response
+     * @since  1.0.0
+     */
+    private static function decode_response($response)
+    {
+        $not_identical= (json_decode($response->__toString(), true) != $response->json) ||
+            (empty($response->__toString()) != empty($response->json));
+
+        if ($not_identical) {
+            $response->{"raw_body"} = filter_var(str_replace("\n", " ",
+                $response->__toString()), FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        }
 
         return $response;
     }

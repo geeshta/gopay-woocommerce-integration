@@ -9,8 +9,8 @@ $settings_url = admin_url("admin.php?page=wc-settings&tab=checkout&section=wc_go
         <h1><?php _e('Woocommerce GoPay gateway', WOOCOMMERCE_GOPAY_DOMAIN); ?></h1>
     </div>
 
-    <div class="woocommerce-gopay-menu table-responsive">
-        <table class="table table-striped table-bordered">
+    <div class="woocommerce-gopay-menu">
+        <table>
             <tr>
                 <th>Plugin Name</th>
                 <th>Version</th>

@@ -26,7 +26,7 @@ class Woocommerce_Gopay_Admin_Menu
         add_action('admin_menu', array($this, 'create_menu'));
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_styles'));
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_styles'));
+        #add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_styles'));
         #add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_scripts'));
     }
 
@@ -49,8 +49,7 @@ class Woocommerce_Gopay_Admin_Menu
     public function admin_enqueue_scripts()
     {
         wp_enqueue_script(WOOCOMMERCE_GOPAY_DOMAIN . '-menu-scripts',
-            WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js', array('jquery'),
-            null, true);
+            WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js');
     }
 
     /**

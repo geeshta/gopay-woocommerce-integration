@@ -586,6 +586,10 @@ function init_woocommerce_gopay_gateway()
                 }
             }
 
+            // GoPay API only considers cents
+            // Rounding total to 2 decimals
+            $order->set_total(wc_format_decimal($order->get_total(), 2));
+
             $response = Woocommerce_Gopay_API::create_payment(
                 $gopay_payment_method,
                 $order,
@@ -598,7 +602,7 @@ function init_woocommerce_gopay_gateway()
                     'transaction_id' => 0,
                     'message' => 'Process payment error',
                     'log_level' => 'ERROR',
-                    'log' => $response->json
+                    'log' => $response
                 ];
                 Woocommerce_Gopay_Log::insert_log($log);
                 if (!wc_has_notice(__('Payment creation on GoPay not possible', WOOCOMMERCE_GOPAY_DOMAIN), "error")) {
@@ -622,7 +626,7 @@ function init_woocommerce_gopay_gateway()
                 'transaction_id' => $response->json['id'],
                 'message' => 'Payment created',
                 'log_level' => 'INFO',
-                'log' => $response->json
+                'log' => $response
             ];
             Woocommerce_Gopay_Log::insert_log($log);
 
@@ -642,6 +646,8 @@ function init_woocommerce_gopay_gateway()
          */
         public function process_refund($order_id, $amount = null, $reason = '')
         {
+            // GoPay API only considers cents
+            // Rounding amount to be refunded to 2 decimals
             $amount = wc_format_decimal($amount, 2);
             $transaction_id = get_post_meta($order_id, 'GoPay_Transaction_id', true);
             $response = Woocommerce_Gopay_API::refund_payment($transaction_id, $amount * 100);
@@ -653,13 +659,13 @@ function init_woocommerce_gopay_gateway()
                 'message' => $status->statusCode == 200 ? ($status->json['state'] == 'PARTIALLY_REFUNDED' ?
                     'Payment partially refunded' : 'Payment refunded') : 'Payment refund executed',
                 'log_level' => 'INFO',
-                'log' => $status->json
+                'log' => $status
             ];
 
             if ($response->statusCode != 200) {
                 $log['message'] = 'Process refund error';
                 $log['log_level'] = 'ERROR';
-                $log['log'] = $response->json;
+                $log['log'] = $response;
                 Woocommerce_Gopay_Log::insert_log($log);
 
                 return false;
