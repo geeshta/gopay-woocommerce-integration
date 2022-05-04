@@ -47,7 +47,7 @@ class Woocommerce_Gopay_Options
      */
     public static function supported_countries()
     {
-        return WC()->countries->get_allowed_countries();
+        return !empty(WC()->countries) ? WC()->countries->get_allowed_countries() : [];
     }
 
     /**
@@ -58,6 +58,10 @@ class Woocommerce_Gopay_Options
      */
     public static function supported_shipping_methods()
     {
+        if (empty(WC()->countries)) {
+            return [];
+        }
+
         return array_reduce(WC()->shipping->load_shipping_methods(),
             function ($supported_shipping_methods, $shipping_method) {
                 $supported_shipping_methods[$shipping_method->id] = $shipping_method->get_method_title();

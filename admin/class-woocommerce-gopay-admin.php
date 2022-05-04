@@ -16,6 +16,13 @@ class Woocommerce_Gopay_Admin_Menu
 {
 
     /**
+     * Instance of the class.
+     *
+     * @since 1.0.0
+     */
+    protected static $instance = null;
+
+    /**
      * Constructor for the plugin admin menu
      *
      * @since 1.0.0
@@ -26,8 +33,20 @@ class Woocommerce_Gopay_Admin_Menu
         add_action('admin_menu', array($this, 'create_menu'));
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_styles'));
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-        #add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_styles'));
-        #add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_bootstrap_scripts'));
+    }
+
+    /**
+     * Get Woocommerce_Gopay_Admin_Menu instance if it exists
+     * or create a new one.
+     *
+     * @since 1.0.0
+     * @return Woocommerce_Gopay_Admin_Menu Instance
+     */
+    public static function instance() {
+        if (empty(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     /**
@@ -50,28 +69,6 @@ class Woocommerce_Gopay_Admin_Menu
     {
         wp_enqueue_script(WOOCOMMERCE_GOPAY_DOMAIN . '-menu-scripts',
             WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js');
-    }
-
-    /**
-     * Admin enqueue bootstrap styles
-     *
-     * @since 1.0.0
-     */
-    public function admin_enqueue_bootstrap_styles()
-    {
-        wp_enqueue_style(WOOCOMMERCE_GOPAY_DOMAIN . '-menu-bootstrap',
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css");
-    }
-
-    /**
-     * Admin enqueue bootstrap scripts
-     *
-     * @since 1.0.0
-     */
-    public function admin_enqueue_bootstrap_scripts()
-    {
-        wp_enqueue_script(WOOCOMMERCE_GOPAY_DOMAIN . '-menu-bootstrap',
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js");
     }
 
     /**

@@ -34,46 +34,46 @@
 .woocommerce-gopay-menu tr:nth-child(odd){background-color: rgba(211, 221, 237, 0.5);}
 .woocommerce-gopay-menu tr:hover {background-color: rgba(240, 128, 128, 0.5);}
 
-.pagination {
+.woocommerce-gopay-menu-pagination {
     display: inline-flex;
     border-radius: 6px;
     padding: 15px;
 }
 
-.pagination li {
+.woocommerce-gopay-menu-pagination li {
     padding: 8px;
 }
 
-.pagination li a {
+.woocommerce-gopay-menu-pagination li a {
     padding: 15px;
     font-size: 14px;
     text-decoration: none;
 }
 
-.pagination li:nth-child(even) {background-color: rgba(255, 255, 255, 0.5);}
-.pagination li:nth-child(odd) {background-color: rgba(211, 221, 237, 0.5);}
-.pagination li:hover {background-color: rgba(240, 128, 128, 0.5);}
+.woocommerce-gopay-menu-pagination li:nth-child(even) {background-color: rgba(255, 255, 255, 0.5);}
+.woocommerce-gopay-menu-pagination li:nth-child(odd) {background-color: rgba(211, 221, 237, 0.5);}
+.woocommerce-gopay-menu-pagination li:hover {background-color: rgba(240, 128, 128, 0.5);}
 
-.enabled a {
+.woocommerce-gopay-menu-enabled a {
     pointer-events: auto;
     cursor: auto;
     opacity: 1;
 }
-.disabled a {
+.woocommerce-gopay-menu-disabled a {
     pointer-events: none;
     cursor: default;
     opacity: 0.4;
 }
 
-.active a {
+.woocommerce-gopay-menu-active a {
     color: rgba(240, 128, 128, 1);
 }
 
-.inactive a {
+.woocommerce-gopay-menu-inactive a {
     color: black;
 }
 
-.popup
+.woocommerce-gopay-menu-popup
 {
     display: none;
     width: auto;
@@ -89,12 +89,12 @@
     transform: translate(-50%, -50%);
 }
 
-.popup span {
+.woocommerce-gopay-menu-popup span {
     color: black;
     overflow: auto;
 }
 
-.close
+.woocommerce-gopay-menu-close
 {
     cursor: pointer;
     height: 16px;
@@ -103,7 +103,7 @@
     border-radius: 5px;
 }
 
-.close:hover {
+.woocommerce-gopay-menu-close:hover {
     transform: scale(1.05, 1.05);
     box-shadow: 0 4px 8px 0 red;
 }

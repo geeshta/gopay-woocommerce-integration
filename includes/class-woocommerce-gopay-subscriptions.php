@@ -16,6 +16,59 @@ class Woocommerce_Gopay_Subscriptions
 {
 
     /**
+     * Instance of the class.
+     *
+     * @since 1.0.0
+     */
+    protected static $instance = null;
+
+    /**
+     * Constructor for the gateway
+     *
+     * @since  1.0.0
+     */
+    public function __construct()
+    {
+
+        // Disable multiple checkout option
+        add_action('plugins_loaded', array($this, 'disable_subscriptions_multiple_purchase'));
+        add_action('update_option_woocommerce_subscriptions_multiple_purchase',
+            array($this, 'disable_subscriptions_multiple_purchase'));
+        add_action('add_option_woocommerce_subscriptions_multiple_purchase',
+            array($this, 'disable_subscriptions_multiple_purchase'));
+
+        // When a subscription is added to the cart check if any other product/subscriptions was included
+        add_filter('woocommerce_add_to_cart_validation',
+            array($this, 'subscriptions_check_add_to_cart'), 9, 3);
+        add_filter('woocommerce_update_cart_validation',
+            array($this, 'subscriptions_check_cart_update'), 10, 4);
+        add_filter('woocommerce_cart_redirect_after_error',
+            array($this, 'redirect_to_shop'));
+
+        // Process/Cancel subscription payments
+        add_action('woocommerce_scheduled_subscription_payment_' . WOOCOMMERCE_GOPAY_ID,
+            array($this, 'process_subscription_payment'), 5, 2);
+        add_action('woocommerce_subscription_status_updated',
+            array($this, 'cancel_subscription_payment'), 4, 3);
+
+        $this->woocommerce_gopay_api = Woocommerce_Gopay_API::instance();
+    }
+
+    /**
+     * Get Woocommerce_Gopay_Subscriptions instance if it exists
+     * or create a new one.
+     *
+     * @since 1.0.0
+     * @return Woocommerce_Gopay_Subscriptions Instance
+     */
+    public static function instance() {
+        if (empty(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * When a subscription is added to the cart then check cart add
      *
      * Check if only one subscription was added to the cart
@@ -27,7 +80,7 @@ class Woocommerce_Gopay_Subscriptions
      * @return bool
      * @since  1.0.0
      */
-    public static function subscriptions_check_add_to_cart($valid, $product_id, $quantity)
+    public function subscriptions_check_add_to_cart($valid, $product_id, $quantity)
     {
         remove_filter("woocommerce_add_to_cart_validation",
             array("WC_Subscriptions_Cart_Validator", "maybe_empty_cart"));
@@ -58,7 +111,7 @@ class Woocommerce_Gopay_Subscriptions
      * @return bool
      * @since  1.0.0
      */
-    public static function subscriptions_check_cart_update($passed, $cart_item_key, $values, $quantity)
+    public function subscriptions_check_cart_update($passed, $cart_item_key, $values, $quantity)
     {
 
         if ($quantity > 1) {
@@ -79,7 +132,7 @@ class Woocommerce_Gopay_Subscriptions
      * @return string
      * @since  1.0.0
      */
-    public static function redirect_to_shop()
+    public function redirect_to_shop()
     {
         return get_permalink(wc_get_page_id('shop'));
     }
@@ -91,7 +144,7 @@ class Woocommerce_Gopay_Subscriptions
      * @return array|false|WC_Subscription
      * @since  1.0.0
      */
-    public static function get_subscription_data($order)
+    public function get_subscription_data($order)
     {
 
         $is_subscriptions_plugin_active = in_array("woocommerce-subscriptions/woocommerce-subscriptions.php",
@@ -123,7 +176,7 @@ class Woocommerce_Gopay_Subscriptions
     public static function get_parent_order($order)
     {
 
-        $subscription = self::get_subscription_data($order);
+        $subscription = (new Woocommerce_Gopay_Subscriptions)->get_subscription_data($order);
 
         if (!empty($subscription)) {
             return $subscription->get_parent();
@@ -138,7 +191,7 @@ class Woocommerce_Gopay_Subscriptions
      * @return bool
      * @since  1.0.0
      */
-    public static function cart_contains_subscription()
+    public function cart_contains_subscription()
     {
 
         foreach (WC()->cart->get_cart() as $item) {
@@ -163,11 +216,11 @@ class Woocommerce_Gopay_Subscriptions
      * @param object $renewal_order
      * @since  1.0.0
      */
-    public static function process_subscription_payment($renewal_total, $renewal_order)
+    public function process_subscription_payment($renewal_total, $renewal_order)
     {
 
         $renewal_order->update_status('pending');
-        $response = Woocommerce_Gopay_API::create_recurrence($renewal_order);
+        $response = $this->woocommerce_gopay_api->create_recurrence($renewal_order);
 
         if ($response->statusCode == 200) {
             $renewal_order->update_meta_data('GoPay_Transaction_id', $response->json['id']);
@@ -197,13 +250,13 @@ class Woocommerce_Gopay_Subscriptions
      * @param string $old_status
      * @since  1.0.0
      */
-    public static function cancel_subscription_payment($subscription, $new_status, $old_status)
+    public function cancel_subscription_payment($subscription, $new_status, $old_status)
     {
 
         $status_to_cancel = array("cancelled", "expired", "pending-cancel");
         if (in_array($new_status, $status_to_cancel)) {
-            $response = Woocommerce_Gopay_API::cancel_recurrence($subscription);
-            $status = Woocommerce_Gopay_API::get_status($subscription->get_parent()->get_id());
+            $response = $this->woocommerce_gopay_api->cancel_recurrence($subscription);
+            $status = $this->woocommerce_gopay_api->get_status($subscription->get_parent()->get_id());
 
             $order = $subscription->order;
             if ($response->statusCode == 200) {
@@ -226,4 +279,33 @@ class Woocommerce_Gopay_Subscriptions
             Woocommerce_Gopay_Log::insert_log($log);
         }
     }
+
+    /**
+     * Disable woocommerce subscriptions multiple purchase option
+     *
+     * @since  1.0.0
+     */
+    public function disable_subscriptions_multiple_purchase()
+    {
+        if (!get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') ||
+            get_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase') == 'yes') {
+            add_action('admin_notices', array($this, 'admin_notice_error'));
+            update_option(WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no');
+        }
+    }
+
+    /**
+     * Show an error message about mixed checkout option was disabled
+     *
+     * @since  1.0.0
+     */
+    public function admin_notice_error()
+    {
+        $message = __(
+            "WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.",
+            WOOCOMMERCE_GOPAY_DOMAIN
+        );
+        echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
+    }
+
 }

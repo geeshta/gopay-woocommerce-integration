@@ -1,9 +1,9 @@
 function openPopup(log) {
 
-    popup = document.getElementById('popup');
+    popup = document.getElementById('woocommerce-gopay-menu-popup');
     const elem = popup.querySelectorAll('span');
     elem.forEach(e => e.remove());
-    span = document.createElement("span");
+    span = document.createElement('span');
     span.innerHTML = JSON.stringify(log);
     popup.append(span);
 
@@ -11,8 +11,9 @@ function openPopup(log) {
 }
 
 function closePopup() {
-    popup = document.getElementById('popup');
+    popup = document.getElementById('woocommerce-gopay-menu-popup');
     const elem = popup.querySelectorAll('span');
     elem.forEach(e => e.remove());
-    document.getElementById('popup').style.display = 'none';
+
+    popup.style.display = 'none';
 }
