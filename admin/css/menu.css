@@ -30,9 +30,17 @@
     border-radius: 5px;
 }
 
-.woocommerce-gopay-menu tr:nth-child(even){background-color: rgba(255, 255, 255, 0.5);}
-.woocommerce-gopay-menu tr:nth-child(odd){background-color: rgba(211, 221, 237, 0.5);}
-.woocommerce-gopay-menu tr:hover {background-color: rgba(240, 128, 128, 0.5);}
+.woocommerce-gopay-menu tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.woocommerce-gopay-menu tr:nth-child(odd) {
+    background-color: rgba(211, 221, 237, 0.5);
+}
+
+.woocommerce-gopay-menu tr:hover {
+    background-color: rgba(240, 128, 128, 0.5);
+}
 
 .woocommerce-gopay-menu-pagination {
     display: inline-flex;
@@ -50,15 +58,24 @@
     text-decoration: none;
 }
 
-.woocommerce-gopay-menu-pagination li:nth-child(even) {background-color: rgba(255, 255, 255, 0.5);}
-.woocommerce-gopay-menu-pagination li:nth-child(odd) {background-color: rgba(211, 221, 237, 0.5);}
-.woocommerce-gopay-menu-pagination li:hover {background-color: rgba(240, 128, 128, 0.5);}
+.woocommerce-gopay-menu-pagination li:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.woocommerce-gopay-menu-pagination li:nth-child(odd) {
+    background-color: rgba(211, 221, 237, 0.5);
+}
+
+.woocommerce-gopay-menu-pagination li:hover {
+    background-color: rgba(240, 128, 128, 0.5);
+}
 
 .woocommerce-gopay-menu-enabled a {
     pointer-events: auto;
     cursor: auto;
     opacity: 1;
 }
+
 .woocommerce-gopay-menu-disabled a {
     pointer-events: none;
     cursor: default;
@@ -73,15 +90,14 @@
     color: black;
 }
 
-.woocommerce-gopay-menu-popup
-{
+.woocommerce-gopay-menu-popup {
     display: none;
     width: auto;
     height: auto;
     font-size: 14px;
     padding: 15px;
     background-color: white;
-    border:2px solid grey;
+    border: 2px solid grey;
     border-radius: 5px;
     position: fixed;
     top: 50%;
@@ -94,12 +110,11 @@
     overflow: auto;
 }
 
-.woocommerce-gopay-menu-close
-{
+.woocommerce-gopay-menu-close {
     cursor: pointer;
     height: 16px;
     width: 16px;
-    background-color:lightcoral;
+    background-color: lightcoral;
     border-radius: 5px;
 }
 

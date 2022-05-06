@@ -1,5 +1,7 @@
 {
     "require": {
-        "gopay/payments-sdk-php": "^1.5"
+        "gopay/payments-sdk-php": "^1.5",
+        "squizlabs/php_codesniffer": ">=3.6.2",
+        "wp-coding-standards/wpcs": ">=2.3.0"
     }
 }
