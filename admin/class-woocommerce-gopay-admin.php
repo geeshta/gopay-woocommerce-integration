@@ -15,38 +15,16 @@ class Woocommerce_Gopay_Admin_Menu
 {
 
 	/**
-	 * Instance of the class.
-	 *
-	 * @since 1.0.0
-	 */
-	protected static $instance = null;
-
-	/**
 	 * Constructor for the plugin admin menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct()
+	public static function create_menu_actions()
 	{
 		#$this->$options = $options;
-		add_action( 'admin_menu', array( $this, 'create_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-	}
-
-	/**
-	 * Get Woocommerce_Gopay_Admin_Menu instance if it exists
-	 * or create a new one.
-	 *
-	 * @return Woocommerce_Gopay_Admin_Menu Instance
-	 * @since 1.0.0
-	 */
-	public static function instance(): ?Woocommerce_Gopay_Admin_Menu
-	{
-		if ( empty( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
+		add_action( 'admin_menu', array( 'Woocommerce_Gopay_Admin_Menu', 'create_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( 'Woocommerce_Gopay_Admin_Menu', 'admin_enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( 'Woocommerce_Gopay_Admin_Menu', 'admin_enqueue_scripts' ) );
 	}
 
 	/**
@@ -54,7 +32,7 @@ class Woocommerce_Gopay_Admin_Menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function admin_enqueue_styles()
+	public static function admin_enqueue_styles()
 	{
 		wp_enqueue_style(
 			WOOCOMMERCE_GOPAY_DOMAIN . '-menu-styles',
@@ -67,7 +45,7 @@ class Woocommerce_Gopay_Admin_Menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function admin_enqueue_scripts()
+	public static function admin_enqueue_scripts()
 	{
 		wp_enqueue_script(
 			WOOCOMMERCE_GOPAY_DOMAIN . '-menu-scripts',
@@ -80,7 +58,7 @@ class Woocommerce_Gopay_Admin_Menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function create_menu()
+	public static function create_menu()
 	{
 		if ( !defined( 'WOOCOMMERCE_GOPAY_ADMIN_MENU' ) ) {
 			add_menu_page(
@@ -96,7 +74,7 @@ class Woocommerce_Gopay_Admin_Menu
 				__( 'Info', WOOCOMMERCE_GOPAY_DOMAIN ),
 				'manage_woocommerce',
 				'woocommerce-gopay-menu',
-				array( $this, 'load_admin_info_page' )
+				array( 'Woocommerce_Gopay_Admin_Menu', 'load_admin_info_page' )
 			);
 
 			add_submenu_page(
@@ -105,7 +83,7 @@ class Woocommerce_Gopay_Admin_Menu
 				__( 'Log', WOOCOMMERCE_GOPAY_DOMAIN ),
 				'manage_woocommerce',
 				'woocommerce-gopay-menu-log',
-				array( $this, 'load_admin_log_page' )
+				array( 'Woocommerce_Gopay_Admin_Menu', 'load_admin_log_page' )
 			);
 
 			define( 'WOOCOMMERCE_GOPAY_ADMIN_MENU', true );
@@ -117,7 +95,7 @@ class Woocommerce_Gopay_Admin_Menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function load_admin_info_page()
+	public static function load_admin_info_page()
 	{
 		include_once( 'views/admin.php' );
 	}
@@ -127,7 +105,7 @@ class Woocommerce_Gopay_Admin_Menu
 	 *
 	 * @since 1.0.0
 	 */
-	public function load_admin_log_page()
+	public static function load_admin_log_page()
 	{
 		include_once( 'views/log.php' );
 	}

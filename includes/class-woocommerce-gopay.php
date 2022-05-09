@@ -108,17 +108,13 @@ function init_woocommerce_gopay_gateway()
 
 			// Load Woocommerce GoPay gateway admin page
 			if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
-				$this->woocommerce_gopay_admin_menu = Woocommerce_Gopay_Admin_Menu::instance();
+				Woocommerce_Gopay_Admin_Menu::create_menu_actions();
 			}
 
 			// Check if WooCommerce Subscriptions is active
 			if ( check_is_plugin_active( 'woocommerce-subscriptions/woocommerce-subscriptions.php' ) ) {
-				$this->woocommerce_gopay_subscriptions = Woocommerce_Gopay_Subscriptions::instance();
+				Woocommerce_Gopay_Subscriptions::subscriptions_actions_filters();
 			}
-
-			$this->woocommerce_gopay_api = Woocommerce_Gopay_API::instance();
-
-			Woocommerce_Gopay_Gateway::$instance = $this;
 		}
 
 		/**
@@ -131,7 +127,7 @@ function init_woocommerce_gopay_gateway()
 		public static function instance(): ?Woocommerce_Gopay_Gateway
 		{
 			if ( empty( self::$instance ) ) {
-				new self();
+				 self::$instance = new self();
 			}
 			return self::$instance;
 		}
@@ -463,7 +459,7 @@ function init_woocommerce_gopay_gateway()
 		 */
 		protected function update_payments_methods_enabled(): array
 		{
-			$paymentInstruments = $this->woocommerce_gopay_api->get_enabled_payment_methods(
+			$paymentInstruments = Woocommerce_Gopay_API::get_enabled_payment_methods(
 				get_woocommerce_currency() );
 
 			// Payment methods
@@ -487,8 +483,8 @@ function init_woocommerce_gopay_gateway()
 			);
 
 			// Banks
+			$supported_banks = array();
 			if ( array_key_exists( 'BANK_ACCOUNT', $enable_gopay_payment_methods ) ) {
-				$supported_banks = array();
 				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $key => $value ) {
 					if ( array_key_exists( $key, Woocommerce_Gopay_Options::supported_banks() ) ) {
 						$supported_banks[ $key ] = $value;
@@ -533,7 +529,7 @@ function init_woocommerce_gopay_gateway()
 				$banks              = $this->get_option( 'enable_banks_' . get_woocommerce_currency() );
 
 				// Check if subscription - only card payment is enabled
-				if ( $this->woocommerce_gopay_subscriptions->cart_contains_subscription() ) {
+				if ( Woocommerce_Gopay_Subscriptions::cart_contains_subscription() ) {
 					if ( in_array( 'PAYMENT_CARD', (array) $payment_methods ) ) {
 						$payment_methods = array( 'PAYMENT_CARD' );
 					} else {
@@ -617,7 +613,7 @@ function init_woocommerce_gopay_gateway()
 			}
 
 			// Check if total is equal to zero
-			$subscription = $this->woocommerce_gopay_subscriptions->get_subscription_data( $order );
+			$subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data( $order );
 			if ( $order->get_total() == 0 ) {
 				if ( empty( $subscription ) ) {
 					foreach ( $order->get_items() as $item ) {
@@ -659,7 +655,7 @@ function init_woocommerce_gopay_gateway()
 			// Rounding total to 2 decimals
 			$order->set_total( wc_format_decimal( $order->get_total(), 2 ) );
 
-			$response = $this->woocommerce_gopay_api->create_payment(
+			$response = Woocommerce_Gopay_API::create_payment(
 				$gopay_payment_method,
 				$order,
 				!empty( $subscription ) ? $subscription->get_date( 'end' ) : '',
@@ -723,8 +719,8 @@ function init_woocommerce_gopay_gateway()
 			// Rounding amount to be refunded to 2 decimals
 			$amount         = wc_format_decimal( $amount, 2 );
 			$transaction_id = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
-			$response       = $this->woocommerce_gopay_api->refund_payment( $transaction_id, $amount * 100 );
-			$status         = $this->woocommerce_gopay_api->get_status( $order_id );
+			$response       = Woocommerce_Gopay_API::refund_payment( $transaction_id, $amount * 100 );
+			$status         = Woocommerce_Gopay_API::get_status( $order_id );
 
 			$log = array(
 				'order_id'          => $order_id,
@@ -782,7 +778,7 @@ function init_woocommerce_gopay_gateway()
 		public function check_status_gopay_redirect()
 		{
 			if ( !empty( $_GET['gopay-api'] ) ) {
-				$this->woocommerce_gopay_api->check_payment_status( $_GET['order_id'], $_GET['id'] );
+				Woocommerce_Gopay_API::check_payment_status( $_GET['order_id'], $_GET['id'] );
 			}
 		}
 
@@ -794,7 +790,7 @@ function init_woocommerce_gopay_gateway()
 		public function thankyou_page( $message, $order )
 		{
 			$message        = __( 'Thank you. Your order has been received.', WOOCOMMERCE_GOPAY_DOMAIN );
-			$subscription   = $this->woocommerce_gopay_subscriptions->get_subscription_data( $order );
+			$subscription   = Woocommerce_Gopay_Subscriptions::get_subscription_data( $order );
 			if ( !empty( $subscription ) && $order->get_total() == 0 ) {
 				return $message . __(
 						' Please pay for your subscription after the trial period.',

@@ -17,13 +17,6 @@ class Woocommerce_Gopay_API
 {
 
 	/**
-	 * Instance of the class.
-	 *
-	 * @since 1.0.0
-	 */
-	protected static $instance = null;
-
-	/**
 	 * Constructor for the plugin GoPay api
 	 *
 	 * @since 1.0.0
@@ -33,28 +26,13 @@ class Woocommerce_Gopay_API
 	}
 
 	/**
-	 * Get Woocommerce_Gopay_API instance if it exists
-	 * or create a new one.
-	 *
-	 * @return Woocommerce_Gopay_API Instance
-	 * @since 1.0.0
-	 */
-	public static function instance(): ?Woocommerce_Gopay_API
-	{
-		if ( empty( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
-
-	/**
 	 * GoPay authentication
 	 *
 	 * @param array $options
 	 * @return Payments object
 	 * @since  1.0.0
 	 */
-	private function auth_GoPay($options): Payments
+	private static function auth_GoPay( $options ): Payments
 	{
 
 		// Change it - compare with supported languages
@@ -81,7 +59,7 @@ class Woocommerce_Gopay_API
 	 * @return array
 	 * @since 1.0.0
 	 */
-	private function get_items( $order ): array
+	private static function get_items( $order ): array
 	{
 		$items = array();
 		foreach ( $order->get_items() as $item ) {
@@ -117,7 +95,7 @@ class Woocommerce_Gopay_API
 	 * @return Response
 	 * @since 1.0.0
 	 */
-	public function create_payment( string $gopay_payment_method, WC_Order $order,
+	public static function create_payment( string $gopay_payment_method, WC_Order $order,
 	                                string $end_date, $is_retry ): Response
 	{
 		$options    = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
@@ -143,7 +121,7 @@ class Woocommerce_Gopay_API
 											$allowed_swifts;
 		}
 
-		$items = $this->get_items( $order );
+		$items = self::get_items( $order );
 
 		$notification_url   = add_query_arg( array(
 			'gopay-api' => WOOCOMMERCE_GOPAY_ID . '_notification',
@@ -212,7 +190,7 @@ class Woocommerce_Gopay_API
 
 		$response = $gopay->createPayment( $data );
 
-		return $this->decode_response( $response );
+		return self::decode_response( $response );
 	}
 
 	/**
@@ -223,7 +201,7 @@ class Woocommerce_Gopay_API
 	 * @return Response
 	 * @since 1.0.0
 	 */
-	public function create_recurrence( $order ): Response
+	public static function create_recurrence( $order ): Response
 	{
 
 		$options                = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
@@ -236,7 +214,7 @@ class Woocommerce_Gopay_API
 			'currency'          => $order->get_currency(),
 			'order_number'      => $order->get_order_number(),
 			'order_description' => 'subscription',
-			'items'             => $this->get_items( $order ),
+			'items'             => self::get_items( $order ),
 			'additional_params' => array( array(
 				'name'  => 'invoicenumber',
 				'value' => $order->get_order_number() ) ),
@@ -244,7 +222,7 @@ class Woocommerce_Gopay_API
 
 		$response = $gopay->createRecurrence( $GoPay_Transaction_id, $data );
 
-		return $this->decode_response( $response );
+		return self::decode_response( $response );
 	}
 
 	/**
@@ -255,14 +233,14 @@ class Woocommerce_Gopay_API
 	 * @return Response
 	 * @since 1.0.0
 	 */
-	public function cancel_recurrence( $subscription ): Response
+	public static function cancel_recurrence( $subscription ): Response
 	{
 		$options                = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay                  = self::auth_GoPay($options);
 		$GoPay_Transaction_id   = $subscription->get_parent()->get_meta( 'GoPay_Transaction_id', true );
 		$response               = $gopay->voidRecurrence( $GoPay_Transaction_id );
 
-		return $this->decode_response( $response );
+		return self::decode_response( $response );
 	}
 
 	/**
@@ -273,7 +251,7 @@ class Woocommerce_Gopay_API
 	 * @return array
 	 * @since  1.0.0
 	 */
-	public function get_enabled_payment_methods( string $currency ): array
+	public static function get_enabled_payment_methods( string $currency ): array
 	{
 		$options         = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay           = self::auth_GoPay($options);
@@ -308,11 +286,11 @@ class Woocommerce_Gopay_API
 	 * @return array
 	 * @since  1.0.0
 	 */
-	public function get_enabled_swifts(): array
+	public static function get_enabled_swifts(): array
 	{
 		$swifts = array();
 		foreach ( array( 'CZK', 'EUR', 'PLN' ) as $key => $currency ) {
-			$paymentInstruments = $this->get_enabled_payment_methods( $currency );
+			$paymentInstruments = self::get_enabled_payment_methods( $currency );
 
 			if ( array_key_exists( 'BANK_ACCOUNT', $paymentInstruments ) ) {
 				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $swift => $description ) {
@@ -332,7 +310,7 @@ class Woocommerce_Gopay_API
 	 *
 	 * @since  1.0.0
 	 */
-	public function check_payment_status( string $order_id, string $GoPay_Transaction_id )
+	public static function check_payment_status( string $order_id, string $GoPay_Transaction_id )
 	{
 		$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay    = self::auth_GoPay($options);
@@ -418,14 +396,14 @@ class Woocommerce_Gopay_API
 	 *
 	 * @since  1.0.0
 	 */
-	public function get_status( $order_id ): Response
+	public static function get_status( $order_id ): Response
 	{
 		$options                = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay                  = self::auth_GoPay($options);
 		$GoPay_Transaction_id   = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
 		$response               = $gopay->getStatus( $GoPay_Transaction_id );
 
-		return $this->decode_response( $response );
+		return self::decode_response( $response );
 	}
 
 	/**
@@ -437,13 +415,13 @@ class Woocommerce_Gopay_API
 	 * @return Response $response
 	 * @since  1.0.0
 	 */
-	public function refund_payment( int $transaction_id, string $amount ): Response
+	public static function refund_payment( int $transaction_id, string $amount ): Response
 	{
 		$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay    = self::auth_GoPay($options);
 		$response = $gopay->refundPayment( $transaction_id, $amount );
 
-		return $this->decode_response( $response );
+		return self::decode_response( $response );
 	}
 
 	/**
@@ -454,7 +432,7 @@ class Woocommerce_Gopay_API
 	 *
 	 * @since  1.0.0
 	 */
-	private function decode_response( Response $response ): Response
+	private static function decode_response( Response $response ): Response
 	{
 		$not_identical = ( json_decode( $response->__toString(), true ) != $response->json ) ||
 			( empty( $response->__toString() ) != empty( $response->json ) );
