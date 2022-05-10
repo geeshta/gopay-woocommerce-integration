@@ -257,14 +257,11 @@ class Woocommerce_Gopay_Subscriptions
 	public static function cancel_subscription_payment( $subscription, string $new_status, string $old_status )
 	{
 		$status_to_cancel = array( 'cancelled', 'expired', 'pending-cancel' );
-		if ( in_array( $new_status, $status_to_cancel ) ) {
-			$status     = Woocommerce_Gopay_API::get_status( $subscription->get_parent()->get_id() );
-
-			if ( $status->json['recurrence']['recurrence_state'] != 'STARTED' ) {
-				return;
-			}
-
+		$gopay_status     = Woocommerce_Gopay_API::get_status( $subscription->get_parent()->get_id() );
+		if ( in_array( $new_status, $status_to_cancel ) &&
+			$gopay_status->json['recurrence']['recurrence_state'] == 'STARTED' ) {
 			$response   = Woocommerce_Gopay_API::cancel_recurrence( $subscription );
+			$status     = Woocommerce_Gopay_API::get_status( $subscription->get_parent()->get_id() );
 
 			$order = $subscription->order;
 			if ( $response->statusCode == 200 ) {

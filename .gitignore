@@ -70,8 +70,4 @@ GitHub.sublime-settings
 # Test files
 test/
 
-# Third party
-includes/assets/
-includes/gopaySDK/
-
 # End of https://www.toptal.com/developers/gitignore/api/sublimetext
