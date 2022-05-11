@@ -66,6 +66,6 @@ register_activation_hook( __FILE__, array( 'Woocommerce_Gopay_Activator', 'activ
 register_deactivation_hook( __FILE__, array( 'Woocommerce_Gopay_Deactivator', 'deactivate' ) );
 
 // Check if Woocommerce GoPay Gateway was instantiated
-add_action( 'plugins_loaded', array( 'Woocommerce_Gopay_Gateway', 'instance' ) );
+add_action( 'plugins_loaded', array( 'Woocommerce_Gopay_Gateway', 'get_instance' ) );
 
 #load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');

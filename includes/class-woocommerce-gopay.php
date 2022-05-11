@@ -85,6 +85,8 @@ function init_woocommerce_gopay_gateway()
 				'pre-orders',
 			);
 
+			add_action( 'admin_init', array( $this, 'update_payment_methods' ), 1 );
+			add_action( 'update_payment_methods_and_banks', array( $this, 'check_enabled_on_GoPay' ), 1 );
 			add_action( 'template_redirect', array( $this, 'check_status_gopay_redirect' ) );
 			add_action( 'woocommerce_create_refund', array( $this, 'calculate_refund_amount' ), 10, 2 );
 			add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array(
@@ -106,6 +108,7 @@ function init_woocommerce_gopay_gateway()
 				2
 			);
 
+
 			// Load Woocommerce GoPay gateway admin page
 			if ( is_admin() && ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) ) {
 				Woocommerce_Gopay_Admin_Menu::create_menu_actions();
@@ -124,12 +127,50 @@ function init_woocommerce_gopay_gateway()
 		 * @return Woocommerce_Gopay_Gateway|null Instance
 		 * @since 1.0.0
 		 */
-		public static function instance(): ?Woocommerce_Gopay_Gateway
+		public static function get_instance(): ?Woocommerce_Gopay_Gateway
 		{
 			if ( empty( self::$instance ) ) {
 				 self::$instance = new self();
 			}
 			return self::$instance;
+		}
+
+		/**
+		 * Update payment methods and banks
+		 *
+		 * @since 1.0.0
+		 */
+		public function update_payment_methods()
+		{
+			if ( empty( $this->settings['goid'] ) ) {
+				return;
+			}
+
+			if ( empty( $this->get_option( 'option_gopay_payment_methods' ) ) ||
+				empty( $this->get_option( 'option_gopay_banks' ) ) ) {
+				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
+			}
+
+			if ( ( array_key_exists( 'page', $_GET ) && $_GET['page'] == 'wc-settings' ) &&
+				( array_key_exists( 'section', $_GET ) && $_GET['section'] == 'wc_gopay_gateway' ) ) {
+				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
+			}
+		}
+
+		/**
+		 * Check payment methods and banks that
+		 * are enabled on GoPay account.
+		 *
+		 * @since 1.0.0
+		 */
+		function check_enabled_on_GoPay()
+		{
+			$supported        = Woocommerce_Gopay_API::check_enabled_on_GoPay();
+			$payment_methods  = $supported[0];
+			$banks            = $supported[1];
+
+			$this->update_option( 'option_gopay_payment_methods', $payment_methods );
+			$this->update_option( 'option_gopay_banks', $banks );
 		}
 
 		/**
@@ -467,7 +508,7 @@ function init_woocommerce_gopay_gateway()
 			foreach ( $paymentInstruments as $key => $value ) {
 				$supported_payment_methods[ $key ] = $value;
 				$supported_payment_methods[ $key ][
-					'description'] = Woocommerce_Gopay_Options::supported_payment_methods()[ $key ];
+					'label'] = Woocommerce_Gopay_Options::supported_payment_methods()[ $key ];
 			}
 //        $supported_payment_methods = array_intersect_key(
 //            Woocommerce_Gopay_Options::supported_payment_methods(), $paymentInstruments);
@@ -488,7 +529,8 @@ function init_woocommerce_gopay_gateway()
 				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $key => $value ) {
 					if ( array_key_exists( $key, Woocommerce_Gopay_Options::supported_banks() ) ) {
 						$supported_banks[ $key ] = $value;
-						$supported_banks[ $key ]['description'] = Woocommerce_Gopay_Options::supported_banks()[ $key ];
+						$supported_banks[ $key ][
+							'label'] = Woocommerce_Gopay_Options::supported_banks()[ $key ];
 					}
 				}
 				$enable_banks = $this->get_option( 'enable_banks', array() );
@@ -554,7 +596,7 @@ function init_woocommerce_gopay_gateway()
 					if ( $payment_method == 'BANK_ACCOUNT' ) {
 						if ( !empty( $this->get_option( 'enable_banks_' . get_woocommerce_currency() ) ) ) {
 							foreach ( $banks as $key_b => $bank ) {
-								$span   = $supported_banks[ $bank ]['description'];
+								$span   = $supported_banks[ $bank ]['label'];
 								$img    = $supported_banks[ $bank ]['image'];
 
 								$enabled_payment_methods .= sprintf(
@@ -570,7 +612,7 @@ function init_woocommerce_gopay_gateway()
 						continue;
 					}
 
-					$span   = $supported_payment_methods[ $payment_method ]['description'];
+					$span   = $supported_payment_methods[ $payment_method ]['label'];
 					$img    = $supported_payment_methods[ $payment_method ]['image'];
 
 					$enabled_payment_methods .= sprintf(
@@ -800,7 +842,7 @@ function init_woocommerce_gopay_gateway()
 
 			if ( $order->has_status( array( 'pending', 'on-hold' ) ) ) {
 				return $message . __(
-						' However, we are still waiting for confirmation or payment rejection.',
+						' However, we are still waiting for the confirmation or payment rejection.',
 						WOOCOMMERCE_GOPAY_DOMAIN
 					);
 			}

@@ -262,6 +262,7 @@ class Woocommerce_Gopay_API
 			foreach ( $enabledPayments->json['enabledPaymentInstruments'] as $key => $paymentMethod ) {
 				if ( $paymentMethod['paymentInstrument'] == 'BANK_ACCOUNT' ) {
 					$paymentInstruments[ $paymentMethod['paymentInstrument'] ] = array(
+						'label' => $paymentMethod['label']['cs'],
 						'image'     => $paymentMethod['image']['normal'],
 						'swifts'    => array() );
 					$enabledSwifts = $paymentMethod['enabledSwifts'];
@@ -272,7 +273,9 @@ class Woocommerce_Gopay_API
 					}
 				} else {
 					$paymentInstruments[ $paymentMethod[
-						'paymentInstrument'] ] = array( 'image' => $paymentMethod['image']['normal'] );
+						'paymentInstrument'] ] = array(
+							'label' => $paymentMethod['label']['cs'],
+							'image' => $paymentMethod['image']['normal'] );
 				}
 			}
 		}
@@ -281,25 +284,37 @@ class Woocommerce_Gopay_API
 	}
 
 	/**
-	 * GoPay get enabled swifts
+	 * Check payment methods and banks that
+	 * are enabled on GoPay account.
 	 *
 	 * @return array
 	 * @since  1.0.0
 	 */
-	public static function get_enabled_swifts(): array
+	public static function check_enabled_on_GoPay(): array
 	{
-		$swifts = array();
-		foreach ( array( 'CZK', 'EUR', 'PLN' ) as $key => $currency ) {
-			$paymentInstruments = self::get_enabled_payment_methods( $currency );
+		$options         = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
+		$gopay           = self::auth_GoPay($options);
 
-			if ( array_key_exists( 'BANK_ACCOUNT', $paymentInstruments ) ) {
-				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $swift => $description ) {
-					$swifts[ $swift ] = __( $description, WOOCOMMERCE_GOPAY_DOMAIN );
+		$payment_methods = array();
+		$banks = array();
+		foreach ( Woocommerce_Gopay_Options::supported_currencies() as $currency => $value ) {
+			$enabledPayments = $gopay->getPaymentInstruments( $options['goid'], $currency );
+
+			if ( $enabledPayments->statusCode == 200 ) {
+				foreach ( $enabledPayments->json['enabledPaymentInstruments'] as $key => $paymentMethod ) {
+					$payment_methods[ $paymentMethod['paymentInstrument']
+					] = __( $paymentMethod['label']['cs'], WOOCOMMERCE_GOPAY_DOMAIN );
+
+					if ( $paymentMethod['paymentInstrument'] == 'BANK_ACCOUNT' ) {
+						foreach ( $paymentMethod['enabledSwifts'] as $_ => $bank ) {
+							$banks[ $bank['swift'] ] = __( $bank['label']['cs'], WOOCOMMERCE_GOPAY_DOMAIN );
+						}
+					}
 				}
 			}
 		}
 
-		return $swifts;
+		return array( $payment_methods, $banks );
 	}
 
 	/**
