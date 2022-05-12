@@ -413,11 +413,11 @@ function init_woocommerce_gopay_gateway()
 						get_woocommerce_currency(),
 						$this->enable_currencies
 					) ) {
-					if ( !wc_has_notice( __( get_woocommerce_currencies()[get_woocommerce_currency()] .
-						' is not supported on GoPay',
+					$currency = array_key_exists( get_woocommerce_currency(), get_woocommerce_currencies() ) ?
+					get_woocommerce_currencies()[ get_woocommerce_currency() ] : get_woocommerce_currency();
+					if ( !wc_has_notice( __( $currency . ' is not supported on GoPay',
 						WOOCOMMERCE_GOPAY_DOMAIN ), 'error' ) ) {
-						wc_add_notice( __( get_woocommerce_currencies()[get_woocommerce_currency()] .
-							' is not supported on GoPay',
+						wc_add_notice( __( $currency . ' is not supported on GoPay',
 							WOOCOMMERCE_GOPAY_DOMAIN ), 'error' );
 					}
 					return false;
