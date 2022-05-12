@@ -331,9 +331,16 @@ class Woocommerce_Gopay_API
 		$gopay    = self::auth_GoPay($options);
 		$response = $gopay->getStatus( $GoPay_Transaction_id );
 
-		$order = wc_get_order( array_key_exists( 'order_number', $response->json ) ?
-			$response->json['order_number']: '' );
-		if ( empty( $order ) ) {
+		$orders = wc_get_orders( array(
+			'limit'         => 1,
+			'meta_key'      => 'GoPay_Transaction_id',
+			'meta_value'    => $GoPay_Transaction_id,
+			'meta_compare'  => '=',
+		) );
+
+		if ( !empty( $orders ) ) {
+			$order = $orders[0];
+		} else {
 			return;
 		}
 
