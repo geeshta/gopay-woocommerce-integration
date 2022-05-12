@@ -39,7 +39,6 @@ class Woocommerce_Gopay_Activator
                 transaction_id bigint(255) NOT NULL,
                 message varchar(50) NOT NULL,
                 created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                gmt_offset int NOT NULL,
                 log_level varchar(100) NOT NULL,
                 log JSON NOT NULL,
                 CONSTRAINT order_transaction_state_unique UNIQUE(order_id, transaction_id, message),

@@ -47,14 +47,13 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
 				$gw_url         = ( !empty( $log_decoded->json ) &&
                                     property_exists( $log_decoded->json, 'gw_url' ) ) ?
                                     $log_decoded->json->gw_url : '#';
-				$gmt_offset     = $log->gmt_offset > 0 ? '+' . $log->gmt_offset : $log->gmt_offset;
 
 				echo '<tr>';
 				echo '<td>' . esc_attr( $log->id ) . '</td>';
 				echo '<td><a href="' . esc_attr( $order_url ) . '">' . esc_attr( $log->order_id ) . '</a></td>';
 				echo '<td><a href="' . esc_attr( $gw_url ) . '">' . esc_attr( $log->transaction_id ) . '</a></td>';
 				echo '<td>' . esc_attr( $log->message ) . '</td>';
-				echo '<td>' . esc_attr( $log->created_at ) . ' (UTC' . esc_attr($gmt_offset) . ')</td>';
+				echo '<td>' . esc_attr( $log->created_at ) . ' (GMT)</td>';
 				echo '<td>' . esc_attr( $log->log_level ) . '</td>';
 				echo '<td><a href="#" onClick="openPopup(' .
 					htmlspecialchars( $log->log, ENT_QUOTES ) . ');">Open log</a></td>';

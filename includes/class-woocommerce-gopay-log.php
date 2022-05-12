@@ -40,7 +40,6 @@ class Woocommerce_Gopay_Log
 						'transaction_id'    => $log['transaction_id'],
 						'message'           => $log['message'],
 						'created_at'        => gmdate( 'Y-m-d H:i:s' ),
-						'gmt_offset'        => get_option( 'gmt_offset' ),
 						'log_level'         => $log['log_level'],
 						'log'               => json_encode( $log['log'] ),
 					);
