@@ -381,11 +381,11 @@ function init_woocommerce_gopay_gateway()
 					( empty( $shipping_country ) && empty( $billing_country ) )
 				) {
 					if ( !wc_has_notice( __(
-						'Country is not enabled or not supported on GoPay',
+						'The shipping/billing Country is not enabled or not supported on GoPay',
 						WOOCOMMERCE_GOPAY_DOMAIN
 					), 'error' ) ) {
 						wc_add_notice( __(
-							'Country is not enabled or not supported on GoPay',
+							'The shipping/billing Country is not enabled or not supported on GoPay',
 							WOOCOMMERCE_GOPAY_DOMAIN
 						), 'error' );
 					}
@@ -396,11 +396,11 @@ function init_woocommerce_gopay_gateway()
 					!in_array( $billing_country, (array) $this->enable_countries )
 				) {
 					if ( !wc_has_notice( __(
-						'Country is not enabled or not supported on GoPay',
+						'The shipping/billing Country is not enabled or not supported on GoPay',
 						WOOCOMMERCE_GOPAY_DOMAIN
 					), 'error' ) ) {
 						wc_add_notice( __(
-							'Country is not enabled or not supported on GoPay',
+							'The shipping/billing Country is not enabled or not supported on GoPay',
 							WOOCOMMERCE_GOPAY_DOMAIN
 						), 'error' );
 					}
@@ -413,9 +413,11 @@ function init_woocommerce_gopay_gateway()
 						get_woocommerce_currency(),
 						$this->enable_currencies
 					) ) {
-					if ( !wc_has_notice( __( 'Currency is not supported on GoPay',
+					if ( !wc_has_notice( __( get_woocommerce_currencies()[get_woocommerce_currency()] .
+						' is not supported on GoPay',
 						WOOCOMMERCE_GOPAY_DOMAIN ), 'error' ) ) {
-						wc_add_notice( __( 'Currency is not supported on GoPay',
+						wc_add_notice( __( get_woocommerce_currencies()[get_woocommerce_currency()] .
+							' is not supported on GoPay',
 							WOOCOMMERCE_GOPAY_DOMAIN ), 'error' );
 					}
 					return false;
@@ -452,11 +454,11 @@ function init_woocommerce_gopay_gateway()
 						)
 						) {
 							if ( !wc_has_notice( __(
-								'Shipping method is not enabled or not supported on GoPay',
+								'The chosen shipping method is not enabled or not supported on GoPay',
 								WOOCOMMERCE_GOPAY_DOMAIN
 							), 'error' ) ) {
 								wc_add_notice( __(
-									'Shipping method is not enabled or not supported on GoPay',
+									'The chosen shipping method is not enabled or not supported on GoPay',
 									WOOCOMMERCE_GOPAY_DOMAIN
 								), 'error' );
 							}
@@ -475,11 +477,11 @@ function init_woocommerce_gopay_gateway()
 						array_diff( $chosen_shipping_methods, (array) $this->enable_shipping_methods )
 					) {
 						if ( !wc_has_notice( __(
-							'Shipping method is not enabled or not supported on GoPay',
+							'The chosen shipping method is not enabled or not supported on GoPay',
 							WOOCOMMERCE_GOPAY_DOMAIN
 						), 'error' ) ) {
 							wc_add_notice( __(
-								'Shipping method is not enabled or not supported on GoPay',
+								'The chosen shipping method is not enabled or not supported on GoPay',
 								WOOCOMMERCE_GOPAY_DOMAIN
 							), 'error' );
 						}
