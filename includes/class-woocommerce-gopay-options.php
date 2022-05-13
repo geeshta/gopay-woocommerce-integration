@@ -39,6 +39,32 @@ class Woocommerce_Gopay_Options
 	}
 
 	/**
+	 * Return supported languages that
+	 * can be used in the gateway
+	 *
+	 * @return array
+	 */
+	public static function supported_languages(): array
+	{
+		return array(
+			'CS' => __( 'Czech', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'SK' => __( 'Slovak', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'EN' => __( 'English', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'DE' => __( 'German', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'RU' => __( 'Russian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'PL' => __( 'Polish', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'HU' => __( 'Hungarian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'RO' => __( 'Romanian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'BG' => __( 'Bulgarian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'HR' => __( 'Croatian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'IT' => __( 'Italian', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'FR' => __( 'French', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'ES' => __( 'Spanish', WOOCOMMERCE_GOPAY_DOMAIN ),
+			'UK' => __( 'Ukrainian', WOOCOMMERCE_GOPAY_DOMAIN ),
+		);
+	}
+
+	/**
 	 * Return supported countries where
 	 * the gateway can be available
 	 *

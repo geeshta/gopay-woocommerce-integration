@@ -34,19 +34,13 @@ class Woocommerce_Gopay_API
 	 */
 	private static function auth_GoPay( $options ): Payments
 	{
-
-		// Change it - compare with supported languages
-		$language = get_locale() ? strtoupper(
-			explode( '_', get_locale() )[0]
-		) : GoPay\Definition\Language::ENGLISH;
-
 		return GoPay\payments( array(
 			'goid'              => $options['goid'],
 			'clientId'          => $options['client_id'],
 			'clientSecret'      => $options['client_secret'],
 			'isProductionMode'  => !( $options['test'] == 'yes' ),
 			'scope'             => GoPay\Definition\TokenScope::ALL,
-			'language'          => $language,
+			'language'          => $options['default_language_gopay_interface'],
 			'timeout'           => 30,
 		) );
 	}
@@ -165,10 +159,7 @@ class Woocommerce_Gopay_API
 				'value' => $order->get_order_number(),
 			) );
 
-		// Change it - compare with supported languages
-		$language = get_locale() ? strtoupper(
-			explode( '_', get_locale() )[0]
-		) : GoPay\Definition\Language::ENGLISH;
+		$language = $options['default_language_gopay_interface'];
 
 		$data = array(
 			'payer'             => $payer,

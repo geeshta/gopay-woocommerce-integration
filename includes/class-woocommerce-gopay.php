@@ -47,6 +47,7 @@ function init_woocommerce_gopay_gateway()
 										);
 
 			$this->enable_currencies            = Woocommerce_Gopay_Options::supported_currencies();
+			$this->supported_languages          = Woocommerce_Gopay_Options::supported_languages();
 			$this->supported_countries          = Woocommerce_Gopay_Options::supported_countries();
 			$this->supported_shipping_methods   = Woocommerce_Gopay_Options::supported_shipping_methods();
 			$this->supported_payment_methods    = Woocommerce_Gopay_Options::supported_payment_methods();
@@ -128,7 +129,7 @@ function init_woocommerce_gopay_gateway()
 		 * @return Woocommerce_Gopay_Gateway|null Instance
 		 * @since 1.0.0
 		 */
-		public static function get_instance(): ?Woocommerce_Gopay_Gateway
+		public static function get_instance()
 		{
 			if ( empty( self::$instance ) ) {
 				 self::$instance = new self();
@@ -291,6 +292,14 @@ function init_woocommerce_gopay_gateway()
 							WOOCOMMERCE_GOPAY_DOMAIN
 						),
 						'default' => 'yes',
+					),
+					'default_language_gopay_interface' => array(
+						'title'     => __( 'Default language of the GoPay interface', WOOCOMMERCE_GOPAY_DOMAIN ),
+						'type'      => 'select',
+						'class'     => 'chosen_select',
+						'options'   => $this->supported_languages,
+						'desc_tip'  => true,
+						'css'       => 'width: 500px; min-height: 50px;',
 					),
 					'enable_shipping_methods' => array(
 						'title'     => __( 'Enable shipping methods', WOOCOMMERCE_GOPAY_DOMAIN ),
