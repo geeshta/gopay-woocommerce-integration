@@ -298,11 +298,19 @@ class Woocommerce_Gopay_API
 
 					if ( $paymentMethod['paymentInstrument'] == 'BANK_ACCOUNT' ) {
 						foreach ( $paymentMethod['enabledSwifts'] as $_ => $bank ) {
-							$banks[ $bank['swift'] ] = __( $bank['label']['cs'], WOOCOMMERCE_GOPAY_DOMAIN );
+							if ( $bank['swift'] != 'OTHERS' ) {
+								$banks[ $bank['swift'] ] = __(
+									$bank['label']['cs'] . ' ' . substr($bank['swift'], 4, 2),
+									WOOCOMMERCE_GOPAY_DOMAIN );
+							}
 						}
 					}
 				}
 			}
+		}
+
+		if ( !empty( $banks ) ) {
+			$banks['OTHERS'] = __( 'Another bank', WOOCOMMERCE_GOPAY_DOMAIN );
 		}
 
 		return array( $payment_methods, $banks );

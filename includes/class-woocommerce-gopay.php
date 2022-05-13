@@ -476,8 +476,6 @@ function init_woocommerce_gopay_gateway()
 			$supported_payment_methods = array();
 			foreach ( $paymentInstruments as $key => $value ) {
 				$supported_payment_methods[ $key ] = $value;
-				$supported_payment_methods[ $key ][
-					'label'] = Woocommerce_Gopay_Options::supported_payment_methods()[ $key ];
 			}
 //        $supported_payment_methods = array_intersect_key(
 //            Woocommerce_Gopay_Options::supported_payment_methods(), $paymentInstruments);
@@ -498,8 +496,6 @@ function init_woocommerce_gopay_gateway()
 				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $key => $value ) {
 					if ( array_key_exists( $key, Woocommerce_Gopay_Options::supported_banks() ) ) {
 						$supported_banks[ $key ] = $value;
-						$supported_banks[ $key ][
-							'label'] = Woocommerce_Gopay_Options::supported_banks()[ $key ];
 					}
 				}
 				$enable_banks = $this->get_option( 'enable_banks', array() );
