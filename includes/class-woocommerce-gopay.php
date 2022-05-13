@@ -34,7 +34,7 @@ function init_woocommerce_gopay_gateway()
 			$this->id                   = WOOCOMMERCE_GOPAY_ID;
 			$this->icon                 = apply_filters(
 											'woocommerce_gopay_icon',
-											WOOCOMMERCE_GOPAY_URL . 'includes/assets/gopay.png'
+											WOOCOMMERCE_GOPAY_URL . 'includes/assets/images/gopay.png'
 										);
 			$this->has_fields           = false;
 			$this->method_title         = __(
@@ -93,6 +93,7 @@ function init_woocommerce_gopay_gateway()
 				$this,
 				'process_admin_options',
 			) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
 			#add_filter( 'woocommerce_currencies', array( 'Woocommerce_Gopay_Options', 'supported_currencies' ) );
 			add_filter(
@@ -583,9 +584,7 @@ function init_woocommerce_gopay_gateway()
 
 				$input =
 					'
-              <div class="payment_method_' .
-					WOOCOMMERCE_GOPAY_ID .
-					'_selection" style="border-bottom: 1px dashed; padding: 12px; display: flex; flex-wrap: wrap;">
+              <div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
                 <div>
                     <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
 					'_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
@@ -882,6 +881,19 @@ function init_woocommerce_gopay_gateway()
 			$this->init_form_fields();
 
 			return $saved;
+		}
+
+		/**
+		 * Enqueue styles
+		 *
+		 * @since 1.0.0
+		 */
+		public function enqueue_styles()
+		{
+			wp_enqueue_style(
+				WOOCOMMERCE_GOPAY_DOMAIN . '-payment-methods-styles',
+				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/payment_methods.css'
+			);
 		}
 	}
 
