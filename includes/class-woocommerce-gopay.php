@@ -380,22 +380,12 @@ function init_woocommerce_gopay_gateway()
 		{
 			if ( !empty( WC()->customer ) ) {
 				// Check countries
-				$shipping_country   = WC()
-					->cart->get_customer()
-					->get_shipping_country();
 				$billing_country    = WC()
 					->cart->get_customer()
 					->get_billing_country();
 
-				if ( empty( $this->enable_countries ) ||
-					( empty( $shipping_country ) && empty( $billing_country ) )
-				) {
-					return false;
-				}
-
-				if ( !in_array( $shipping_country, (array) $this->enable_countries ) &&
-					!in_array( $billing_country, (array) $this->enable_countries )
-				) {
+				if ( empty( $this->enable_countries ) || empty( $billing_country ) ||
+					!in_array( $billing_country, (array) $this->enable_countries ) ) {
 					return false;
 				}
 				// end check countries
