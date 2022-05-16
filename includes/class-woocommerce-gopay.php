@@ -138,6 +138,16 @@ function init_woocommerce_gopay_gateway()
 		}
 
 		/**
+		 * Load plugin textdomain
+		 *
+		 * @since 1.0.0
+		 */
+		public static function load_textdomain() {
+			load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, false,
+				WOOCOMMERCE_GOPAY_BASENAME_DIR . '/languages');
+		}
+
+		/**
 		 * Update payment methods and banks
 		 *
 		 * @since 1.0.0
@@ -549,7 +559,7 @@ function init_woocommerce_gopay_gateway()
 					if ( $payment_method == 'BANK_ACCOUNT' ) {
 						if ( !empty( $this->get_option( 'enable_banks_' . get_woocommerce_currency() ) ) ) {
 							foreach ( $banks as $key_b => $bank ) {
-								$span   = $supported_banks[ $bank ]['label'];
+								$span   = __( $supported_banks[ $bank ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
 								$img    = $supported_banks[ $bank ]['image'];
 
 								$enabled_payment_methods .= sprintf(
@@ -565,7 +575,7 @@ function init_woocommerce_gopay_gateway()
 						continue;
 					}
 
-					$span   = $supported_payment_methods[ $payment_method ]['label'];
+					$span   = __( $supported_payment_methods[ $payment_method ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
 					$img    = $supported_payment_methods[ $payment_method ]['image'];
 
 					$enabled_payment_methods .= sprintf(

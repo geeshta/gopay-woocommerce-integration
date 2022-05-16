@@ -12,11 +12,11 @@ $settings_url   = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wc
     <div class="woocommerce-gopay-menu">
         <table>
             <tr>
-                <th>Plugin Name</th>
-                <th>Version</th>
-                <th>Description</th>
-                <th>Author</th>
-                <th>Settings</th>
+                <th><?php _e( 'Plugin Name', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Version', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Description', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Author', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Settings', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
             </tr>
             <tr>
                 <td><?php _e( $plugin_data['Title'], WOOCOMMERCE_GOPAY_DOMAIN ); ?></td>

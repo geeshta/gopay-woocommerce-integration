@@ -35,6 +35,7 @@ define( 'WOOCOMMERCE_GOPAY_FULLPATH', __FILE__ );
 define( 'WOOCOMMERCE_GOPAY_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOCOMMERCE_GOPAY_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOOCOMMERCE_GOPAY_BASENAME', plugin_basename( __FILE__ ) );
+define( 'WOOCOMMERCE_GOPAY_BASENAME_DIR', dirname( plugin_basename( __FILE__ ) ) );
 define( 'WOOCOMMERCE_GOPAY_LOG_TABLE_NAME', 'woocommerce_gopay_log' );
 
 // Check requirements
@@ -67,5 +68,5 @@ register_deactivation_hook( __FILE__, array( 'Woocommerce_Gopay_Deactivator', 'd
 
 // Check if Woocommerce GoPay Gateway was instantiated
 add_action( 'plugins_loaded', array( 'Woocommerce_Gopay_Gateway', 'get_instance' ) );
-
-#load_plugin_textdomain(WOOCOMMERCE_GOPAY_DOMAIN, WOOCOMMERCE_GOPAY_DIR . '/languages');
+// Load text domain for translations
+add_action( 'init', array( 'Woocommerce_Gopay_Gateway', 'load_textdomain' ), 99 );

@@ -179,7 +179,7 @@ class Woocommerce_Gopay_Subscriptions
 	 * @return array
 	 * @since  1.0.0
 	 */
-	public static function get_parent_order( $order ): ?WC_Order
+	public static function get_parent_order( $order )
 	{
 		$subscription = ( new Woocommerce_Gopay_Subscriptions )->get_subscription_data( $order );
 

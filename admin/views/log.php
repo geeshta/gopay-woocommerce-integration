@@ -31,13 +31,13 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
     <div class="woocommerce-gopay-menu">
         <table>
             <tr>
-                <th>Id</th>
-                <th>Order id</th>
-                <th>Transaction id</th>
-                <th>Message</th>
-                <th>Created at</th>
-                <th>Log level</th>
-                <th>Log</th>
+                <th><?php _e( 'Id', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Order id', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Transaction id', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Message', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Created at', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Log level', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
+                <th><?php _e( 'Log', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
             </tr>
 			<?php
 			foreach ( $log_data as $_ => $log ) {
