@@ -180,7 +180,7 @@ class Woocommerce_Gopay_Options
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_payment_methods';
 
-		return !empty($options) && array_key_exists( $key, $options ) ? $options[ $key ] : [] ;
+		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : array() ;
 
 
 //		// Supported payment methods according to https://doc.gopay.com/#payment-instrument
@@ -210,7 +210,7 @@ class Woocommerce_Gopay_Options
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_banks';
 
-		return !empty($options) && array_key_exists( $key, $options ) ? $options[ $key ] : [] ;
+		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : array() ;
 
 //		// Supported banks according to https://doc.gopay.com/#swift
 //		return array(

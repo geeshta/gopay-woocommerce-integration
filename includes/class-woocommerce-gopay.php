@@ -177,12 +177,38 @@ function init_woocommerce_gopay_gateway()
 		 */
 		function check_enabled_on_GoPay()
 		{
-			$supported        = Woocommerce_Gopay_API::check_enabled_on_GoPay();
-			$payment_methods  = $supported[0];
-			$banks            = $supported[1];
+			$payment_methods = array();
+			$banks = array();
+			foreach ( Woocommerce_Gopay_Options::supported_currencies() as $currency => $value ) {
+				$supported        = Woocommerce_Gopay_API::check_enabled_on_GoPay( $currency );
+				$payment_methods  = $payment_methods + $supported[0];
+				$banks            = $banks + $supported[1];
+			}
+
+			// Send 'Others' to the end
+			$other = $banks['OTHERS'];
+			unset( $banks['OTHERS'] );
+			$banks['OTHERS'] = $other;
 
 			$this->update_option( 'option_gopay_payment_methods', $payment_methods );
 			$this->update_option( 'option_gopay_banks', $banks );
+		}
+
+		/**
+		 * Extract payment methods/banks from
+		 * list of supported
+		 *
+		 * @param array $supported either payment methods or banks
+		 * @return array
+		 */
+		private function extract_payment_methods( $supported ): array
+		{
+			foreach ( $supported as $key => $value ) {
+				$supported[ $key ] = $value['label'] .
+					( array_key_exists( 'country', $value ) ? ' ' .  $value['country'] : '');
+			}
+
+			return $supported;
 		}
 
 		/**
@@ -348,7 +374,7 @@ function init_woocommerce_gopay_gateway()
 						),
 						'type'      => 'multiselect',
 						'class'     => 'chosen_select',
-						'options'   => $this->supported_payment_methods,
+						'options'   => $this->extract_payment_methods( $this->supported_payment_methods ),
 						'desc_tip'  => true,
 						'css'       => 'width: 500px; min-height: 50px;',
 					),
@@ -356,7 +382,7 @@ function init_woocommerce_gopay_gateway()
 						'title'     => __( 'Enable banks', WOOCOMMERCE_GOPAY_DOMAIN ),
 						'type'      => 'multiselect',
 						'class'     => 'chosen_select',
-						'options'   => $this->supported_banks,
+						'options'   => $this->extract_payment_methods( $this->supported_banks ),
 						'desc_tip'  => true,
 						'css'       => 'width: 500px; min-height: 50px;',
 					),
@@ -463,55 +489,25 @@ function init_woocommerce_gopay_gateway()
 		}
 
 		/**
-		 * Payments methods enabled on GoPay account
+		 * Extract banks by country code
 		 *
-		 * @return array $supported_payment_methods
+		 * @param string $country
 		 * @since  1.0.0
 		 */
-		protected function update_payments_methods_enabled(): array
+		public function extract_banks_by_country()
 		{
-			$paymentInstruments = Woocommerce_Gopay_API::get_enabled_payment_methods(
-				get_woocommerce_currency() );
-
-			// Payment methods
-			$supported_payment_methods = array();
-			foreach ( $paymentInstruments as $key => $value ) {
-				$supported_payment_methods[ $key ] = $value;
-			}
-//        $supported_payment_methods = array_intersect_key(
-//            Woocommerce_Gopay_Options::supported_payment_methods(), $paymentInstruments);
-			$enable_gopay_payment_methods = $this->get_option( 'enable_gopay_payment_methods', array() );
-			$enable_gopay_payment_methods = array_intersect_key(
-				$supported_payment_methods,
-				array_flip( $enable_gopay_payment_methods )
-			);
-			#$this->enable_gopay_payment_methods = array_keys($enable_gopay_payment_methods);
-			$this->update_option(
-				'enable_gopay_payment_methods_' . get_woocommerce_currency(),
-				array_keys( $enable_gopay_payment_methods )
-			);
-
-			// Banks
 			$supported_banks = array();
-			if ( array_key_exists( 'BANK_ACCOUNT', $enable_gopay_payment_methods ) ) {
-				foreach ( $paymentInstruments['BANK_ACCOUNT']['swifts'] as $key => $value ) {
-					if ( array_key_exists( $key, Woocommerce_Gopay_Options::supported_banks() ) ) {
-						$supported_banks[ $key ] = $value;
+			if ( !empty( WC()->customer->get_billing_country() ) ) {
+
+				$country = WC()->customer->get_billing_country();
+				foreach ( Woocommerce_Gopay_Options::supported_banks() as $swift => $value ) {
+					if ( $country == $value['country'] ) {
+						$supported_banks[$swift] = $value;
 					}
 				}
-				$enable_banks = $this->get_option( 'enable_banks', array() );
-				$enable_banks = array_intersect_key(
-					$supported_banks,
-					array_flip( $enable_banks )
-				);
-				#$this->enable_banks = array_keys($enable_banks);
-				$this->update_option( 'enable_banks_' . get_woocommerce_currency(), array_keys( $enable_banks ) );
-			} else {
-				#$this->supported_banks = array();
-				$this->update_option( 'enable_banks_' . get_woocommerce_currency(), array() );
 			}
 
-			return array( $supported_payment_methods, $supported_banks );
+			return $supported_banks;
 		}
 
 		/**
@@ -523,9 +519,8 @@ function init_woocommerce_gopay_gateway()
 		{
 			echo wpautop( wptexturize( $this->description ) );
 
-			$supported                  = $this->update_payments_methods_enabled();
-			$supported_payment_methods  = $supported[0];
-			$supported_banks            = $supported[1];
+			$supported_payment_methods  = Woocommerce_Gopay_Options::supported_payment_methods();
+			$supported_banks            = $this->extract_banks_by_country();
 
 			$enabled_payment_methods    = '';
 			$checked                    = 'checked="checked"';
@@ -533,35 +528,35 @@ function init_woocommerce_gopay_gateway()
 											is_page( wc_get_page_id( 'checkout' ) ) &&
 											!empty( get_query_var( 'order-pay' ) ) );
 			if ( !$this->simplified_payment_method && !$payment_retry ) {
-				$payment_methods    = $this->get_option( 'enable_gopay_payment_methods_' . get_woocommerce_currency() );
-				$banks              = $this->get_option( 'enable_banks_' . get_woocommerce_currency() );
 
 				// Check if subscription - only card payment is enabled
 				if ( Woocommerce_Gopay_Subscriptions::cart_contains_subscription() ) {
-					if ( in_array( 'PAYMENT_CARD', (array) $payment_methods ) ) {
-						$payment_methods = array( 'PAYMENT_CARD' );
+					if ( array_key_exists( 'PAYMENT_CARD', $supported_payment_methods ) ) {
+						$payment_card = $supported_payment_methods['PAYMENT_CARD'];
+						$supported_payment_methods = array();
+						$supported_payment_methods['PAYMENT_CARD'] = $payment_card;
 					} else {
-						$payment_methods = array();
+						$supported_payment_methods = array();
 					}
 				}
 
 				$input =
 					'
-              <div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
-                <div>
-                    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
+				<div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
+				<div>
+				    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
 					'_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
-                    <span>%s</span>
-                </div>
-                <img src="%s" alt="ico" style="height: auto; width: auto; margin-left: auto;"/>
-              </div>';
+				    <span>%s</span>
+				</div>
+				<img src="%s" alt="ico" style="height: auto; width: auto; margin-left: auto;"/>
+				</div>';
 
-				foreach ( $payment_methods as $key_p => $payment_method ) {
+				foreach ( $supported_payment_methods as $payment_method => $value_payment_method ) {
 					if ( $payment_method == 'BANK_ACCOUNT' ) {
-						if ( !empty( $this->get_option( 'enable_banks_' . get_woocommerce_currency() ) ) ) {
-							foreach ( $banks as $key_b => $bank ) {
-								$span   = __( $supported_banks[ $bank ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-								$img    = $supported_banks[ $bank ]['image'];
+						if ( !empty( $supported_banks ) ) {
+							foreach ( $supported_banks as $bank => $value_bank ) {
+								$span   = __( $value_bank['label'], WOOCOMMERCE_GOPAY_DOMAIN );
+								$img    = $value_bank['image'];
 
 								$enabled_payment_methods .= sprintf(
 									$input,
@@ -576,8 +571,8 @@ function init_woocommerce_gopay_gateway()
 						continue;
 					}
 
-					$span   = __( $supported_payment_methods[ $payment_method ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-					$img    = $supported_payment_methods[ $payment_method ]['image'];
+					$span   = __( $value_payment_method['label'], WOOCOMMERCE_GOPAY_DOMAIN );
+					$img    = $value_payment_method['image'];
 
 					$enabled_payment_methods .= sprintf(
 						$input,
