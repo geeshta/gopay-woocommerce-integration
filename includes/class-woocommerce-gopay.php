@@ -309,6 +309,7 @@ function init_woocommerce_gopay_gateway()
 						'class'     => 'chosen_select',
 						'options'   => $this->supported_languages,
 						'desc_tip'  => true,
+						'default'   => 'EN',
 						'css'       => 'width: 500px; min-height: 50px;',
 					),
 					'enable_shipping_methods' => array(

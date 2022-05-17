@@ -159,7 +159,10 @@ class Woocommerce_Gopay_API
 				'value' => $order->get_order_number(),
 			) );
 
-		$language = $options['default_language_gopay_interface'];
+		$language = Woocommerce_Gopay_Options::country_to_language()[ $order->get_billing_country() ];
+		if ( !array_key_exists( $language, Woocommerce_Gopay_Options::supported_languages() ) ) {
+			$language = $options['default_language_gopay_interface'];
+		}
 
 		$data = array(
 			'payer'             => $payer,
