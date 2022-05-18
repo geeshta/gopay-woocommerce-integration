@@ -525,38 +525,38 @@ function init_woocommerce_gopay_gateway()
 			$enabled_payment_methods    = '';
 			$checked                    = 'checked="checked"';
 			$payment_retry              = ( $this->payment_retry &&
-											is_page( wc_get_page_id( 'checkout' ) ) &&
-											!empty( get_query_var( 'order-pay' ) ) );
+				is_page( wc_get_page_id( 'checkout' ) ) &&
+				!empty( get_query_var( 'order-pay' ) ) );
 			if ( !$this->simplified_payment_method && !$payment_retry ) {
+				$payment_methods    = $this->get_option( 'enable_gopay_payment_methods', array() );
+				$banks              = $this->get_option( 'enable_banks', array() );
 
 				// Check if subscription - only card payment is enabled
 				if ( Woocommerce_Gopay_Subscriptions::cart_contains_subscription() ) {
-					if ( array_key_exists( 'PAYMENT_CARD', $supported_payment_methods ) ) {
-						$payment_card = $supported_payment_methods['PAYMENT_CARD'];
-						$supported_payment_methods = array();
-						$supported_payment_methods['PAYMENT_CARD'] = $payment_card;
+					if ( in_array( 'PAYMENT_CARD', (array) $payment_methods ) ) {
+						$payment_methods = array( 'PAYMENT_CARD' );
 					} else {
-						$supported_payment_methods = array();
+						$payment_methods = array();
 					}
 				}
 
 				$input =
 					'
-				<div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
-				<div>
-				    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
-					'_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
-				    <span>%s</span>
-				</div>
-				<img src="%s" alt="ico" style="height: auto; width: auto; margin-left: auto;"/>
-				</div>';
+					<div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
+					<div>
+					    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
+						'_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
+					    <span>%s</span>
+					</div>
+					<img src="%s" alt="ico" style="height: auto; width: auto; margin-left: auto;"/>
+					</div>';
 
-				foreach ( $supported_payment_methods as $payment_method => $value_payment_method ) {
+				foreach ( $payment_methods as $key_p => $payment_method ) {
 					if ( $payment_method == 'BANK_ACCOUNT' ) {
-						if ( !empty( $supported_banks ) ) {
-							foreach ( $supported_banks as $bank => $value_bank ) {
-								$span   = __( $value_bank['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-								$img    = $value_bank['image'];
+						foreach ( $banks as $key_b => $bank ) {
+							if ( array_key_exists( $bank, $supported_banks ) ) {
+								$span   = __( $supported_banks[ $bank ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
+								$img    = $supported_banks[ $bank ]['image'];
 
 								$enabled_payment_methods .= sprintf(
 									$input,
@@ -571,8 +571,8 @@ function init_woocommerce_gopay_gateway()
 						continue;
 					}
 
-					$span   = __( $value_payment_method['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-					$img    = $value_payment_method['image'];
+					$span   = __( $supported_payment_methods[ $payment_method ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
+					$img    = $supported_payment_methods[ $payment_method ]['image'];
 
 					$enabled_payment_methods .= sprintf(
 						$input,
