@@ -177,26 +177,25 @@ class Woocommerce_Gopay_Options
 	 */
 	public static function supported_payment_methods(): array
 	{
+		// Supported payment methods according to https://doc.gopay.com/#payment-instrument
+		$payment_methods = array(
+			'PAYMENT_CARD'  => array( 'label' => __( 'Payment card', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'BANK_ACCOUNT'  => array( 'label' => __( 'Bank account', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'GPAY'          => array( 'label' => __( 'Google Pay', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'APPLE_PAY'     => array( 'label' => __( 'Apple Pay', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'GOPAY'         => array( 'label' => __( 'GoPay wallet', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'PAYPAL'        => array( 'label' => __( 'PayPal wallet', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'MPAYMENT'      => array( 'label' => __( 'mPlatba (mobile payment)', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'PRSMS'         => array( 'label' => __( 'Premium SMS', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'PAYSAFECARD'   => array( 'label' => __( 'PaySafeCard coupon', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'BITCOIN'       => array( 'label' => __( 'Bitcoin wallet', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'CLICK_TO_PAY'  => array( 'label' => __( 'Click to Pay', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+		);
+
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_payment_methods';
 
-		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : array() ;
-
-
-//		// Supported payment methods according to https://doc.gopay.com/#payment-instrument
-//		return array(
-//			'PAYMENT_CARD'  => __( 'Payment card', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BANK_ACCOUNT'  => __( 'Bank account', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'GPAY'          => __( 'Google Pay', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'APPLE_PAY'     => __( 'Apple Pay', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'GOPAY'         => __( 'GoPay wallet', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'PAYPAL'        => __( 'PayPal wallet', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'MPAYMENT'      => __( 'mPlatba (mobile payment)', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'PRSMS'         => __( 'Premium SMS', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'PAYSAFECARD'   => __( 'PaySafeCard coupon', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BITCOIN'       => __( 'Bitcoin wallet', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'CLICK_TO_PAY'  => __( 'Click to Pay', WOOCOMMERCE_GOPAY_DOMAIN ),
-//		);
+		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : $payment_methods ;
 	}
 
 	/**
@@ -207,66 +206,166 @@ class Woocommerce_Gopay_Options
 	 */
 	public static function supported_banks(): array
 	{
+
+		// Supported banks according to https://doc.gopay.com/#swift
+		$banks = array(
+			'GIBACZPX'      => array(
+				'label' => __( 'Česká Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'KOMBCZPP'      => array(
+				'label' => __( 'Komerční Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'RZBCCZPP'      => array(
+				'label' => __( 'Raiffeisenbank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'FIOBCZPP'      => array(
+				'label' => __( 'FIO Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'BACXCZPP'      => array(
+				'label' => __( 'UniCredit Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'BREXCZPP'      => array(
+				'label' => __( 'mBank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'CEKOCZPP'      => array(
+				'label' => __( 'ČSOB', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'CEKOCZPP-ERA'  => array(
+				'label' => __( 'Poštovní Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'AGBACZPP'      => array(
+				'label' => __( 'Moneta Money Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'AIRACZPP'      => array(
+				'label' => __( 'AirBank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'EQBKCZPP'      => array(
+				'label' => __( 'EQUA Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'INGBCZPP'      => array(
+				'label' => __( 'ING Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'EXPNCZPP'      => array(
+				'label' => __( 'Expobank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'OBKLCZ2X'      => array(
+				'label' => __( 'OberBank AG', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'SUBACZPP'      => array(
+				'label' => __( 'Všeobecná Úvěrová Banka - pobočka Praha', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'CZ' ),
+			'TATRSKBX'      => array(
+				'label' => __( 'Tatra Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'SUBASKBX'      => array(
+				'label' => __( 'Všeobecná Úverová Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'UNCRSKBX'      => array(
+				'label' => __( 'UniCredit Bank SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'GIBASKBX'      => array(
+				'label' => __( 'Slovenská Sporiteľňa', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'POBNSKBA'      => array(
+				'label' => __( 'Poštová Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'OTPVSKBX'      => array(
+				'label' => __( 'OTP Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'KOMASK2X'      => array(
+				'label' => __( 'Prima Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'CITISKBA'      => array(
+				'label' => __( 'Citibank Europe', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'FIOZSKBA'      => array(
+				'label' => __( 'FIO Banka SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'INGBSKBX'      => array(
+				'label' => __( 'ING Wholesale Banking SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'BREXSKBX'      => array(
+				'label' => __( 'mBank SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'JTBPSKBA'      => array(
+				'label' => __( 'J&T Banka SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'OBKLSKBA'      => array(
+				'label' => __( 'OberBank AG SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'BSLOSK22'      => array(
+				'label' => __( 'Privatbanka', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'BFKKSKBB'      => array(
+				'label' => __( 'BKS Bank AG SK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'SK' ),
+			'GBGCPLPK'      => array(
+				'label' => __( 'Getin Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'NESBPLPW'      => array(
+				'label' => __( 'Nest Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'VOWAPLP9'      => array(
+				'label' => __( 'Volkswagen Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'CITIPLPX'      => array(
+				'label' => __( 'Citi handlowy', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'WBKPPLPP'      => array(
+				'label' => __( 'Santander', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'BIGBPLPW'      => array(
+				'label' => __( 'Millenium Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'EBOSPLPW'      => array(
+				'label' => __( 'Bank Ochrony Srodowiska', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'PKOPPLPW'      => array(
+				'label' => __( 'Pekao Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'PPABPLPK'      => array(
+				'label' => __( 'BNP Paribas', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'BPKOPLPW'      => array(
+				'label' => __( 'OWSZECHNA KASA OSZCZEDNOSCI BANK POLSK', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'AGRIPLPR'      => array(
+				'label' => __( 'Credit Agricole Banka Polska', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'GBGCPLPK-NOB'  => array(
+				'label' => __( 'Noble Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'POLUPLPR'      => array(
+				'label' => __( 'BPS/Bank Nowy BFG', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'BREXPLPW'      => array(
+				'label' => __( 'mBank PL', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'INGBPLPW'      => array(
+				'label' => __( 'ING Bank PL', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'ALBPPLPW'      => array(
+				'label' => __( 'Alior', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'IEEAPLPA'      => array(
+				'label' => __( 'IdeaBank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'POCZPLP4'      => array(
+				'label' => __( 'Pocztowy24', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'IVSEPLPP'      => array(
+				'label' => __( 'Plus Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'TOBAPLPW'      => array(
+				'label' => __( 'Toyota Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => 'PL' ),
+			'OTHERS'        => array( 'label' => __( 'Another bank', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+		);
+
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_banks';
 
-		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : array() ;
-
-//		// Supported banks according to https://doc.gopay.com/#swift
-//		return array(
-//			'GIBACZPX'      => __( 'Česká Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'KOMBCZPP'      => __( 'Komerční Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'RZBCCZPP'      => __( 'Raiffeisenbank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'FIOBCZPP'      => __( 'FIO Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BACXCZPP'      => __( 'UniCredit Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BREXCZPP'      => __( 'mBank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'CEKOCZPP'      => __( 'ČSOB', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'CEKOCZPP-ERA'  => __( 'Poštovní Spořitelna', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'AGBACZPP'      => __( 'Moneta Money Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'AIRACZPP'      => __( 'AirBank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'EQBKCZPP'      => __( 'EQUA Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'INGBCZPP'      => __( 'ING Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'EXPNCZPP'      => __( 'Expobank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'OBKLCZ2X'      => __( 'OberBank AG', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'SUBACZPP'      => __( 'Všeobecná Úvěrová Banka - pobočka Praha', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			#'BPPFCZP1'     => __('Hello! Bank', WOOCOMMERCE_GOPAY_DOMAIN),
-//			'TATRSKBX'      => __( 'Tatra Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'SUBASKBX'      => __( 'Všeobecná Úverová Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'UNCRSKBX'      => __( 'UniCredit Bank SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'GIBASKBX'      => __( 'Slovenská Sporiteľňa', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'POBNSKBA'      => __( 'Poštová Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'OTPVSKBX'      => __( 'OTP Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'KOMASK2X'      => __( 'Prima Banka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'CITISKBA'      => __( 'Citibank Europe', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'FIOZSKBA'      => __( 'FIO Banka SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'INGBSKBX'      => __( 'ING Wholesale Banking SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BREXSKBX'      => __( 'mBank SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'JTBPSKBA'      => __( 'J&T Banka SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'OBKLSKBA'      => __( 'OberBank AG SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BSLOSK22'      => __( 'Privatbanka', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BFKKSKBB'      => __( 'BKS Bank AG SK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'GBGCPLPK'      => __( 'Getin Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'NESBPLPW'      => __( 'Nest Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'VOWAPLP9'      => __( 'Volkswagen Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'CITIPLPX'      => __( 'Citi handlowy', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'WBKPPLPP'      => __( 'Santander', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BIGBPLPW'      => __( 'Millenium Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'EBOSPLPW'      => __( 'Bank Ochrony Srodowiska', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'PKOPPLPW'      => __( 'Pekao Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'PPABPLPK'      => __( 'BNP Paribas', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BPKOPLPW'      => __( 'OWSZECHNA KASA OSZCZEDNOSCI BANK POLSK', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'AGRIPLPR'      => __( 'Credit Agricole Banka Polska', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'GBGCPLPK-NOB'  => __( 'Noble Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'POLUPLPR'      => __( 'BPS/Bank Nowy BFG', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'BREXPLPW'      => __( 'mBank PL', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'INGBPLPW'      => __( 'ING Bank PL', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'ALBPPLPW'      => __( 'Alior', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'IEEAPLPA'      => __( 'IdeaBank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'POCZPLP4'      => __( 'Pocztowy24', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'IVSEPLPP'      => __( 'Plus Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'TOBAPLPW'      => __( 'Toyota Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//			'OTHERS'        => __( 'Another bank', WOOCOMMERCE_GOPAY_DOMAIN ),
-//		);
+		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : $banks ;
 	}
 
 	/**

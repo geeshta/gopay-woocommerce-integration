@@ -40,7 +40,8 @@ class Woocommerce_Gopay_API
 			'clientSecret'      => $options['client_secret'],
 			'isProductionMode'  => !( $options['test'] == 'yes' ),
 			'scope'             => GoPay\Definition\TokenScope::ALL,
-			'language'          => $options['default_language_gopay_interface'],
+			'language'          => array_key_exists( 'default_language_gopay_interface', $options) ?
+				$options['default_language_gopay_interface'] : 'EN',
 			'timeout'           => 30,
 		) );
 	}
