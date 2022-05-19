@@ -189,10 +189,13 @@ function init_woocommerce_gopay_gateway()
 				$this->update_option( 'option_gopay_payment_methods', $payment_methods );
 			}
 			if ( !empty( $banks ) ) {
-				// Send 'Others' to the end
-				$other = $banks['OTHERS'];
-				unset( $banks['OTHERS'] );
-				$banks['OTHERS'] = $other;
+				if ( array_key_exists( 'OTHERS', $banks ) ) {
+					// Send 'Others' to the end
+					$other = $banks['OTHERS'];
+					unset( $banks['OTHERS'] );
+					$banks['OTHERS'] = $other;
+				}
+
 				$this->update_option( 'option_gopay_banks', $banks );
 			}
 		}
@@ -842,6 +845,13 @@ function init_woocommerce_gopay_gateway()
 		{
 			$saved = parent::process_admin_options();
 			$this->init_form_fields();
+
+			// Check payment methods and banks enabled on GoPay account
+			if ( empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
+				!empty($this->get_option( 'goid', '' ) )
+			) {
+				$this->check_enabled_on_GoPay();
+			}
 
 			return $saved;
 		}

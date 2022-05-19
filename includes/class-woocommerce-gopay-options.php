@@ -195,7 +195,8 @@ class Woocommerce_Gopay_Options
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_payment_methods';
 
-		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : $payment_methods ;
+		return !empty( $options ) && array_key_exists( $key, $options ) && !empty( $options[ $key ] ) ?
+			$options[ $key ] : $payment_methods ;
 	}
 
 	/**
@@ -366,7 +367,8 @@ class Woocommerce_Gopay_Options
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );
 		$key = 'option_gopay_banks';
 
-		return !empty( $options ) && array_key_exists( $key, $options ) ? $options[ $key ] : $banks ;
+		return !empty( $options ) && array_key_exists( $key, $options ) && !empty( $options[ $key ] ) ?
+			$options[ $key ] : $banks ;
 	}
 
 	/**
