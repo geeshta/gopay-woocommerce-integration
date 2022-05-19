@@ -359,7 +359,8 @@ class Woocommerce_Gopay_Options
 			'TOBAPLPW'      => array(
 				'label' => __( 'Toyota Bank', WOOCOMMERCE_GOPAY_DOMAIN ),
 				'country' => 'PL' ),
-			'OTHERS'        => array( 'label' => __( 'Another bank', WOOCOMMERCE_GOPAY_DOMAIN ) ),
+			'OTHERS'        => array( 'label' => __( 'Another bank', WOOCOMMERCE_GOPAY_DOMAIN ),
+				'country' => ''),
 		);
 
 		$options = get_option( 'woocommerce_wc_gopay_gateway_settings' ,  array() );

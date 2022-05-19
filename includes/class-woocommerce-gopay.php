@@ -185,13 +185,16 @@ function init_woocommerce_gopay_gateway()
 				$banks            = $banks + $supported[1];
 			}
 
-			// Send 'Others' to the end
-			$other = $banks['OTHERS'];
-			unset( $banks['OTHERS'] );
-			$banks['OTHERS'] = $other;
-
-			$this->update_option( 'option_gopay_payment_methods', $payment_methods );
-			$this->update_option( 'option_gopay_banks', $banks );
+			if ( !empty( $payment_methods ) ) {
+				$this->update_option( 'option_gopay_payment_methods', $payment_methods );
+			}
+			if ( !empty( $banks ) ) {
+				// Send 'Others' to the end
+				$other = $banks['OTHERS'];
+				unset( $banks['OTHERS'] );
+				$banks['OTHERS'] = $other;
+				$this->update_option( 'option_gopay_banks', $banks );
+			}
 		}
 
 		/**
@@ -501,7 +504,7 @@ function init_woocommerce_gopay_gateway()
 
 				$country = WC()->customer->get_billing_country();
 				foreach ( Woocommerce_Gopay_Options::supported_banks() as $swift => $value ) {
-					if ( $country == $value['country'] ) {
+					if ( $country == $value['country'] ||  $value['country'] == '' ) {
 						$supported_banks[$swift] = $value;
 					}
 				}
@@ -556,7 +559,8 @@ function init_woocommerce_gopay_gateway()
 						foreach ( $banks as $key_b => $bank ) {
 							if ( array_key_exists( $bank, $supported_banks ) ) {
 								$span   = __( $supported_banks[ $bank ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-								$img    = $supported_banks[ $bank ]['image'];
+								$img    = array_key_exists( 'image', $supported_banks[ $bank ] ) ? $supported_banks[
+									$bank ]['image'] : '';
 
 								$enabled_payment_methods .= sprintf(
 									$input,
@@ -572,7 +576,8 @@ function init_woocommerce_gopay_gateway()
 					}
 
 					$span   = __( $supported_payment_methods[ $payment_method ]['label'], WOOCOMMERCE_GOPAY_DOMAIN );
-					$img    = $supported_payment_methods[ $payment_method ]['image'];
+					$img    = array_key_exists( 'image', $supported_payment_methods[ $payment_method ] ) ?
+					$supported_payment_methods[ $payment_method ]['image'] : '';
 
 					$enabled_payment_methods .= sprintf(
 						$input,
