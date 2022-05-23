@@ -6,7 +6,7 @@
   - [Built With](#built-with)
 - [Development](#development)
   - [Prerequisites](#prerequisites)
-  - [Instalation](#instalation)
+  - [Installation](#instalation)
   - [Run project](#run-project)
   - [Project Structure](#project-structure)
   - [Migrations](#migrations)
@@ -33,12 +33,23 @@ Running project on local machine for development and testing purposes.
 
 ### Prerequisites
 
+- [PHP](https://www.php.net)
 - [WordPress](https://wordpress.org/)
+- [WooCommerce](https://woocommerce.com)
+- [WooCommerce Subscriptions](https://woocommerce.com/document/subscriptions/)*
 - [Composer](https://getcomposer.org/)
+
+###### * *WooCommerce Subscriptions must be installed if you need to deal with recurring payments.*
 
 ### Instalation
 
 ### Run project
+
+For local project execution, first install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
+1. Copy the plugin files to the '/wp-content/plugins/' directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the Plugins screen in WordPress.
+3. Configure the plugin by providing goid, client id and secret to load the other options (they can be found on your GoPay account).
+4. Finally, choose the options you want to be available in the payment gateway (payment methods and banks must also be enabled in your GoPay account).
 
 ### Project Structure
 
@@ -82,18 +93,39 @@ make format-fix
 
 ## Versioning
 
-We use [SemVer](http://semver.org/).
+This plugin uses [SemVer](http://semver.org/) for versioning scheme.
+
+### Contribution
+
+- `master` - contains production code. You must not make changes directly to the master!
+- `staging` - contains staging code. Pre-production environment for testing.
+- `development` - contains development code.
+
+### Implementing a new feature
+
+1. Use the development branch to implement a new feature.
+2. Update corresponding readmes after the completion of the feature development.
+3. Create a pull request and properly revise all your changes before merging.
+4. Push into the development branch.
+5. Upload to staging for testing.
+6. When the feature is tested and approved on staging, pull you changes to master.
 
 ## Deployment
 
-We use [Git Updater](https://github.com/afragen/git-updater/).
+This plugin uses [Git Updater](https://github.com/afragen/git-updater/) to manage updates.
 
-Before deploy change Version in the `woocommerce-gopay.php` and push. Staging site uses staging branch.
+Before deploy change Version in the `woocommerce-gopay.php`, then commit & push. Staging site uses staging branch.
 
-1) Log into WP admin.
-2) Go to Settings > Git Updater
-3) Click Refresh Cache
-4) Go to Plugins and Update plugin
+To fetch the new update:
+
+- Git Updater:
+  1) Log into WP admin.
+  2) Go to Settings > Git Updater
+  3) Click Refresh Cache
+  4) Go to Plugins and Update plugin
+- WP checks for new version every 12 hours based on the latest versions hosted on WordPress.org.
+- You can force the update on the plugin's page by using the "Check for updates" action.
+- Or you can download the latest version from the [GitHub repository](https://github.com/argo22packages/gopay-woocommerce-integration) and install it manually by clicking on "Add New" and "Upload Plugin".
 
 ## Documentation
 

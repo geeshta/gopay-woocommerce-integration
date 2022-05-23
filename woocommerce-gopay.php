@@ -2,22 +2,22 @@
 /**
  * The plugin bootstrap file
  *
- * @link              https://argo22.com/
- * @since             1.0.0
- * @package           woocommerce-gopay
+ * @link                 https://argo22.com/
+ * @since                1.0.0
+ * @package              woocommerce-gopay
  * @wordpress-plugin
- * Plugin Name:       WooCommerce GoPay gateway
- * Plugin URI:        https://argo22.com/
- * Description:       WooCommerce and GoPay payment gateway integration
- * Version:           1.0.0
- * Author:            Argo22
- * Author URI:        https://argo22.com/
- * Text Domain:       woocommerce-gopay
- * License:
- * License URI:
- * Domain Path:       /languages
- * WC requires at least: 0.0
- * WC tested up to: 0.0
+ * Plugin Name:          WooCommerce GoPay gateway
+ * Plugin URI:           https://argo22.com/
+ * Description:          WooCommerce and GoPay payment gateway integration
+ * Version:              1.0.0
+ * Author:               Argo22
+ * Author URI:           https://argo22.com/
+ * Text Domain:          woocommerce-gopay
+ * License:              GPLv2 or later
+ * License URI:          https://www.gnu.org/licenses/gpl-2.0.html
+ * Domain Path:          /languages
+ * WC requires at least: 6.0
+ * WC tested up to:      6.3
  */
 
 // If this file is called directly, abort.

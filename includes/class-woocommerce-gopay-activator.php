@@ -20,6 +20,9 @@ class Woocommerce_Gopay_Activator
 	public static function activate()
 	{
 		self::create_log_table();
+		// update num of decimals to be 2 by default (number of decimals of GoPay)
+		// Rounded amounts can cause error when trying to refund an order
+		update_option( 'woocommerce_price_num_decimals', 2 );
 	}
 
 	/**
