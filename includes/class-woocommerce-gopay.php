@@ -183,6 +183,9 @@ function init_woocommerce_gopay_gateway()
 				$supported        = Woocommerce_Gopay_API::check_enabled_on_GoPay( $currency );
 				$payment_methods  = $payment_methods + $supported[0];
 				$banks            = $banks + $supported[1];
+
+				$this->update_option( 'gopay_payment_methods_' . $currency, $supported[0] );
+				$this->update_option( 'gopay_banks_' . $currency, $supported[1] );
 			}
 
 			if ( !empty( $payment_methods ) ) {
@@ -525,8 +528,10 @@ function init_woocommerce_gopay_gateway()
 		{
 			echo wpautop( wptexturize( $this->description ) );
 
-			$supported_payment_methods  = Woocommerce_Gopay_Options::supported_payment_methods();
-			$supported_banks            = $this->extract_banks_by_country();
+			$supported_payment_methods  = $this->get_option(
+				'gopay_payment_methods_' . get_woocommerce_currency(), array() );
+			$supported_banks            = $this->get_option(
+				'gopay_banks_' . get_woocommerce_currency(), array() );
 
 			$enabled_payment_methods    = '';
 			$checked                    = 'checked="checked"';
