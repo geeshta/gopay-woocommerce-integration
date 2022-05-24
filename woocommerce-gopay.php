@@ -7,7 +7,7 @@
  * @package              woocommerce-gopay
  * @wordpress-plugin
  * Plugin Name:          WooCommerce GoPay gateway
- * Plugin URI:           https://argo22.com/
+ * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
  * Version:              1.0.0
  * Author:               Argo22

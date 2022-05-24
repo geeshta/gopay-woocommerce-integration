@@ -1,0 +1,381 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce GoPay gateway\n"
+"POT-Creation-Date: 2022-05-16 14:09+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: Slovakian\n"
+"Language: sk_SK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: $this->__;__;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;"
+"_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;"
+"esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: admin/class-woocommerce-gopay-admin.php:65
+#: admin/class-woocommerce-gopay-admin.php:66 admin/views/admin.php:9
+#: admin/views/log.php:28
+msgid "Woocommerce GoPay gateway"
+msgstr "Woocommerce GoPay gateway"
+
+#: admin/class-woocommerce-gopay-admin.php:73
+msgid "Woocommerce GoPay info"
+msgstr "Woocommerce GoPay info"
+
+#: admin/class-woocommerce-gopay-admin.php:74
+msgid "Info"
+msgstr "Info"
+
+#: admin/class-woocommerce-gopay-admin.php:82
+msgid "Woocommerce GoPay log"
+msgstr "Woocommerce GoPay log"
+
+#: admin/class-woocommerce-gopay-admin.php:83 admin/views/log.php:40
+msgid "Log"
+msgstr "Log"
+
+#: admin/views/admin.php:15
+msgid "Plugin Name"
+msgstr "Názov pluginu"
+
+#: admin/views/admin.php:16
+msgid "Version"
+msgstr "Verzia"
+
+#: admin/views/admin.php:17 includes/class-woocommerce-gopay.php:260
+msgid "Description"
+msgstr "Popis"
+
+#: admin/views/admin.php:18
+msgid "Author"
+msgstr "Autor"
+
+#: admin/views/admin.php:19 admin/views/admin.php:28
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: admin/views/log.php:34
+msgid "Id"
+msgstr "Id"
+
+#: admin/views/log.php:35
+msgid "Order id"
+msgstr "ID objednávky"
+
+#: admin/views/log.php:36
+msgid "Transaction id"
+msgstr "Id transakcie"
+
+#: admin/views/log.php:37
+msgid "Message"
+msgstr "Správa"
+
+#: admin/views/log.php:38
+msgid "Created at"
+msgstr "Vytvorené na"
+
+#: admin/views/log.php:39
+msgid "Log level"
+msgstr "Úroveň protokolu"
+
+#: check_requirements.php:25
+msgid "WooCommerce GoPay gateway plugin requires WooCommerce to be active."
+msgstr ""
+"Zásuvný modul WooCommerce GoPay vyžaduje, aby bol WooCommerce aktívny."
+
+#. Payment methods card
+msgid "Platební karta"
+msgstr "Platobná karta"
+
+#. Payment methods banco
+msgid "Rychlý bankovní převod"
+msgstr "Rýchly bankový prevod"
+
+#: includes/class-woocommerce-gopay-api.php:303
+msgid " "
+msgstr " "
+
+#: includes/class-woocommerce-gopay-api.php:313
+msgid "Another bank"
+msgstr "Ďalšia banka"
+
+#: includes/class-woocommerce-gopay-options.php:29
+msgid "Czech koruna"
+msgstr "Česká koruna"
+
+#: includes/class-woocommerce-gopay-options.php:30
+msgid "Euro"
+msgstr "Euro"
+
+#: includes/class-woocommerce-gopay-options.php:31
+msgid "Polish złoty"
+msgstr "Poľský złoty"
+
+#: includes/class-woocommerce-gopay-options.php:32
+msgid "United States dollar"
+msgstr "Americký dolár"
+
+#: includes/class-woocommerce-gopay-options.php:33
+msgid "Pound sterling"
+msgstr "Libra šterlingov"
+
+#: includes/class-woocommerce-gopay-options.php:34
+msgid "Hungarian forint"
+msgstr "Maďarský forint"
+
+#: includes/class-woocommerce-gopay-options.php:35
+msgid "Romanian lei"
+msgstr "Rumunský lei"
+
+#: includes/class-woocommerce-gopay-options.php:36
+msgid "Bulgarian lev"
+msgstr "Bulharský lev"
+
+#: includes/class-woocommerce-gopay-options.php:37
+msgid "Croatian kuna"
+msgstr "Chorvátska kuna"
+
+#: includes/class-woocommerce-gopay-options.php:50
+msgid "Czech"
+msgstr "Čeština"
+
+#: includes/class-woocommerce-gopay-options.php:51
+msgid "Slovak"
+msgstr "Slovenčina"
+
+#: includes/class-woocommerce-gopay-options.php:52
+msgid "English"
+msgstr "Angličtina"
+
+#: includes/class-woocommerce-gopay-options.php:53
+msgid "German"
+msgstr "Nemčina"
+
+#: includes/class-woocommerce-gopay-options.php:54
+msgid "Russian"
+msgstr "Ruština"
+
+#: includes/class-woocommerce-gopay-options.php:55
+msgid "Polish"
+msgstr "Poľština"
+
+#: includes/class-woocommerce-gopay-options.php:56
+msgid "Hungarian"
+msgstr "Maďarčina"
+
+#: includes/class-woocommerce-gopay-options.php:57
+msgid "Romanian"
+msgstr "Rumunčina"
+
+#: includes/class-woocommerce-gopay-options.php:58
+msgid "Bulgarian"
+msgstr "Bulharčina"
+
+#: includes/class-woocommerce-gopay-options.php:59
+msgid "Croatian"
+msgstr "Chorvátčina"
+
+#: includes/class-woocommerce-gopay-options.php:60
+msgid "Italian"
+msgstr "Taliančina"
+
+#: includes/class-woocommerce-gopay-options.php:61
+msgid "French"
+msgstr "Francúzština"
+
+#: includes/class-woocommerce-gopay-options.php:62
+msgid "Spanish"
+msgstr "Španielčina"
+
+#: includes/class-woocommerce-gopay-options.php:63
+msgid "Ukrainian"
+msgstr "Ukrajinčina"
+
+#: includes/class-woocommerce-gopay-subscriptions.php:93
+msgid ""
+"Products and subscriptions can not be purchased at the same time and only "
+"one subscription per checkout is possible."
+msgstr ""
+"Výrobky a predplatné nie je možné zakúpiť súčasne a pri jednej pokladni je "
+"možné zakúpiť len jedno predplatné."
+
+#: includes/class-woocommerce-gopay-subscriptions.php:121
+msgid "Only one recurring payment/subscription per checkout is possible"
+msgstr "Pri jednej pokladni je možná len jedna opakovaná platba/predplatné"
+
+#: includes/class-woocommerce-gopay-subscriptions.php:310
+msgid ""
+"WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed "
+"Checkout option to be disabled."
+msgstr ""
+"Plugin brány WooCommerce GoPay vyžaduje, aby bola možnosť WooCommerce "
+"Subscriptions Mixed Checkout vypnutá."
+
+#: includes/class-woocommerce-gopay.php:41
+msgid "GoPay payment gateway"
+msgstr "Platobná brána GoPay"
+
+#: includes/class-woocommerce-gopay.php:45
+msgid "Take payments via GoPay payment gateway."
+msgstr "Prijímajte platby prostredníctvom platobnej brány GoPay."
+
+#: includes/class-woocommerce-gopay.php:195
+#: includes/class-woocommerce-gopay.php:241
+msgid "Enable/Disable"
+msgstr "Povolenie/zakázanie"
+
+#: includes/class-woocommerce-gopay.php:198
+msgid ""
+"Inform goid, client id and secret to enable GoPay payment gateway and load "
+"the other options"
+msgstr ""
+"Informujte goid, ID klienta a secret, aby ste povolili platobnú bránu "
+"GoPay a načítali ostatné možnosti"
+
+#: includes/class-woocommerce-gopay.php:205
+#: includes/class-woocommerce-gopay.php:273
+msgid "GoId"
+msgstr "GoId"
+
+#: includes/class-woocommerce-gopay.php:210
+#: includes/class-woocommerce-gopay.php:278
+msgid "Client Id"
+msgstr "Client Id"
+
+#: includes/class-woocommerce-gopay.php:215
+#: includes/class-woocommerce-gopay.php:283
+msgid "Client secret"
+msgstr "Client secret"
+
+#: includes/class-woocommerce-gopay.php:244
+msgid "Enable GoPay payment gateway"
+msgstr "Povolenie platobnej brány GoPay"
+
+#: includes/class-woocommerce-gopay.php:250
+msgid "Title"
+msgstr "Názov"
+
+#: includes/class-woocommerce-gopay.php:253
+msgid "Name of the payment method that is displayed at the checkout"
+msgstr "Názov spôsobu platby, ktorý sa zobrazí pri pokladni"
+
+#: includes/class-woocommerce-gopay.php:256
+msgid "GoPay"
+msgstr "GoPay"
+
+#: includes/class-woocommerce-gopay.php:263
+msgid "Description of the payment method that is displayed at the checkout"
+msgstr "Popis spôsobu platby, ktorý sa zobrazí pri pokladni"
+
+#: includes/class-woocommerce-gopay.php:267
+msgid "Payment via GoPay gateway"
+msgstr "Platba cez bránu GoPay"
+
+#: includes/class-woocommerce-gopay.php:288
+msgid "Test mode"
+msgstr "Testovací režim"
+
+#: includes/class-woocommerce-gopay.php:291
+msgid "Enable GoPay payment gateway test mode"
+msgstr "Povolenie testovacieho režimu platobnej brány GoPay"
+
+#: includes/class-woocommerce-gopay.php:297
+msgid "Default language of the GoPay interface"
+msgstr "Predvolený jazyk rozhrania GoPay"
+
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable shipping methods"
+msgstr "Povolenie spôsobov prepravy"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable countries"
+msgstr "Umožniť krajinám"
+
+#: includes/class-woocommerce-gopay.php:321
+msgid "Payment method selection"
+msgstr "Výber spôsobu platby"
+
+#: includes/class-woocommerce-gopay.php:324
+msgid "Enable simplified payment method selection"
+msgstr "Umožniť zjednodušený výber spôsobu platby"
+
+#: includes/class-woocommerce-gopay.php:328
+msgid ""
+"If enabled, customers cannot choose any specific payment method at the "
+"checkout but they have to select the payment method once the GoPay payment "
+"gateway is invoked."
+msgstr ""
+"Ak je táto možnosť povolená, zákazníci si pri pokladni nemôžu vybrať "
+"konkrétny spôsob platby, ale musia si ho vybrať po vyvolaní platobnej "
+"brány GoPay."
+
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay payment methods"
+msgstr "Povolenie platobných metód GoPay"
+
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable banks"
+msgstr "Povolenie bánk"
+
+#: includes/class-woocommerce-gopay.php:354
+msgid "Payment retry payment method"
+msgstr "Spôsob opakovania platby"
+
+#: includes/class-woocommerce-gopay.php:359
+msgid "Enable payment retry using the same payment method"
+msgstr "Povolenie opakovania platby pomocou rovnakého spôsobu platby"
+
+#: includes/class-woocommerce-gopay.php:363
+msgid ""
+"If enabled, payment retry of a failed payment will be done using the same "
+"payment method that was selected when customer was placing an order."
+msgstr ""
+"Ak je táto možnosť povolená, opakovanie neúspešnej platby sa vykoná "
+"rovnakým spôsobom platby, aký bol zvolený pri zadávaní objednávky."
+
+#: includes/class-woocommerce-gopay.php:601
+#: includes/class-woocommerce-gopay.php:602
+msgid "Currency is not supported on GoPay"
+msgstr "Mena nie je v službe GoPay podporovaná"
+
+#: includes/class-woocommerce-gopay.php:669
+#: includes/class-woocommerce-gopay.php:671
+msgid "Payment creation on GoPay not possible"
+msgstr "Vytvorenie platby na GoPay nie je možné"
+
+#: includes/class-woocommerce-gopay.php:787
+msgid "Thank you. Your order has been received."
+msgstr "Ďakujeme. Vaša objednávka bola prijatá."
+
+#: includes/class-woocommerce-gopay.php:791
+msgid " Please pay for your subscription after the trial period."
+msgstr " Po skončení skúšobného obdobia za predplatné zaplatíte."
+
+#: includes/class-woocommerce-gopay.php:798
+msgid ""
+" However, we are still waiting for the confirmation or payment rejection."
+msgstr " Stále však čakáme na potvrdenie alebo zamietnutie platby."
+
+#. Author of the plugin
+msgid "Argo22"
+msgstr "Argo22"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://argo22.com/"
+msgstr "https://argo22.com/"
+
+#. Description of the plugin
+msgid "WooCommerce and GoPay payment gateway integration"
+msgstr "Integrácia platobnej brány WooCommerce a GoPay"
+
+#. Name of the plugin
+msgid "WooCommerce GoPay gateway"
+msgstr "Woocommerce GoPay gateway"
