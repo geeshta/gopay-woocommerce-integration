@@ -162,7 +162,8 @@ class Woocommerce_Gopay_Options
 		return array_reduce(
 			WC()->shipping->load_shipping_methods(),
 			function ( $supported_shipping_methods, $shipping_method ) {
-				$supported_shipping_methods[ $shipping_method->id ] = $shipping_method->get_method_title();
+				$supported_shipping_methods[ $shipping_method->id ] = __( $shipping_method->get_method_title(),
+					WOOCOMMERCE_GOPAY_DOMAIN );
 				return $supported_shipping_methods;
 			},
 			array()

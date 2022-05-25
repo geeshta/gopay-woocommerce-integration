@@ -104,7 +104,7 @@ msgid " "
 msgstr " "
 
 #: includes/class-woocommerce-gopay-api.php:313
-msgid "Another bank"
+msgid "Jiná banka"
 msgstr "O altă bancă"
 
 #: includes/class-woocommerce-gopay-options.php:29

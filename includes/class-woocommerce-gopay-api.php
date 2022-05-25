@@ -62,7 +62,7 @@ class Woocommerce_Gopay_API
 			if ( $item->get_tax_status() == 'taxable' ) {
 				$tax_rates = WC_Tax::get_base_tax_rates( $item->get_tax_class() );
 				if ( !empty( $tax_rates ) ) {
-					$vat_rate = (string) end( $tax_rates )['rate'];
+					$vat_rate = (int) end( $tax_rates )['rate'];
 				}
 			}
 
@@ -70,7 +70,7 @@ class Woocommerce_Gopay_API
 				'type'          => 'ITEM',
 				'name'          => $item['name'],
 				'product_url'   => get_permalink( $item['product_id'] ),
-				'amount'        => $item['total'] * 100,
+				'amount'        => wc_format_decimal( $item['total'], 2 ) * 100, // Rounding total to 2 decimals
 				'count'         => $item['quantity'],
 				'vat_rate'      => $vat_rate,
 			);

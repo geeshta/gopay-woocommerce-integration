@@ -372,3 +372,7 @@ msgstr "Integrace platební brány WooCommerce a GoPay"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+#. WooCommerce Local Pickup translation overriding
+msgid "Místní vyzvednutí"
+msgstr "Osobní odběr"

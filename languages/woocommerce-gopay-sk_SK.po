@@ -103,8 +103,8 @@ msgid " "
 msgstr " "
 
 #: includes/class-woocommerce-gopay-api.php:313
-msgid "Another bank"
-msgstr "Ďalšia banka"
+msgid "Jiná banka"
+msgstr "Iná banka"
 
 #: includes/class-woocommerce-gopay-options.php:29
 msgid "Czech koruna"
