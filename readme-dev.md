@@ -48,8 +48,8 @@ Running project on local machine for development and testing purposes.
 For local project execution, first install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
 1. Copy the plugin files to the '/wp-content/plugins/' directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the Plugins screen in WordPress.
-3. Configure the plugin by providing goid, client id and secret to load the other options (they can be found on your GoPay account).
-4. Finally, choose the options you want to be available in the payment gateway (payment methods and banks must also be enabled in your GoPay account).
+3. Configure the plugin by providing goid, client id and secret to load the other options (follow these [steps](https://help.gopay.com/en/knowledge-base/gopay-account/gopay-business-account/signing-in-password-reset-activating-and-deactivating-the-payment-gateway/how-to-activate-the-payment-gateway) to activate the payment gateway and get goid, client id and secret).
+4. Finally, choose the options you want to be available in the payment gateway (payment methods and banks must be enabled in your GoPay account).
 
 ### Project Structure
 
@@ -101,10 +101,10 @@ This plugin uses [SemVer](http://semver.org/) for versioning scheme.
 - `staging` - contains staging code. Pre-production environment for testing.
 - `development` - contains development code.
 
-### Implementing a new feature
+### Contribution process in details
 
-1. Use the development branch to implement a new feature.
-2. Update corresponding readmes after the completion of the feature development.
+1. Use the development branch for the implementation.
+2. Update corresponding readmes after the completion of the development.
 3. Create a pull request and properly revise all your changes before merging.
 4. Push into the development branch.
 5. Upload to staging for testing.
