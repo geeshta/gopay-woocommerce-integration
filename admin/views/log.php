@@ -41,10 +41,14 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
             </tr>
 			<?php
 			foreach ( $log_data as $_ => $log ) {
-				$order          = wc_get_order( $log->order_id );
-				$order_url      = ( $order && $order->get_edit_order_url() ) ? $order->get_edit_order_url() : "#";
-				$log_decoded    = json_decode( $log->log );
-				$gw_url         = ( !empty( $log_decoded->json ) &&
+				$order         = wc_get_order( $log->order_id );
+                if ( is_object( $order ) && $order instanceof \Automattic\WooCommerce\Admin\Overrides\Order ) {
+	                $order_url = !empty( $order->get_edit_order_url() ) ? $order->get_edit_order_url() : "#";
+                } else {
+	                $order_url = "#";
+                }
+				$log_decoded   = json_decode( $log->log );
+				$gw_url        = ( !empty( $log_decoded->json ) &&
                                     property_exists( $log_decoded->json, 'gw_url' ) ) ?
                                     $log_decoded->json->gw_url : '#';
 
@@ -72,7 +76,21 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
                     <a href="<?php echo add_query_arg( 'pagenum', $pagenum - 1 ) ?>">Previous</a>
                 </li>
 				<?php
-				for ( $page = 1; $page <= $number_of_pages; $page++ ) {
+                if ( $number_of_pages > 10 ) {
+                    $start = max( $pagenum - 5, 1 );
+                    $stop  = $start + 10;
+
+                    if ( $stop > $number_of_pages ) {
+	                    $start = $number_of_pages - 10;
+	                    $stop  = $number_of_pages;
+                    }
+
+                    $pages = range( $start, $stop );
+                } else {
+	                $pages = range( 1, $number_of_pages );
+                }
+
+				foreach ( $pages as $page ) {
 					echo '<li class="woocommerce-gopay-menu-' .
 						( $pagenum == $page ? 'active' : 'inactive' ) . '"><a href = "'
 						. add_query_arg( 'pagenum', $page ) . '">' . $page . ' </a>';
@@ -83,6 +101,14 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
                 </li>
             </ul>
         </nav>
+        <form action="">
+            <label for="page"></label>
+            <input type="hidden" id="page" name="page" value="woocommerce-gopay-menu-log">
+            <label for="pagenum">Page (<?php echo $pagenum . ' of ' . $number_of_pages ?>):</label>
+            <input type="number" id="pagenum" name="pagenum" min="1" max="<?php echo $number_of_pages ?>"
+                   style="width: 65px;">
+            <input type="submit" value="<?php echo _e( 'Go to', WOOCOMMERCE_GOPAY_DOMAIN ) ?>">
+        </form>
 
     </div>
 </div>
