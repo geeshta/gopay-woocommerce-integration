@@ -163,8 +163,8 @@ function init_woocommerce_gopay_gateway()
 				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
 			}
 
-			if ( ( array_key_exists( 'page', $_GET ) && $_GET['page'] == 'wc-settings' ) &&
-				( array_key_exists( 'section', $_GET ) && $_GET['section'] == 'wc_gopay_gateway' ) ) {
+			if ( filter_input( INPUT_GET, 'page' ) == 'wc-settings' &&
+				filter_input( INPUT_GET, 'section' ) == 'wc_gopay_gateway' ) {
 				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
 			}
 		}
@@ -654,14 +654,13 @@ function init_woocommerce_gopay_gateway()
 				);
 			}
 
-			$gopay_payment_method   = array_key_exists( 'gopay_payment_method', $_POST ) ?
-				$_POST['gopay_payment_method'] : '';
+			$gopay_payment_method   = filter_input( INPUT_POST, 'gopay_payment_method' );
 			$is_retry               = $this->payment_retry &&
 										is_page( wc_get_page_id( 'checkout' ) ) &&
 										!empty( get_query_var( 'order-pay' ) );
 
 			// Add GoPay payment method to order
-			if ( !empty( $gopay_payment_method ) ) {
+			if ( $gopay_payment_method ) {
 				if ( array_key_exists( $gopay_payment_method, Woocommerce_Gopay_Options::supported_banks() ) ) {
 					$order->update_meta_data( '_GoPay_bank_swift', $gopay_payment_method );
 					$order->update_meta_data( '_GoPay_payment_method', 'BANK_ACCOUNT' );
@@ -796,8 +795,10 @@ function init_woocommerce_gopay_gateway()
 		 */
 		public function check_status_gopay_redirect()
 		{
-			if ( !empty( $_GET['gopay-api'] ) ) {
-				Woocommerce_Gopay_API::check_payment_status( $_GET['order_id'], $_GET['id'] );
+            $gopay_api = filter_input( INPUT_GET, 'gopay-api' );
+            $id = filter_input( INPUT_GET, 'id' );
+			if ( $gopay_api && $id ) {
+				Woocommerce_Gopay_API::check_payment_status( $id );
 			}
 		}
 

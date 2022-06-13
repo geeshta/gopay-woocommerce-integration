@@ -7,10 +7,9 @@ $results_per_page   = 20;
 $number_of_rows     = $rows[0]->num_rows;
 $number_of_pages    = ceil( $number_of_rows / $results_per_page );
 
-if ( !isset( $_GET['pagenum'] ) ) {
+$pagenum = filter_input( INPUT_GET, 'pagenum', FILTER_VALIDATE_INT );
+if ( $pagenum === null || $pagenum === false ) {
 	$pagenum = 1;
-} else {
-	$pagenum = filter_var( $_GET['pagenum'], FILTER_VALIDATE_INT );
 }
 
 $page_pagination    = ( $pagenum - 1 ) * $results_per_page;
@@ -40,7 +39,7 @@ $log_data           = $wpdb->get_results( sprintf( 'SELECT * FROM %s%s ORDER BY 
                 <th><?php _e( 'Log', WOOCOMMERCE_GOPAY_DOMAIN ) ?></th>
             </tr>
 			<?php
-			foreach ( $log_data as $_ => $log ) {
+			foreach ( $log_data as $log ) {
 				$order         = wc_get_order( $log->order_id );
                 if ( is_object( $order ) && $order instanceof \Automattic\WooCommerce\Admin\Overrides\Order ) {
 	                $order_url = !empty( $order->get_edit_order_url() ) ? $order->get_edit_order_url() : "#";

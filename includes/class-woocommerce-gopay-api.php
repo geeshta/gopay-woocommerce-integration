@@ -261,7 +261,7 @@ class Woocommerce_Gopay_API
 						'image'     => $paymentMethod['image']['normal'],
 						'swifts'    => array() );
 					$enabledSwifts = $paymentMethod['enabledSwifts'];
-					foreach ( $enabledSwifts as $_ => $bank ) {
+					foreach ( $enabledSwifts as $bank ) {
 						$paymentInstruments[ $paymentMethod['paymentInstrument'] ]['swifts'][ $bank['swift'] ] = array(
 							'label' => $bank['label']['cs'],
 							'image' => $bank['image']['normal'] );
@@ -304,7 +304,7 @@ class Woocommerce_Gopay_API
 				);
 
 				if ( $paymentMethod['paymentInstrument'] == 'BANK_ACCOUNT' ) {
-					foreach ( $paymentMethod['enabledSwifts'] as $_ => $bank ) {
+					foreach ( $paymentMethod['enabledSwifts'] as $bank ) {
 						$banks[ $bank['swift'] ] = array(
 							'label'     => __($bank['label']['cs'],
 								WOOCOMMERCE_GOPAY_DOMAIN ),
@@ -326,7 +326,7 @@ class Woocommerce_Gopay_API
 	 *
 	 * @since  1.0.0
 	 */
-	public static function check_payment_status( string $order_id, string $GoPay_Transaction_id )
+	public static function check_payment_status( string $GoPay_Transaction_id )
 	{
 		$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay    = self::auth_GoPay($options);
