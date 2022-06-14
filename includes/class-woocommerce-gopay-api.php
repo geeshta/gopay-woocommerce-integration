@@ -185,7 +185,7 @@ class Woocommerce_Gopay_API
 
 		$response = $gopay->createPayment( $data );
 
-		return self::decode_response( $response );
+		return $response;
 	}
 
 	/**
@@ -217,7 +217,7 @@ class Woocommerce_Gopay_API
 
 		$response = $gopay->createRecurrence( $GoPay_Transaction_id, $data );
 
-		return self::decode_response( $response );
+		return $response;
 	}
 
 	/**
@@ -235,7 +235,7 @@ class Woocommerce_Gopay_API
 		$GoPay_Transaction_id   = $subscription->get_parent()->get_meta( 'GoPay_Transaction_id', true );
 		$response               = $gopay->voidRecurrence( $GoPay_Transaction_id );
 
-		return self::decode_response( $response );
+		return $response;
 	}
 
 	/**
@@ -426,7 +426,7 @@ class Woocommerce_Gopay_API
 		$GoPay_Transaction_id   = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
 		$response               = $gopay->getStatus( $GoPay_Transaction_id );
 
-		return self::decode_response( $response );
+		return $response;
 	}
 
 	/**
@@ -443,30 +443,6 @@ class Woocommerce_Gopay_API
 		$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay    = self::auth_GoPay($options);
 		$response = $gopay->refundPayment( $transaction_id, $amount );
-
-		return self::decode_response( $response );
-	}
-
-	/**
-	 * Decode GoPay response and add raw body if
-	 * different from json property
-	 *
-	 * @param Response $response
-	 *
-	 * @since  1.0.0
-	 */
-	private static function decode_response( Response $response ): Response
-	{
-		$not_identical = ( json_decode( $response->__toString(), true ) != $response->json ) ||
-			( empty( $response->__toString() ) != empty( $response->json ) );
-
-		if ( $not_identical ) {
-			$response->{'raw_body'} = filter_var( str_replace(
-				'\n',
-				' ',
-				$response->__toString()
-			), FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-		}
 
 		return $response;
 	}
