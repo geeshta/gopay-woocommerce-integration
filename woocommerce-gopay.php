@@ -40,7 +40,7 @@ define( 'WOOCOMMERCE_GOPAY_LOG_TABLE_NAME', 'woocommerce_gopay_log' );
 
 // Check requirements
 require WOOCOMMERCE_GOPAY_DIR .
-	'check_requirements.php';
+	'check-requirements.php';
 
 // Load files
 require_once WOOCOMMERCE_GOPAY_DIR .

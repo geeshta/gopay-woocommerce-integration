@@ -10,7 +10,7 @@ services:
             - ./admin:/usr/src/myapp/admin
             - ./includes:/usr/src/myapp/includes
             - ./languages:/usr/src/myapp/languages
-            - ./check_requirements.php:/usr/src/myapp/check_requirements.php
+            - ./check-requirements.php:/usr/src/myapp/check-requirements.php
             - ./composer.json:/usr/src/myapp/composer.json
             - ./composer.lock:/usr/src/myapp/composer.lock
             - ./index.php:/usr/src/myapp/index.php
