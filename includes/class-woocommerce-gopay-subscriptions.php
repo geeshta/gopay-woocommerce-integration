@@ -96,7 +96,7 @@ class Woocommerce_Gopay_Subscriptions {
 				__(
 					'Products and subscriptions can not be purchased at the same time and ' .
 					'only one subscription per checkout is possible.',
-					WOOCOMMERCE_GOPAY_DOMAIN
+					'woocommerce-gopay'
 				),
 				'notice'
 			);
@@ -125,7 +125,7 @@ class Woocommerce_Gopay_Subscriptions {
 				wc_add_notice(
 					__(
 						'Only one recurring payment/subscription per checkout is possible',
-						WOOCOMMERCE_GOPAY_DOMAIN
+						'woocommerce-gopay'
 					),
 					'notice'
 				);
@@ -308,7 +308,7 @@ class Woocommerce_Gopay_Subscriptions {
 	public static function admin_notice_error() {
 		$message = __(
 			'WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.',
-			WOOCOMMERCE_GOPAY_DOMAIN
+			'woocommerce-gopay'
 		);
 		echo '<div class="notice notice-error"><p>' . $message . '</p></div>';
 	}

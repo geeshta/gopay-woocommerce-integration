@@ -58,16 +58,16 @@ class Woocommerce_Gopay_Admin_Menu {
 	public static function create_menu() {
 		if ( ! defined( 'WOOCOMMERCE_GOPAY_ADMIN_MENU' ) ) {
 			add_menu_page(
-				__( 'Woocommerce GoPay gateway', WOOCOMMERCE_GOPAY_DOMAIN ),
-				__( 'Woocommerce GoPay gateway', WOOCOMMERCE_GOPAY_DOMAIN ),
+				__( 'Woocommerce GoPay gateway', 'woocommerce-gopay' ),
+				__( 'Woocommerce GoPay gateway', 'woocommerce-gopay' ),
 				'manage_woocommerce',
 				'woocommerce-gopay-menu'
 			);
 
 			add_submenu_page(
 				'woocommerce-gopay-menu',
-				__( 'Woocommerce GoPay info', WOOCOMMERCE_GOPAY_DOMAIN ),
-				__( 'Info', WOOCOMMERCE_GOPAY_DOMAIN ),
+				__( 'Woocommerce GoPay info', 'woocommerce-gopay' ),
+				__( 'Info', 'woocommerce-gopay' ),
 				'manage_woocommerce',
 				'woocommerce-gopay-menu',
 				array( 'Woocommerce_Gopay_Admin_Menu', 'load_admin_info_page' )
@@ -75,8 +75,8 @@ class Woocommerce_Gopay_Admin_Menu {
 
 			add_submenu_page(
 				'woocommerce-gopay-menu',
-				__( 'Woocommerce GoPay log', WOOCOMMERCE_GOPAY_DOMAIN ),
-				__( 'Log', WOOCOMMERCE_GOPAY_DOMAIN ),
+				__( 'Woocommerce GoPay log', 'woocommerce-gopay' ),
+				__( 'Log', 'woocommerce-gopay' ),
 				'manage_woocommerce',
 				'woocommerce-gopay-menu-log',
 				array( 'Woocommerce_Gopay_Admin_Menu', 'load_admin_log_page' )

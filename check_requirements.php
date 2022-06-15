@@ -22,7 +22,7 @@ function check_is_plugin_active( $path ): bool {
 // Check if WooCommerce is active
 $message = __(
 	'WooCommerce GoPay gateway plugin requires WooCommerce to be active.',
-	WOOCOMMERCE_GOPAY_DOMAIN
+	'woocommerce-gopay'
 );
 if ( ! check_is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 	exit( $message );

@@ -6,25 +6,25 @@ $settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wc_g
 
 <div class="wrap">
 	<div class="woocommerce-gopay-menu">
-		<h1><?php _e( 'Woocommerce GoPay gateway', WOOCOMMERCE_GOPAY_DOMAIN ); ?></h1>
+		<h1><?php _e( 'Woocommerce GoPay gateway', 'woocommerce-gopay' ); ?></h1>
 	</div>
 
 	<div class="woocommerce-gopay-menu">
 		<table>
 			<tr>
-				<th><?php _e( 'Plugin Name', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Version', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Description', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Author', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Settings', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
+				<th><?php _e( 'Plugin Name', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Version', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Description', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Author', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Settings', 'woocommerce-gopay' ); ?></th>
 			</tr>
 			<tr>
-				<td><?php _e( $plugin_data['Title'], WOOCOMMERCE_GOPAY_DOMAIN ); ?></td>
-				<td><?php _e( $plugin_data['Version'], WOOCOMMERCE_GOPAY_DOMAIN ); ?></td>
-				<td><?php _e( $plugin_data['Description'], WOOCOMMERCE_GOPAY_DOMAIN ); ?></td>
-				<td><?php _e( $plugin_data['Author'], WOOCOMMERCE_GOPAY_DOMAIN ); ?></td>
+				<td><?php _e( $plugin_data['Title'], 'woocommerce-gopay' ); ?></td>
+				<td><?php _e( $plugin_data['Version'], 'woocommerce-gopay' ); ?></td>
+				<td><?php _e( $plugin_data['Description'], 'woocommerce-gopay' ); ?></td>
+				<td><?php _e( $plugin_data['Author'], 'woocommerce-gopay' ); ?></td>
 				<?php
-				echo '<td><a href="' . $settings_url . '">' . __( 'Settings', WOOCOMMERCE_GOPAY_DOMAIN ) . '</a></td>'
+				echo '<td><a href="' . $settings_url . '">' . __( 'Settings', 'woocommerce-gopay' ) . '</a></td>'
 				?>
 			</tr>
 		</table>

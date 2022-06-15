@@ -306,7 +306,7 @@ class Woocommerce_Gopay_API {
 		if ( $enabledPayments->statusCode == 200 ) {
 			foreach ( $enabledPayments->json['enabledPaymentInstruments'] as $key => $paymentMethod ) {
 				$payment_methods[ $paymentMethod['paymentInstrument'] ] = array(
-					'label' => __( $paymentMethod['label']['cs'], WOOCOMMERCE_GOPAY_DOMAIN ),
+					'label' => __( $paymentMethod['label']['cs'], 'woocommerce-gopay' ),
 					'image' => $paymentMethod['image']['normal'],
 				);
 
@@ -315,7 +315,7 @@ class Woocommerce_Gopay_API {
 						$banks[ $bank['swift'] ] = array(
 							'label'   => __(
 								$bank['label']['cs'],
-								WOOCOMMERCE_GOPAY_DOMAIN
+								'woocommerce-gopay'
 							),
 							'country' => $bank['swift'] != 'OTHERS' ? substr( $bank['swift'], 4, 2 ) : '',
 							'image'   => $bank['image']['normal'],

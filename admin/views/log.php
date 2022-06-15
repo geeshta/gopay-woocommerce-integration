@@ -27,19 +27,19 @@ $log_data        = $wpdb->get_results(
 
 <div class="wrap">
 	<div class="woocommerce-gopay-menu">
-		<h1><?php _e( 'Woocommerce GoPay gateway', WOOCOMMERCE_GOPAY_DOMAIN ); ?></h1>
+		<h1><?php _e( 'Woocommerce GoPay gateway', 'woocommerce-gopay' ); ?></h1>
 	</div>
 
 	<div class="woocommerce-gopay-menu">
 		<table>
 			<tr>
-				<th><?php _e( 'Id', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Order id', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Transaction id', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Message', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Created at', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Log level', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
-				<th><?php _e( 'Log', WOOCOMMERCE_GOPAY_DOMAIN ); ?></th>
+				<th><?php _e( 'Id', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Order id', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Transaction id', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Message', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Created at', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Log level', 'woocommerce-gopay' ); ?></th>
+				<th><?php _e( 'Log', 'woocommerce-gopay' ); ?></th>
 			</tr>
 			<?php
 			foreach ( $log_data as $log ) {
@@ -109,7 +109,7 @@ $log_data        = $wpdb->get_results(
 			<label for="pagenum">Page (<?php echo $pagenum . ' of ' . $number_of_pages; ?>):</label>
 			<input type="number" id="pagenum" name="pagenum" min="1" max="<?php echo $number_of_pages; ?>"
 				   style="width: 65px;">
-			<input type="submit" value="<?php echo _e( 'Go to', WOOCOMMERCE_GOPAY_DOMAIN ); ?>">
+			<input type="submit" value="<?php echo _e( 'Go to', 'woocommerce-gopay' ); ?>">
 		</form>
 
 	</div>
