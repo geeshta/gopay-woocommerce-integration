@@ -11,17 +11,15 @@
  * @since     1.0.0
  */
 
-class Woocommerce_Gopay_Log
-{
+class Woocommerce_Gopay_Log {
+
 
 	/**
 	 * Constructor for the plugin log
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct()
-	{
-	}
+	public function __construct() {     }
 
 	/**
 	 * Insert log into the database
@@ -30,26 +28,25 @@ class Woocommerce_Gopay_Log
 	 *
 	 * @since  1.0.0
 	 */
-	public static function insert_log( array $log )
-	{
+	public static function insert_log( array $log ) {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME;
 		$data       = array(
-						'order_id'          => $log['order_id'],
-						'transaction_id'    => $log['transaction_id'],
-						'message'           => $log['message'],
-						'created_at'        => gmdate( 'Y-m-d H:i:s' ),
-						'log_level'         => $log['log_level'],
-						'log'               => json_encode( $log['log'] ),
-					);
+			'order_id'       => $log['order_id'],
+			'transaction_id' => $log['transaction_id'],
+			'message'        => $log['message'],
+			'created_at'     => gmdate( 'Y-m-d H:i:s' ),
+			'log_level'      => $log['log_level'],
+			'log'            => json_encode( $log['log'] ),
+		);
 		$where      = array(
-						'order_id'          => $log['order_id'],
-						'transaction_id'    => $log['transaction_id'],
-						'message'           => $log['message'],
-					);
+			'order_id'       => $log['order_id'],
+			'transaction_id' => $log['transaction_id'],
+			'message'        => $log['message'],
+		);
 
-		$response   = $wpdb->update( $table_name, $data, $where );
+		$response = $wpdb->update( $table_name, $data, $where );
 		if ( $response === false || $response < 1 ) {
 			$wpdb->insert( $table_name, $data );
 		}

@@ -1,124 +1,124 @@
 .woocommerce-gopay-menu {
-    display: grid;
-    position: center;
-    text-align: center;
-    vertical-align: middle;
-    border-bottom: 1px;
-    padding: 12px;
+	display: grid;
+	position: center;
+	text-align: center;
+	vertical-align: middle;
+	border-bottom: 1px;
+	padding: 12px;
 }
 
 .woocommerce-gopay-menu h1 {
-    font-size: xx-large;
-    font-weight: bold;
+	font-size: xx-large;
+	font-weight: bold;
 }
 
 .woocommerce-gopay-menu table {
-    font-weight: bold;
-    margin: fill;
+	font-weight: bold;
+	margin: fill;
 }
 
 .woocommerce-gopay-menu th {
-    font-size: 20px;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: rgba(211, 221, 237, 1)
+	font-size: 20px;
+	border-radius: 5px;
+	padding: 15px;
+	background-color: rgba(211, 221, 237, 1)
 }
 
 .woocommerce-gopay-menu td {
-    font-size: 14px;
-    padding: 5px;
-    border-radius: 5px;
+	font-size: 14px;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 .woocommerce-gopay-menu tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .woocommerce-gopay-menu tr:nth-child(odd) {
-    background-color: rgba(211, 221, 237, 0.5);
+	background-color: rgba(211, 221, 237, 0.5);
 }
 
 .woocommerce-gopay-menu tr:hover {
-    background-color: rgba(240, 128, 128, 0.5);
+	background-color: rgba(240, 128, 128, 0.5);
 }
 
 .woocommerce-gopay-menu-pagination {
-    display: inline-flex;
-    border-radius: 6px;
-    padding: 15px;
+	display: inline-flex;
+	border-radius: 6px;
+	padding: 15px;
 }
 
 .woocommerce-gopay-menu-pagination li {
-    padding: 8px;
+	padding: 8px;
 }
 
 .woocommerce-gopay-menu-pagination li a {
-    padding: 15px;
-    font-size: 14px;
-    text-decoration: none;
+	padding: 15px;
+	font-size: 14px;
+	text-decoration: none;
 }
 
 .woocommerce-gopay-menu-pagination li:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .woocommerce-gopay-menu-pagination li:nth-child(odd) {
-    background-color: rgba(211, 221, 237, 0.5);
+	background-color: rgba(211, 221, 237, 0.5);
 }
 
 .woocommerce-gopay-menu-pagination li:hover {
-    background-color: rgba(240, 128, 128, 0.5);
+	background-color: rgba(240, 128, 128, 0.5);
 }
 
 .woocommerce-gopay-menu-enabled a {
-    pointer-events: auto;
-    cursor: auto;
-    opacity: 1;
+	pointer-events: auto;
+	cursor: auto;
+	opacity: 1;
 }
 
 .woocommerce-gopay-menu-disabled a {
-    pointer-events: none;
-    cursor: default;
-    opacity: 0.4;
+	pointer-events: none;
+	cursor: default;
+	opacity: 0.4;
 }
 
 .woocommerce-gopay-menu-active a {
-    color: rgba(240, 128, 128, 1);
+	color: rgba(240, 128, 128, 1);
 }
 
 .woocommerce-gopay-menu-inactive a {
-    color: black;
+	color: black;
 }
 
 .woocommerce-gopay-menu-popup {
-    display: none;
-    width: auto;
-    height: auto;
-    font-size: 14px;
-    padding: 15px;
-    background-color: white;
-    border: 2px solid grey;
-    border-radius: 5px;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	display: none;
+	width: auto;
+	height: auto;
+	font-size: 14px;
+	padding: 15px;
+	background-color: white;
+	border: 2px solid grey;
+	border-radius: 5px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .woocommerce-gopay-menu-popup span {
-    color: black;
-    overflow: auto;
+	color: black;
+	overflow: auto;
 }
 
 .woocommerce-gopay-menu-close {
-    cursor: pointer;
-    height: 16px;
-    width: 16px;
-    background-color: lightcoral;
-    border-radius: 5px;
+	cursor: pointer;
+	height: 16px;
+	width: 16px;
+	background-color: lightcoral;
+	border-radius: 5px;
 }
 
 .woocommerce-gopay-menu-close:hover {
-    transform: scale(1.05, 1.05);
-    box-shadow: 0 4px 8px 0 red;
+	transform: scale(1.05, 1.05);
+	box-shadow: 0 4px 8px 0 red;
 }

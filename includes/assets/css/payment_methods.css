@@ -1,19 +1,19 @@
 .woocommerce #payment .payment_methods.methods label[for="payment_method_wc_gopay_gateway"] {
-    position: relative;
-    overflow: hidden;
+	position: relative;
+	overflow: hidden;
 }
 
 .woocommerce #payment .payment_methods.methods label[for="payment_method_wc_gopay_gateway"] img{
-    height: auto;
-    width: auto;
-    margin-left: auto;
+	height: auto;
+	width: auto;
+	margin-left: auto;
 }
 
 .payment_method_wc_gopay_gateway_selection {
-    border-bottom: 1px dashed;
-    padding: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
-    overflow: hidden;
+	border-bottom: 1px dashed;
+	padding: 12px;
+	display: flex;
+	flex-wrap: wrap;
+	position: relative;
+	overflow: hidden;
 }

@@ -22,7 +22,7 @@
 
 // If this file is called directly, abort.
 // Preventing direct access to your WordPress.
-if ( !defined( 'WPINC' ) ) {
+if ( ! defined( 'WPINC' ) ) {
 	die();
 }
 

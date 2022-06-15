@@ -3,8 +3,7 @@
 /**
  * Check if plugin is active
  */
-function check_is_plugin_active( $path ): bool
-{
+function check_is_plugin_active( $path ): bool {
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
@@ -25,7 +24,7 @@ $message = __(
 	'WooCommerce GoPay gateway plugin requires WooCommerce to be active.',
 	WOOCOMMERCE_GOPAY_DOMAIN
 );
-if ( !check_is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+if ( ! check_is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 	exit( $message );
 }
 
@@ -37,8 +36,7 @@ register_deactivation_hook(
 /**
  * When woocommerce is deactivated then deactivate woocommerce gopay as well
  */
-function woocommerce_deactivate_dependents()
-{
+function woocommerce_deactivate_dependents() {
 	if ( check_is_plugin_active( WOOCOMMERCE_GOPAY_BASENAME ) ) {
 		add_action(
 			'update_option_active_plugins',
@@ -50,7 +48,6 @@ function woocommerce_deactivate_dependents()
 /**
  * woocommerce gopay deactivation
  */
-function woocommerce_gopay_deactivation()
-{
-	deactivate_plugins( WOOCOMMERCE_GOPAY_BASENAME );
+function woocommerce_gopay_deactivation() {
+	 deactivate_plugins( WOOCOMMERCE_GOPAY_BASENAME );
 }
