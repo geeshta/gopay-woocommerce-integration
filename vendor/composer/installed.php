@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7a950cdb23e55b8352851a034b98e8233130179a',
+        'reference' => '250c5ee80f5c2511f35ff1f71961bb8dbca03bf1',
         'name' => '__root__',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7a950cdb23e55b8352851a034b98e8233130179a',
+            'reference' => '250c5ee80f5c2511f35ff1f71961bb8dbca03bf1',
             'dev_requirement' => false,
         ),
         'gopay/payments-sdk-php' => array(
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(
-            'pretty_version' => '6.5.5',
-            'version' => '6.5.5.0',
+            'pretty_version' => '6.5.7',
+            'version' => '6.5.7.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
-            'reference' => '9d4290de1cfd701f38099ef7e183b64b4b7b0c5e',
+            'reference' => '724562fa861e21a4071c652c8a159934e4f05592',
             'dev_requirement' => false,
         ),
         'guzzlehttp/promises' => array(

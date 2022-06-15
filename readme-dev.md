@@ -37,7 +37,8 @@ Running project on local machine for development and testing purposes.
 - [WordPress](https://wordpress.org/)
 - [WooCommerce](https://woocommerce.com)
 - [WooCommerce Subscriptions](https://woocommerce.com/document/subscriptions/)*
-- [Composer](https://getcomposer.org/)
+- [Docker Desktop](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/) _(is part of Docker Desktop)_
 
 ###### * *WooCommerce Subscriptions must be installed if you need to deal with recurring payments.*
 
@@ -67,16 +68,30 @@ For local project execution, first install WordPress and WooCommerce, then uploa
 
 ### Dependencies
 
-Use Composer to install or upgrade dependencies.
+Use Composer inside Docker container to install or upgrade dependencies.
+
+Run docker-compose.
+
+```sh
+make run-dev
+```
+
+Run update.
+
+```sh
+make update
+```
+
+See `makefile` for more commands.
 
 ### Coding Standard
 
-The project contains [WordPress Coding Standards for PHP_CodeSniffer](https://github.com/WordPress/WordPress-Coding-Standards).
+The project contains [WordPress Coding Standards for PHP_CodeSniffer](https://github.com/WordPress/WordPress-Coding-Standards). Use Docker container to check code.
 
-First install composer with dev dependencies.
+Run docker-compose.
 
 ```sh
-make composer-dev
+make run-dev
 ```
 
 Check and fix code.
@@ -88,6 +103,8 @@ make format-check
 ```sh
 make format-fix
 ```
+
+See `makefile` for more commands.
 
 ### Testing
 
