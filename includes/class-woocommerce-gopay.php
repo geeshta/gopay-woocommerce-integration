@@ -142,7 +142,7 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		public static function load_textdomain() {
 			load_plugin_textdomain(
-				WOOCOMMERCE_GOPAY_DOMAIN,
+				'woocommerce-gopay',
 				false,
 				WOOCOMMERCE_GOPAY_BASENAME_DIR . '/languages'
 			);
@@ -232,7 +232,7 @@ function init_woocommerce_gopay_gateway() {
 			}
 
 			$this->form_fields = array(
-				'enabled'       => array(
+				'enabled' => array(
 					'title'   => __( 'Enable/Disable', 'woocommerce-gopay' ),
 					'type'    => 'checkbox',
 					'label'   => __(
@@ -242,20 +242,47 @@ function init_woocommerce_gopay_gateway() {
 					'css'     => 'display: none;',
 					'default' => 'no',
 				),
-				'goid'          => array(
-					'title' => __( 'GoId', 'woocommerce-gopay' ),
-					'type'  => 'text',
-					'css'   => 'width: 500px;',
+				'goid' => array(
+					'title'       => __( 'GoID', 'woocommerce-gopay' ),
+					'type'        => 'text',
+					'description' => __(
+						sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
+							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+					),
+					'css'         => 'width: 500px;',
+					'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
 				),
-				'client_id'     => array(
-					'title' => __( 'Client Id', 'woocommerce-gopay' ),
-					'type'  => 'text',
-					'css'   => 'width: 500px;',
+				'client_id' => array(
+					'title'       => __( 'Client ID', 'woocommerce-gopay' ),
+					'type'        => 'text',
+					'description' => __(
+						sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
+							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+					),
+					'css'         => 'width: 500px;',
+					'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
 				),
 				'client_secret' => array(
-					'title' => __( 'Client secret', 'woocommerce-gopay' ),
-					'type'  => 'text',
-					'css'   => 'width: 500px;',
+					'title'       => __( 'Client Secret', 'woocommerce-gopay' ),
+					'type'        => 'text',
+					'description' => __(
+						sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
+							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+					),
+					'css'         => 'width: 500px;',
+					'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
 				),
 			);
 
@@ -278,7 +305,7 @@ function init_woocommerce_gopay_gateway() {
 				// end
 
 				$this->form_fields = array(
-					'enabled'                          => array(
+					'enabled' => array(
 						'title'   => __( 'Enable/Disable', 'woocommerce-gopay' ),
 						'type'    => 'checkbox',
 						'label'   => __(
@@ -287,17 +314,19 @@ function init_woocommerce_gopay_gateway() {
 						),
 						'default' => 'yes',
 					),
-					'title'                            => array(
+					'title' => array(
 						'title'       => __( 'Title', 'woocommerce-gopay' ),
 						'type'        => 'text',
 						'description' => __(
 							'Name of the payment method that is displayed at the checkout',
 							'woocommerce-gopay'
 						),
-						'default'     => __( 'GoPay', 'woocommerce-gopay' ),
-						'css'         => 'width: 500px;',
+						'default'       => __( 'GoPay', 'woocommerce-gopay' ),
+						'css'           => 'width: 500px;',
+						'desc_tip'      => true,
+						'placeholder'   => __( 'Insert Payment Title...', 'woocommerce-gopay' ),
 					),
-					'description'                      => array(
+					'description' => array(
 						'title'       => __( 'Description', 'woocommerce-gopay' ),
 						'type'        => 'textarea',
 						'description' => __(
@@ -309,58 +338,104 @@ function init_woocommerce_gopay_gateway() {
 							'woocommerce-gopay'
 						),
 						'css'         => 'width: 500px; min-height: 100px;',
+						'desc_tip'    => true,
+						'placeholder' => __( 'Insert Description...', 'woocommerce-gopay' ),
 					),
-					'goid'                             => array(
-						'title' => __( 'GoId', 'woocommerce-gopay' ),
-						'type'  => 'text',
-						'css'   => 'width: 500px;',
+					'goid' => array(
+						'title'       => __( 'GoID', 'woocommerce-gopay' ),
+						'type'        => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css'         => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
 					),
-					'client_id'                        => array(
-						'title' => __( 'Client Id', 'woocommerce-gopay' ),
-						'type'  => 'text',
-						'css'   => 'width: 500px;',
+					'client_id' => array(
+						'title'       => __( 'Client ID', 'woocommerce-gopay' ),
+						'type'        => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css'         => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
 					),
-					'client_secret'                    => array(
-						'title' => __( 'Client secret', 'woocommerce-gopay' ),
-						'type'  => 'text',
-						'css'   => 'width: 500px;',
+					'client_secret' => array(
+						'title'       => __( 'Client Secret', 'woocommerce-gopay' ),
+						'type'        => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css'         => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
 					),
-					'test'                             => array(
+					'test' => array(
 						'title'   => __( 'Test mode', 'woocommerce-gopay' ),
 						'type'    => 'checkbox',
 						'label'   => __(
 							'Enable GoPay payment gateway test mode',
 							'woocommerce-gopay'
 						),
-						'default' => 'yes',
+						'default'  => 'yes',
+						'desc_tip' => true,
 					),
 					'default_language_gopay_interface' => array(
-						'title'    => __( 'Default language of the GoPay interface', 'woocommerce-gopay' ),
-						'type'     => 'select',
-						'class'    => 'chosen_select',
-						'options'  => $this->supported_languages,
-						'desc_tip' => true,
-						'default'  => 'EN',
-						'css'      => 'width: 500px; min-height: 50px;',
+						'title'       => __( 'Default Language', 'woocommerce-gopay' ),
+						'type'        => 'select',
+						'class'       => 'chosen_select',
+						'options'     => $this->supported_languages,
+						'description' => __(
+							'Default language is used when a customer of an e-commerce site' .
+							' is from a country whose language is not supported.',
+							'woocommerce-gopay'
+						),
+						'desc_tip'    => true,
+						'default'     => 'EN',
+						'css'         => 'width: 500px; min-height: 50px;',
+						'placeholder' => __( 'Select Default Language...', 'woocommerce-gopay' ),
 					),
-					'enable_shipping_methods'          => array(
-						'title'    => __( 'Enable shipping methods', 'woocommerce-gopay' ),
-						'type'     => 'multiselect',
-						'class'    => 'chosen_select',
-						'options'  => $this->supported_shipping_methods,
-						'desc_tip' => true,
-						'css'      => 'width: 500px; min-height: 50px;',
+					'enable_shipping_methods' => array(
+						'title'       => __( 'Enable Shipping Methods', 'woocommerce-gopay' ),
+						'type'        => 'multiselect',
+						'class'       => 'chosen_select',
+						'options'     => $this->supported_shipping_methods,
+						'description' => __(
+							'Enable the GoPay payment gateway only for the selected WooCommerce shipping methods.',
+							'woocommerce-gopay'
+						),
+						'desc_tip'    => true,
+						'css'         => 'width: 500px; min-height: 50px;',
+						'placeholder' => __( 'Select Shipping Methods...', 'woocommerce-gopay' ),
 					),
-					'enable_countries'                 => array(
-						'title'    => __( 'Enable countries', 'woocommerce-gopay' ),
-						'type'     => 'multiselect',
-						'class'    => 'chosen_select',
-						'options'  => $this->supported_countries,
-						'desc_tip' => true,
-						'css'      => 'width: 500px; min-height: 50px;',
+					'enable_countries' => array(
+						'title'       => __( 'Enable Countries', 'woocommerce-gopay' ),
+						'type'        => 'multiselect',
+						'class'       => 'chosen_select',
+						'options'     => $this->supported_countries,
+						'description' => __(
+							'Enable the GoPay payment gateway only for the selected countries.',
+							'woocommerce-gopay'
+						),
+						'desc_tip'    => true,
+						'css'         => 'width: 500px; min-height: 50px;',
+						'placeholder' => __( 'Select Available Countries...', 'woocommerce-gopay' ),
 					),
-					'simplified_payment_method'        => array(
-						'title'       => __( 'Payment method selection', 'woocommerce-gopay' ),
+					'simplified_payment_method' => array(
+						'title'       => __( 'Payment Method Selection', 'woocommerce-gopay' ),
 						'type'        => 'checkbox',
 						'label'       => __(
 							'Enable simplified payment method selection',
@@ -371,41 +446,53 @@ function init_woocommerce_gopay_gateway() {
 							' but they have to select the payment method once the GoPay payment gateway is invoked.',
 							'woocommerce-gopay'
 						),
+						'desc_tip'    => true,
 					),
-					'enable_gopay_payment_methods'     => array(
-						'title'    => __(
-							'Enable GoPay payment methods',
-							'woocommerce-gopay'
-						),
-						'type'     => 'multiselect',
-						'class'    => 'chosen_select',
-						'options'  => $this->extract_payment_methods( $this->supported_payment_methods ),
-						'desc_tip' => true,
-						'css'      => 'width: 500px; min-height: 50px;',
-					),
-					'enable_banks'                     => array(
-						'title'    => __( 'Enable banks', 'woocommerce-gopay' ),
-						'type'     => 'multiselect',
-						'class'    => 'chosen_select',
-						'options'  => $this->extract_payment_methods( $this->supported_banks ),
-						'desc_tip' => true,
-						'css'      => 'width: 500px; min-height: 50px;',
-					),
-					'payment_retry'                    => array(
+					'enable_gopay_payment_methods' => array(
 						'title'       => __(
-							'Payment retry payment method',
+							'Enable GoPay Payment Methods',
 							'woocommerce-gopay'
 						),
-						'type'        => 'checkbox',
-						'label'       => __(
+						'type'        => 'multiselect',
+						'class'       => 'chosen_select',
+						'options'     => $this->extract_payment_methods( $this->supported_payment_methods ),
+						'description' => __(
+							'Enable only the selected payment methods on the GoPay payment gateway .',
+							'woocommerce-gopay'
+						),
+						'desc_tip'    => true,
+						'css'         => 'width: 500px; min-height: 50px;',
+						'placeholder' => __( 'Select GoPay Payment Methods...', 'woocommerce-gopay' ),
+					),
+					'enable_banks' => array(
+						'title'       => __( 'Enable Banks', 'woocommerce-gopay' ),
+						'type'        => 'multiselect',
+						'class'       => 'chosen_select',
+						'options'     => $this->extract_payment_methods( $this->supported_banks ),
+						'description' => __(
+							'Enable only the selected banks on the GoPay payment gateway .',
+							'woocommerce-gopay'
+						),
+						'desc_tip'    => true,
+						'css'         => 'width: 500px; min-height: 50px;',
+						'placeholder' => __( 'Select Available Banks...', 'woocommerce-gopay' ),
+					),
+					'payment_retry' => array(
+						'title'        => __(
+							'Retry Payment Method',
+							'woocommerce-gopay'
+						),
+						'type'         => 'checkbox',
+						'label'        => __(
 							'Enable payment retry using the same payment method',
 							'woocommerce-gopay'
 						),
-						'description' => __(
+						'description'  => __(
 							'If enabled, payment retry of a failed payment will be done using the same payment method' .
 							' that was selected when customer was placing an order.',
 							'woocommerce-gopay'
 						),
+						'desc_tip'     => true,
 					),
 				);
 			}
@@ -878,7 +965,7 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		public function enqueue_styles() {
 			wp_enqueue_style(
-				WOOCOMMERCE_GOPAY_DOMAIN . '-payment-methods-styles',
+				'woocommerce-gopay' . '-payment-methods-styles',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/payment_methods.css'
 			);
 		}
