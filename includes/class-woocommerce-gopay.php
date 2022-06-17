@@ -154,7 +154,8 @@ function init_woocommerce_gopay_gateway() {
 		 * @since 1.0.0
 		 */
 		public function update_payment_methods() {
-			if ( empty( $this->settings['goid'] ) ) {
+			if ( empty( $this->settings['goid'] ) ||
+				empty( $this->settings['test'] ) ) {
 				return;
 			}
 
@@ -229,62 +230,62 @@ function init_woocommerce_gopay_gateway() {
 				empty( $this->settings['client_id'] ) ||
 				empty( $this->settings['client_secret'] ) ) {
 				$this->update_option( 'enabled', 'no' );
+
+				$this->form_fields = array(
+					'enabled' => array(
+						'title' => __( 'Enable/Disable', 'woocommerce-gopay' ),
+						'type' => 'checkbox',
+						'label' => __(
+							'Inform goid, client id and secret to enable GoPay payment gateway and load the other options',
+							'woocommerce-gopay'
+						),
+						'css' => 'display: none;',
+						'default' => 'no',
+					),
+					'goid' => array(
+						'title' => __( 'GoID', 'woocommerce-gopay' ),
+						'type' => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css' => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
+					),
+					'client_id' => array(
+						'title' => __( 'Client ID', 'woocommerce-gopay' ),
+						'type' => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css' => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
+					),
+					'client_secret' => array(
+						'title' => __( 'Client Secret', 'woocommerce-gopay' ),
+						'type' => 'text',
+						'description' => __(
+							sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
+								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
+								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
+
+						),
+						'css' => 'width: 500px;',
+						'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
+					),
+				);
 			}
-
-			$this->form_fields = array(
-				'enabled' => array(
-					'title'   => __( 'Enable/Disable', 'woocommerce-gopay' ),
-					'type'    => 'checkbox',
-					'label'   => __(
-						'Inform goid, client id and secret to enable GoPay payment gateway and load the other options',
-						'woocommerce-gopay'
-					),
-					'css'     => 'display: none;',
-					'default' => 'no',
-				),
-				'goid' => array(
-					'title'       => __( 'GoID', 'woocommerce-gopay' ),
-					'type'        => 'text',
-					'description' => __(
-						sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
-							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
-							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
-							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
-					),
-					'css'         => 'width: 500px;',
-					'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
-				),
-				'client_id' => array(
-					'title'       => __( 'Client ID', 'woocommerce-gopay' ),
-					'type'        => 'text',
-					'description' => __(
-						sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
-							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
-							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
-							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
-					),
-					'css'         => 'width: 500px;',
-					'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
-				),
-				'client_secret' => array(
-					'title'       => __( 'Client Secret', 'woocommerce-gopay' ),
-					'type'        => 'text',
-					'description' => __(
-						sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
-							. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
-							'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
-							'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-							'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
-					),
-					'css'         => 'width: 500px;',
-					'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
-				),
-			);
 
 			if ( ! empty( $this->settings['goid'] ) &&
 				! empty( $this->settings['client_id'] ) &&
@@ -950,12 +951,64 @@ function init_woocommerce_gopay_gateway() {
 
 			// Check payment methods and banks enabled on GoPay account
 			if ( empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
-				! empty( $this->get_option( 'goid', '' ) )
-			) {
+				! empty( $this->get_option( 'goid', '' ) ) &&
+				! empty( $this->get_option( 'test', '' ) ) ) {
 				$this->check_enabled_on_GoPay();
 			}
 
+			// Check credentials (GoID, Client ID and Client Secret)
+			$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
+			if ( array_key_exists( 'test', $options ) ) {
+				$gopay = Woocommerce_Gopay_API::auth_GoPay( $options );
+
+				$response = $gopay->getPaymentInstruments(
+					$this->get_option( 'goid', '' ), 'CZK' );
+				if ( !empty( $this->get_option( 'goid', '' ) ) &&
+					array_key_exists( 'errors', $response->json ) &&
+					$response->json['errors'][0]['error_name'] == 'INVALID' ) {
+					$this->update_option( 'goid', '' );
+
+					if ( empty( $this->get_option( 'admin_notice_goid' ) ) ) {
+						add_action( 'admin_notices', array( $this, 'admin_notice_goid' ) );
+						$this->update_option( 'admin_notice_goid', true );
+					} else {
+						$this->update_option( 'admin_notice_goid', false );
+					}
+				}
+
+				$response = $gopay->getAuth()->authorize()->response;
+				if ( !empty( $this->get_option( 'client_id', '' ) ) &&
+					!empty( $this->get_option( 'client_secret', '' ) ) &&
+					array_key_exists( 'errors', $response->json ) &&
+					$response->json['errors'][0]['error_name'] == 'AUTH_WRONG_CREDENTIALS' ) {
+					$this->update_option( 'client_id', '' );
+					$this->update_option( 'client_secret', '' );
+
+					if ( empty( $this->get_option( 'admin_notice_credentials' ) ) ) {
+						add_action( 'admin_notices', array( $this, 'admin_notice_credentials' ) );
+						$this->update_option( 'admin_notice_credentials', true );
+					} else {
+						$this->update_option( 'admin_notice_credentials', false );
+					}
+				}
+			}
+			// END
+
 			return $saved;
+		}
+
+		public function admin_notice_goid() {
+			$class = 'notice notice-error';
+			$message = __( 'Wrong GoID. Payee not found. Please provide a valid GoID.', 'woocommerce-gopay' );
+
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+		}
+
+		public function admin_notice_credentials() {
+			$class = 'notice notice-error';
+			$message = __( 'Wrong credentials. Please provide valid Client ID and Secret.', 'woocommerce-gopay' );
+
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}
 
 		/**

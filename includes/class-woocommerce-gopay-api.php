@@ -30,7 +30,7 @@ class Woocommerce_Gopay_API {
 	 * @return Payments object
 	 * @since  1.0.0
 	 */
-	private static function auth_GoPay( $options ): Payments {
+	public static function auth_GoPay( $options ): Payments {
 		return GoPay\payments(
 			array(
 				'goid'             => $options['goid'],
