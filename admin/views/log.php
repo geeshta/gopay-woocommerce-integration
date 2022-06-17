@@ -13,7 +13,7 @@ if ( $pagenum === null || $pagenum === false ) {
 }
 
 $page_pagination = ( $pagenum - 1 ) * $results_per_page;
-$log_data        = $wpdb->get_results(
+$log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 	sprintf(
 		'SELECT * FROM %s%s ORDER BY created_at DESC LIMIT %d,%d',
 		$wpdb->prefix,
@@ -21,7 +21,7 @@ $log_data        = $wpdb->get_results(
 		$page_pagination,
 		$results_per_page
 	)
-);
+) : array();
 
 ?>
 
@@ -68,6 +68,10 @@ $log_data        = $wpdb->get_results(
 			?>
 		</table>
 
+        <?php
+        if ( !empty( $log_data ) ) {
+        ?>
+
 		<div id="woocommerce-gopay-menu-popup" class="woocommerce-gopay-menu-popup">
 			<div class="woocommerce-gopay-menu-close" onclick="closePopup();"></div>
 		</div>
@@ -111,6 +115,10 @@ $log_data        = $wpdb->get_results(
 				   style="width: 65px;">
 			<input type="submit" value="<?php echo _e( 'Go to', 'woocommerce-gopay' ); ?>">
 		</form>
+
+		<?php
+            }
+		?>
 
 	</div>
 </div>

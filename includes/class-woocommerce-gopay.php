@@ -95,6 +95,7 @@ function init_woocommerce_gopay_gateway() {
 				)
 			);
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			add_action( 'delete_user', array( $this, 'delete_user_logs' ), 10 );
 
 			// add_filter( 'woocommerce_currencies', array( 'Woocommerce_Gopay_Options', 'supported_currencies' ) );
 			add_filter(
@@ -118,6 +119,27 @@ function init_woocommerce_gopay_gateway() {
 			// Check if WooCommerce Subscriptions is active
 			if ( check_is_plugin_active( 'woocommerce-subscriptions/woocommerce-subscriptions.php' ) ) {
 				Woocommerce_Gopay_Subscriptions::subscriptions_actions_filters();
+			}
+		}
+
+		/**
+		 * Delete customer logs when
+		 * the user is deleted
+		 *
+		 * @param $user_id
+		 * @since 1.0.0
+		 */
+		function delete_user_logs( $user_id ) {
+			$args = array(
+				'customer_id' => $user_id,
+				'limit' => -1,
+			);
+			$orders = wc_get_orders( $args );
+
+			foreach ( $orders as $key => $order ) {
+				global $wpdb;
+				$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . ' WHERE order_id = ' .
+					$order->get_id() );
 			}
 		}
 
