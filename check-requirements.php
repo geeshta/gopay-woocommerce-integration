@@ -1,6 +1,6 @@
 <?php
 /**
- * Check check-requirements
+ * Check requirements
  *
  * @package   WooCommerce GoPay gateway
  */

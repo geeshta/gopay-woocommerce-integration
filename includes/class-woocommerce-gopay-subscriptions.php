@@ -5,9 +5,9 @@
  * Deal with woocommerce subscriptions plugin.
  *
  * @package   WooCommerce GoPay gateway
- * @author    argo22
- * @link      https://www.argo22.com
- * @copyright 2022 argo22
+ * @author    GoPay
+ * @link      https://www.gopay.com/
+ * @copyright 2022 GoPay
  * @since     1.0.0
  */
 

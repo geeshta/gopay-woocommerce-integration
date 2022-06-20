@@ -2,7 +2,7 @@
 /**
  * The plugin bootstrap file
  *
- * @link                 https://argo22.com/
+ * @link                 https://www.gopay.com/
  * @since                1.0.0
  * @package              woocommerce-gopay
  * @wordpress-plugin
@@ -10,8 +10,8 @@
  * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
  * Version:              1.0.0
- * Author:               Argo22
- * Author URI:           https://argo22.com/
+ * Author:               GoPay
+ * Author URI:           https://www.gopay.com/
  * Text Domain:          woocommerce-gopay
  * License:              GPLv2 or later
  * License URI:          https://www.gnu.org/licenses/gpl-2.0.html

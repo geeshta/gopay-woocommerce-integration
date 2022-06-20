@@ -3,7 +3,7 @@
 /**
  * Fired when the plugin is uninstalled.
  *
- * @link       https://argo22.com/
+ * @link       https://www.gopay.com/
  * @since      1.0.0
  */
 
