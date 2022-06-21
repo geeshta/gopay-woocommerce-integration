@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "gopay/payments-sdk-php": "^1.4"
     },
     "require-dev": {

@@ -63,7 +63,7 @@ function init_woocommerce_gopay_gateway() {
 			$this->test          = ! $this->get_option( 'test' );
 			$this->instructions  = $this->get_option( 'instructions' );
 
-			$this->simplified_payment_method    = $this->get_option( 'simplified_payment_method' ) == 'yes';
+			$this->simplified_bank_selection    = $this->get_option( 'simplified_bank_selection' ) == 'yes';
 			$this->payment_retry                = $this->get_option( 'payment_retry' ) == 'yes';
 			$this->enable_countries             = $this->get_option( 'enable_countries', array() );
 			$this->enable_gopay_payment_methods = $this->get_option( 'enable_gopay_payment_methods', array() );
@@ -438,16 +438,17 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select Available Countries...', 'woocommerce-gopay' ),
 					),
-					'simplified_payment_method' => array(
-						'title'       => __( 'Payment Method Selection', 'woocommerce-gopay' ),
+					'simplified_bank_selection' => array(
+						'title'       => __( 'Bank Selection', 'woocommerce-gopay' ),
 						'type'        => 'checkbox',
 						'label'       => __(
-							'Enable simplified payment method selection',
+							'Enable simplified bank selection',
 							'woocommerce-gopay'
 						),
 						'description' => __(
-							'If enabled, customers cannot choose any specific payment method at the checkout' .
-							' but they have to select the payment method once the GoPay payment gateway is invoked.',
+							'If enabled, customers cannot choose any specific bank at the checkout,' .
+							' they are grouped into one “Bank account” option,' .
+							' but they have to select the bank once the GoPay payment gateway is invoked.',
 							'woocommerce-gopay'
 						),
 						'desc_tip'    => true,
@@ -617,7 +618,7 @@ function init_woocommerce_gopay_gateway() {
 			$payment_retry           = ( $this->payment_retry &&
 				is_page( wc_get_page_id( 'checkout' ) ) &&
 				! empty( get_query_var( 'order-pay' ) ) );
-			if ( ! $this->simplified_payment_method && ! $payment_retry ) {
+			if ( ! $payment_retry ) {
 				// Only supported by the currency
 				$supported_payment_methods = $this->get_option(
 					'gopay_payment_methods_' . get_woocommerce_currency(),
@@ -663,21 +664,23 @@ function init_woocommerce_gopay_gateway() {
 
 				foreach ( $payment_methods as $payment_method => $payment_method_label_image ) {
 					if ( $payment_method == 'BANK_ACCOUNT' ) {
-						foreach ( $banks as $bank => $bank_label_image ) {
-							$span = __( $bank_label_image['label'], 'woocommerce-gopay' );
-							$img  = array_key_exists( 'image', $bank_label_image ) ?
-								$bank_label_image['image'] : '';
+						if (! $this->simplified_bank_selection ) {
+							foreach ( $banks as $bank => $bank_label_image ) {
+								$span = __( $bank_label_image['label'], 'woocommerce-gopay' );
+								$img  = array_key_exists( 'image', $bank_label_image ) ?
+									$bank_label_image['image'] : '';
 
-							$enabled_payment_methods .= sprintf(
-								$input,
-								$payment_method,
-								$bank,
-								$checked,
-								$span,
-								$img
-							);
+								$enabled_payment_methods .= sprintf(
+									$input,
+									$payment_method,
+									$bank,
+									$checked,
+									$span,
+									$img
+								);
+							}
+							continue;
 						}
-						continue;
 					}
 
 					$span = __( $payment_method_label_image['label'], 'woocommerce-gopay' );

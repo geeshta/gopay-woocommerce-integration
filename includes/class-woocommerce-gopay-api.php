@@ -80,7 +80,7 @@ class Woocommerce_Gopay_API {
 	/**
 	 * GoPay create payment
 	 *
-	 * @param string   $gopay_payment_method payment method.
+	 * @param ?string   $gopay_payment_method payment method.
 	 * @param WC_Order $order                order detail.
 	 * @param string   $end_date             the end date of recurrence
 	 * @param          $is_retry
@@ -88,11 +88,10 @@ class Woocommerce_Gopay_API {
 	 * @return Response
 	 * @since 1.0.0
 	 */
-	public static function create_payment( string $gopay_payment_method, WC_Order $order,
+	public static function create_payment( ?string $gopay_payment_method, WC_Order $order,
 									string $end_date, $is_retry ): Response {
 		$options    = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay      = self::auth_GoPay( $options );
-		$simplified = $options['simplified_payment_method'] == 'yes';
 
 		$allowed_swifts = array();
 		if ( array_key_exists( $gopay_payment_method, Woocommerce_Gopay_Options::supported_banks() ) ) {
@@ -101,7 +100,7 @@ class Woocommerce_Gopay_API {
 		}
 
 		if ( empty( $order->get_meta( '_GoPay_payment_method' ) ) || ! $is_retry ) {
-			if ( ! $simplified && ! empty( $gopay_payment_method ) ) {
+			if ( ! empty( $gopay_payment_method ) ) {
 				$default_payment_instrument = $gopay_payment_method;
 			} else {
 				$default_payment_instrument = '';
