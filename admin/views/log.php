@@ -72,6 +72,10 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
             </tbody>
 		</table>
 
+        <b>Filter table by any column:
+            <input id="log_table_filter" type="text" onkeyup="searchTable();" placeholder="Search here">
+        </b>
+
         <?php
         if ( !empty( $log_data ) ) {
         ?>
