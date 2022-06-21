@@ -32,40 +32,44 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 
 	<div class="woocommerce-gopay-menu">
 		<table>
-			<tr>
-				<th><?php _e( 'Id', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Order id', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Transaction id', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Message', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Created at', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Log level', 'woocommerce-gopay' ); ?></th>
-				<th><?php _e( 'Log', 'woocommerce-gopay' ); ?></th>
-			</tr>
-			<?php
-			foreach ( $log_data as $log ) {
-				$order = wc_get_order( $log->order_id );
-				if ( is_object( $order ) && $order instanceof \Automattic\WooCommerce\Admin\Overrides\Order ) {
-					$order_url = ! empty( $order->get_edit_order_url() ) ? $order->get_edit_order_url() : '#';
-				} else {
-					$order_url = '#';
-				}
-				$log_decoded = json_decode( $log->log );
-				$gw_url      = ( ! empty( $log_decoded->json ) &&
-									property_exists( $log_decoded->json, 'gw_url' ) ) ?
-									$log_decoded->json->gw_url : '#';
+            <thead>
+                <tr>
+                    <th><?php _e( 'Id', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Order id', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Transaction id', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Message', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Created at', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Log level', 'woocommerce-gopay' ); ?></th>
+                    <th><?php _e( 'Log', 'woocommerce-gopay' ); ?></th>
+                </tr>
+            </thead>
+            <tbody id="log_table_body">
+                <?php
+                foreach ( $log_data as $log ) {
+                    $order = wc_get_order( $log->order_id );
+                    if ( is_object( $order ) && $order instanceof \Automattic\WooCommerce\Admin\Overrides\Order ) {
+                        $order_url = ! empty( $order->get_edit_order_url() ) ? $order->get_edit_order_url() : '#';
+                    } else {
+                        $order_url = '#';
+                    }
+                    $log_decoded = json_decode( $log->log );
+                    $gw_url      = ( ! empty( $log_decoded->json ) &&
+                                        property_exists( $log_decoded->json, 'gw_url' ) ) ?
+                                        $log_decoded->json->gw_url : '#';
 
-				echo '<tr>';
-				echo '<td>' . esc_attr( $log->id ) . '</td>';
-				echo '<td><a href="' . esc_attr( $order_url ) . '">' . esc_attr( $log->order_id ) . '</a></td>';
-				echo '<td><a href="' . esc_attr( $gw_url ) . '">' . esc_attr( $log->transaction_id ) . '</a></td>';
-				echo '<td>' . esc_attr( $log->message ) . '</td>';
-				echo '<td>' . esc_attr( $log->created_at ) . ' (GMT)</td>';
-				echo '<td>' . esc_attr( $log->log_level ) . '</td>';
-				echo '<td><a href="#" onClick="openPopup(' .
-					htmlspecialchars( $log->log, ENT_QUOTES ) . ');">Open log</a></td>';
-				echo '</tr>';
-			}
-			?>
+                    echo '<tr>';
+                    echo '<td>' . esc_attr( $log->id ) . '</td>';
+                    echo '<td><a href="' . esc_attr( $order_url ) . '">' . esc_attr( $log->order_id ) . '</a></td>';
+                    echo '<td><a href="' . esc_attr( $gw_url ) . '">' . esc_attr( $log->transaction_id ) . '</a></td>';
+                    echo '<td>' . esc_attr( $log->message ) . '</td>';
+                    echo '<td>' . esc_attr( $log->created_at ) . ' (GMT)</td>';
+                    echo '<td>' . esc_attr( $log->log_level ) . '</td>';
+                    echo '<td><a href="#" onClick="openPopup(' .
+                        htmlspecialchars( $log->log, ENT_QUOTES ) . ');">Open log</a></td>';
+                    echo '</tr>';
+                }
+                ?>
+            </tbody>
 		</table>
 
         <?php

@@ -95,6 +95,7 @@ function init_woocommerce_gopay_gateway() {
 				)
 			);
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
 			add_action( 'delete_user', array( $this, 'delete_user_logs' ), 10 );
 			add_action( 'after_delete_post', array( $this, 'delete_order_logs' ), 10, 1 );
 
@@ -1022,6 +1023,18 @@ function init_woocommerce_gopay_gateway() {
 			wp_enqueue_style(
 				'woocommerce-gopay' . '-payment-methods-styles',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/payment_methods.css'
+			);
+		}
+
+		/**
+		 * Admin enqueue styles
+		 *
+		 * @since 1.0.0
+		 */
+		public function admin_enqueue_styles() {
+			wp_enqueue_style(
+				'woocommerce-gopay' . '-payment-methods-styles',
+				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/form_fields.css'
 			);
 		}
 
