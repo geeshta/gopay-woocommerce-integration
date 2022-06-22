@@ -366,15 +366,6 @@ msgid ""
 msgstr ""
 " Azonban még mindig várjuk a visszaigazolást vagy a fizetés elutasítását."
 
-#. Author of the plugin
-msgid "Argo22"
-msgstr "Argo22"
-
-#. URI of the plugin
-#. Author URI of the plugin
-msgid "https://argo22.com/"
-msgstr "https://argo22.com/"
-
 #. Description of the plugin
 msgid "WooCommerce and GoPay payment gateway integration"
 msgstr "WooCommerce és GoPay fizetési átjáró integráció"

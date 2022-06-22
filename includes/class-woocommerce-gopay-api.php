@@ -404,10 +404,10 @@ class Woocommerce_Gopay_API {
 				break;
 			case 'PAYMENT_METHOD_CHOSEN':
 			case 'AUTHORIZED':
-			case 'CREATED':
 				wp_redirect( $order->get_checkout_order_received_url() );
 
 				break;
+			case 'CREATED':
 			case 'TIMEOUTED':
 			case 'CANCELED':
 				$order->set_status( 'failed' );

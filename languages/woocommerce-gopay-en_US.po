@@ -24,7 +24,7 @@ msgstr ""
 msgid "Platební karta"
 msgstr "Payment card"
 
-#. Payment methods banco
+#. Payment methods bank
 msgid "Rychlý bankovní převod"
 msgstr "Bank account"
 

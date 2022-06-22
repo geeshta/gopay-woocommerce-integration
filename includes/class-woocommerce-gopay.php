@@ -98,6 +98,7 @@ function init_woocommerce_gopay_gateway() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
 			add_action( 'delete_user', array( $this, 'delete_user_logs' ), 10 );
 			add_action( 'after_delete_post', array( $this, 'delete_order_logs' ), 10, 1 );
+			add_action( 'woocommerce_thankyou', array( $this, 'thankyou_order_failed_text' ), 10, 1 );
 
 			// add_filter( 'woocommerce_currencies', array( 'Woocommerce_Gopay_Options', 'supported_currencies' ) );
 			add_filter(
@@ -896,8 +897,8 @@ function init_woocommerce_gopay_gateway() {
 		 * @since 1.0.0
 		 */
 		public function check_status_gopay_redirect() {
-			 $gopay_api = filter_input( INPUT_GET, 'gopay-api' );
-			$id         = filter_input( INPUT_GET, 'id' );
+            $gopay_api = filter_input( INPUT_GET, 'gopay-api' );
+            $id        = filter_input( INPUT_GET, 'id' );
 			if ( $gopay_api && $id ) {
 				Woocommerce_Gopay_API::check_payment_status( $id );
 			}
@@ -909,7 +910,7 @@ function init_woocommerce_gopay_gateway() {
 		 * @since  1.0.0
 		 */
 		public function thankyou_page( $message, $order ) {
-			 $message     = __( 'Thank you. Your order has been received.', 'woocommerce-gopay' );
+			$message      = __( 'Thank you. Your order has been received.', 'woocommerce-gopay' );
 			$subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data( $order );
 			if ( ! empty( $subscription ) && $order->get_total() == 0 ) {
 				return $message . __(
@@ -926,6 +927,29 @@ function init_woocommerce_gopay_gateway() {
 			}
 
 			return $message;
+		}
+
+		/**
+		 * Change thank you order failed text
+		 *
+		 * @param int $order_id Order ID.
+		 * @since  1.0.0
+		 */
+		function thankyou_order_failed_text( int $order_id ) {
+			$order=new WC_Order( $order_id );
+			if ( $order->has_status( 'failed' ) ) {
+				$message = __( 'Unfortunately your order cannot be processed as the payment was not completed.'
+							. ' Please attempt the payment or your purchase again.', 'woocommerce-gopay' );
+
+				?>
+				<script>
+                    if (typeof failed_message === 'undefined') {
+                        let failed_message = document.getElementsByClassName('woocommerce-thankyou-order-failed');
+                        failed_message[0].textContent = <?php echo json_encode($message); ?>;
+                    }
+				</script>
+				<?php
+			}
 		}
 
 		/**

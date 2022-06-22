@@ -363,15 +363,6 @@ msgid ""
 " However, we are still waiting for the confirmation or payment rejection."
 msgstr " Stále však čakáme na potvrdenie alebo zamietnutie platby."
 
-#. Author of the plugin
-msgid "Argo22"
-msgstr "Argo22"
-
-#. URI of the plugin
-#. Author URI of the plugin
-msgid "https://argo22.com/"
-msgstr "https://argo22.com/"
-
 #. Description of the plugin
 msgid "WooCommerce and GoPay payment gateway integration"
 msgstr "Integrácia platobnej brány WooCommerce a GoPay"
