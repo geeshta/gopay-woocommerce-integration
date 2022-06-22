@@ -29,7 +29,7 @@ function init_woocommerce_gopay_gateway() {
 		 * @since  1.0.0
 		 */
 		public function __construct() {
-			 $this->id                = WOOCOMMERCE_GOPAY_ID;
+            $this->id                = WOOCOMMERCE_GOPAY_ID;
 			$this->icon               = apply_filters(
 				'woocommerce_gopay_icon',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/images/gopay.png'
@@ -160,18 +160,25 @@ function init_woocommerce_gopay_gateway() {
 		public function update_payment_methods() {
 			if ( empty( $this->settings['goid'] ) ||
 				empty( $this->settings['test'] ) ) {
+				$timestamp = wp_next_scheduled( 'update_payment_methods_and_banks' );
+				wp_unschedule_event( $timestamp, 'update_payment_methods_and_banks' );
+
 				return;
 			}
 
-			if ( empty( $this->get_option( 'option_gopay_payment_methods' ) ) ||
-				empty( $this->get_option( 'option_gopay_banks' ) ) ) {
-				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
+			if ( ! wp_next_scheduled( 'update_payment_methods_and_banks' ) ) {
+				wp_schedule_event( time(), 'daily', 'update_payment_methods_and_banks' );
 			}
 
-			if ( filter_input( INPUT_GET, 'page' ) == 'wc-settings' &&
-				filter_input( INPUT_GET, 'section' ) == 'wc_gopay_gateway' ) {
-				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
-			}
+//			if ( empty( $this->get_option( 'option_gopay_payment_methods' ) ) ||
+//				empty( $this->get_option( 'option_gopay_banks' ) ) ) {
+//				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
+//			}
+//
+//			if ( filter_input( INPUT_GET, 'page' ) == 'wc-settings' &&
+//				filter_input( INPUT_GET, 'section' ) == 'wc_gopay_gateway' ) {
+//				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
+//			}
 		}
 
 		/**
@@ -181,7 +188,7 @@ function init_woocommerce_gopay_gateway() {
 		 * @since 1.0.0
 		 */
 		function check_enabled_on_GoPay() {
-			 $payment_methods = array();
+            $payment_methods = array();
 			$banks            = array();
 			foreach ( Woocommerce_Gopay_Options::supported_currencies() as $currency => $value ) {
 				$supported       = Woocommerce_Gopay_API::check_enabled_on_GoPay( $currency );
@@ -980,7 +987,7 @@ function init_woocommerce_gopay_gateway() {
 			$this->init_form_fields();
 
 			// Check payment methods and banks enabled on GoPay account
-			if ( empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
+			if ( //empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
 				! empty( $this->get_option( 'goid', '' ) ) &&
 				! empty( $this->get_option( 'test', '' ) ) ) {
 				$this->check_enabled_on_GoPay();
