@@ -621,6 +621,21 @@ function init_woocommerce_gopay_gateway() {
 		public function payment_fields() {
 			echo wpautop( wptexturize( $this->description ) );
 
+            // Check if Apple pay is available
+            ?>
+            <script>
+                var applePayAvailable = false;
+                if(window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
+                    applePayAvailable = true;
+                }
+
+                var applePay = document.getElementsByName('APPLE_PAY');
+                if (applePay.length !== 0 && !applePayAvailable) {
+                    applePay[0].remove();
+                }
+            </script>
+            <?php
+
 			$enabled_payment_methods = '';
 			$checked                 = 'checked="checked"';
 			$payment_retry           = ( $this->payment_retry &&
@@ -661,7 +676,7 @@ function init_woocommerce_gopay_gateway() {
 
 				$input =
 					'
-					<div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection">
+					<div class="payment_method_' . WOOCOMMERCE_GOPAY_ID . '_selection" name="%s">
 					<div>
 					    <input class="payment_method_' . WOOCOMMERCE_GOPAY_ID .
 						'_input" name="gopay_payment_method" type="radio" id="%s" value="%s" %s />
@@ -681,6 +696,7 @@ function init_woocommerce_gopay_gateway() {
 								$enabled_payment_methods .= sprintf(
 									$input,
 									$payment_method,
+									$payment_method,
 									$bank,
 									$checked,
 									$span,
@@ -697,6 +713,7 @@ function init_woocommerce_gopay_gateway() {
 
 					$enabled_payment_methods .= sprintf(
 						$input,
+						$payment_method,
 						$payment_method,
 						$payment_method,
 						$checked,
