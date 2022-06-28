@@ -114,6 +114,7 @@ function init_woocommerce_gopay_gateway() {
 				2
 			);
 
+
 			// Load Woocommerce GoPay gateway admin page
 			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 				Woocommerce_Gopay_Admin_Menu::create_menu_actions();
@@ -519,6 +520,20 @@ function init_woocommerce_gopay_gateway() {
 		 * @since  1.0.0
 		 */
 		public function is_available(): bool {
+
+			// Inline
+			if ( ! empty( $_GET['gopay_url'] ) ) {
+				$test = $this->get_option( 'test', '' );
+				if ( $test == 'yes' ) {
+					echo '<script type="text/javascript" src="https://gw.sandbox.gopay.com/gp-gw/js/embed.js"></script>';
+				} else {
+					echo '<script type="text/javascript" src="https://gate.gopay.cz/gp-gw/js/embed.js"></script>';
+				}
+
+				echo '<script>_gopay.checkout({gatewayUrl: "' . $_GET['gopay_url'] . '", inline: true});</script>';
+			}
+			// end Inline
+
 			if ( ! empty( WC()->customer ) ) {
 				// Check countries
 				$billing_country = WC()
@@ -621,21 +636,6 @@ function init_woocommerce_gopay_gateway() {
 		public function payment_fields() {
 			echo wpautop( wptexturize( $this->description ) );
 
-            // Check if Apple pay is available
-            ?>
-            <script>
-                var applePayAvailable = false;
-                if(window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
-                    applePayAvailable = true;
-                }
-
-                var applePay = document.getElementsByName('APPLE_PAY');
-                if (applePay.length !== 0 && !applePayAvailable) {
-                    applePay[0].remove();
-                }
-            </script>
-            <?php
-
 			$enabled_payment_methods = '';
 			$checked                 = 'checked="checked"';
 			$payment_retry           = ( $this->payment_retry &&
@@ -724,6 +724,21 @@ function init_woocommerce_gopay_gateway() {
 					$checked = '';
 				}
 			}
+
+			// Check if Apple pay is available
+			?>
+            <script>
+                var applePayAvailable = false;
+                if(window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
+                    applePayAvailable = true;
+                }
+
+                var applePay = document.getElementsByName('APPLE_PAY');
+                if (applePay.length !== 0 && !applePayAvailable) {
+                    applePay[0].remove();
+                }
+            </script>
+			<?php
 
 			echo $enabled_payment_methods;
 		}
@@ -845,9 +860,17 @@ function init_woocommerce_gopay_gateway() {
 			);
 			Woocommerce_Gopay_Log::insert_log( $log );
 
+			$redirect_url = wc_get_checkout_url();
+			$url_args     = array( 'gopay_url' => $response->json['gw_url'] );
+			if( !empty( $_GET['pay_for_order'] ) && $_GET['pay_for_order'] == 'true' ) {
+				$url_args     = array_merge( $_GET, $url_args );
+				$redirect_url = wc_get_endpoint_url( 'order-pay' );
+				$redirect_url = $redirect_url . $order_id . '/';
+			}
+
 			return array(
 				'result'   => 'success',
-				'redirect' => $response->json['gw_url'],
+				'redirect' => add_query_arg( $url_args, $redirect_url ),
 			);
 		}
 
