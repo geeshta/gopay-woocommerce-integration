@@ -15,19 +15,3 @@ function closePopup() {
 
 	popup.style.display = 'none';
 }
-
-function searchTable() {
-	const to_be_filtered = document.getElementById('log_table_filter').value;
-	const rows = document.getElementById('log_table_body').rows;
-
-	Object.values(rows).forEach( (row) => {
-		const tds = row.getElementsByTagName('td');
-		row.style.display = 'none';
-		Object.values(tds).forEach( (td) => {
-			const re = new RegExp(to_be_filtered, 'gi');
-			if (td.innerHTML.match(re)) {
-				row.style.display = '';
-			}
-		} );
-	} );
-}

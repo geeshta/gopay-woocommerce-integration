@@ -1,13 +1,23 @@
 <?php
 
+$pagenum          = filter_input( INPUT_GET, 'pagenum', FILTER_VALIDATE_INT );
+$log_table_filter = filter_input( INPUT_GET, 'log_table_filter' );
+
 global $wpdb;
-$rows = $wpdb->get_results( 'SELECT COUNT(*) as num_rows FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME );
+$rows = $wpdb->get_results(
+	sprintf(
+		"SELECT COUNT(*) as num_rows FROM %s%s WHERE UPPER(CONCAT(order_id, transaction_id, message, created_at, log_level, log))
+                REGEXP '[\w\W]*%s[\w\W]*'",
+		$wpdb->prefix,
+		WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
+		strtoupper( $log_table_filter )
+	)
+);
 
 $results_per_page = 20;
 $number_of_rows   = $rows[0]->num_rows;
 $number_of_pages  = ceil( $number_of_rows / $results_per_page );
 
-$pagenum = filter_input( INPUT_GET, 'pagenum', FILTER_VALIDATE_INT );
 if ( $pagenum === null || $pagenum === false ) {
 	$pagenum = 1;
 }
@@ -15,9 +25,11 @@ if ( $pagenum === null || $pagenum === false ) {
 $page_pagination = ( $pagenum - 1 ) * $results_per_page;
 $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 	sprintf(
-		'SELECT * FROM %s%s ORDER BY created_at DESC LIMIT %d,%d',
+		"SELECT * FROM %s%s WHERE UPPER(CONCAT(order_id, transaction_id, message, created_at, log_level, log))
+                REGEXP '[\w\W]*%s[\w\W]*' ORDER BY created_at DESC LIMIT %d,%d",
 		$wpdb->prefix,
 		WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
+        strtoupper( $log_table_filter ),
 		$page_pagination,
 		$results_per_page
 	)
@@ -72,9 +84,14 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
             </tbody>
 		</table>
 
-        <b>Filter table by any column:
-            <input id="log_table_filter" type="text" onkeyup="searchTable();" placeholder="Search here">
-        </b>
+        <form action="">
+            <label for="page"></label>
+            <input type="hidden" id="page" name="page" value="woocommerce-gopay-menu-log">
+            <label for="log_table_filter"><?php _e( 'Filter table by any column:', 'woocommerce-gopay' ); ?></label>
+            <input type="text" id="log_table_filter" name="log_table_filter"
+                   placeholder="<?php _e( 'Search here', 'woocommerce-gopay' ); ?>">
+            <input type="submit" value="<?php echo _e( 'Search', 'woocommerce-gopay' ); ?>">
+        </form>
 
         <?php
         if ( !empty( $log_data ) ) {
