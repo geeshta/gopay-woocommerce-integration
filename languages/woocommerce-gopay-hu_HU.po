@@ -295,8 +295,16 @@ msgstr "A GoPay felület alapértelmezett nyelve"
 msgid "Enable shipping methods"
 msgstr "Szállítási módszerek engedélyezése"
 
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable Shipping Methods"
+msgstr "Szállítási módszerek engedélyezése"
+
 #: includes/class-woocommerce-gopay.php:313
 msgid "Enable countries"
+msgstr "Országok engedélyezése"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable Countries"
 msgstr "Országok engedélyezése"
 
 #: includes/class-woocommerce-gopay.php:321
@@ -321,8 +329,16 @@ msgstr ""
 msgid "Enable GoPay payment methods"
 msgstr "A GoPay fizetési módok engedélyezése"
 
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay Payment Methods"
+msgstr "A GoPay fizetési módok engedélyezése"
+
 #: includes/class-woocommerce-gopay.php:345
 msgid "Enable banks"
+msgstr "Bankok engedélyezése"
+
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable Banks"
 msgstr "Bankok engedélyezése"
 
 #: includes/class-woocommerce-gopay.php:354
@@ -373,3 +389,173 @@ msgstr "WooCommerce és GoPay fizetési átjáró integráció"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+#: admin/views/log.php:124
+msgid "Go to"
+msgstr "Menjen a"
+
+#: includes/class-woocommerce-gopay.php:410
+msgid "Default Language"
+msgstr "Alapértelmezett nyelv"
+
+#: includes/class-woocommerce-gopay.php:415
+msgid ""
+"Default language is used when a customer of an e-commerce site is from a "
+"country whose language is not supported."
+msgstr "Az alapértelmezett nyelvet akkor használjuk, ha egy e-kereskedelmi webhely vásárlója olyan országból származik, amelynek nyelve nem támogatott."
+
+#: includes/class-woocommerce-gopay.php:422
+msgid "Select Default Language..."
+msgstr "Alapértelmezett nyelv kiválasztása..."
+
+#: includes/class-woocommerce-gopay.php:430
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid ""
+"Enable the GoPay payment gateway only for the selected WooCommerce shipping "
+"methods."
+msgstr "A GoPay fizetési átjáró engedélyezése csak a kiválasztott WooCommerce szállítási módokhoz."
+
+#: includes/class-woocommerce-gopay.php:435
+#, fuzzy
+#| msgid "Enable shipping methods"
+msgid "Select Shipping Methods..."
+msgstr "Szállítási módok kiválasztása..."
+
+#: includes/class-woocommerce-gopay.php:443
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid "Enable the GoPay payment gateway only for the selected countries."
+msgstr "A GoPay fizetési átjáró engedélyezése csak a kiválasztott országokban."
+
+#: includes/class-woocommerce-gopay.php:448
+msgid "Select Available Countries..."
+msgstr "Válassza ki az elérhető országokat..."
+
+#: includes/class-woocommerce-gopay.php:451
+msgid "Bank Selection"
+msgstr "Bank kiválasztása"
+
+#: includes/class-woocommerce-gopay.php:454
+#, fuzzy
+#| msgid "Enable simplified payment method selection"
+msgid "Enable simplified bank selection"
+msgstr "Egyszerűsített bankválasztás engedélyezése"
+
+#: includes/class-woocommerce-gopay.php:474
+#, fuzzy
+#| msgid "Take payments via GoPay payment gateway."
+msgid "Enable only the selected payment methods on the GoPay payment gateway ."
+msgstr "Csak a kiválasztott fizetési módok engedélyezése a GoPay fizetési átjárón."
+
+#: includes/class-woocommerce-gopay.php:261
+#: includes/class-woocommerce-gopay.php:361
+#, php-format
+msgid ""
+"Enter your unique GoID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Adja meg egyedi GoID azonosítóját, amelyet a GoPay-fiók beállításaiban talál. "
+"%1$sTovábbi információ%2$s."
+
+#: includes/class-woocommerce-gopay.php:275
+#: includes/class-woocommerce-gopay.php:375
+#, php-format
+msgid ""
+"Enter your client ID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Adja meg ügyfél-azonosítóját, amelyet a GoPay-fiók beállításaiban talál. "
+"%1$sTovábbi információ%2$s."
+
+#: includes/class-woocommerce-gopay.php:289
+#: includes/class-woocommerce-gopay.php:389
+#, php-format
+msgid ""
+"Enter your Client Secret Token, which can be found in your GoPay account "
+"settings. %1$sMore information%2$s."
+msgstr "Adja meg az ügyféltitkot (Client Secret Token), amelyet a GoPay-fiók beállításaiban talál. "
+"%1$sTovábbi információ%2$s."
+
+#: includes/class-woocommerce-gopay.php:269
+#: includes/class-woocommerce-gopay.php:369
+msgid "Insert Your GoID..."
+msgstr "GoID beillesztése..."
+
+#: includes/class-woocommerce-gopay.php:283
+#: includes/class-woocommerce-gopay.php:383
+msgid "Insert Your GoPay Client ID..."
+msgstr "Adja meg GoPay ügyfél azonosítóját..."
+
+#: includes/class-woocommerce-gopay.php:297
+#: includes/class-woocommerce-gopay.php:397
+msgid "Insert Your GoPay Client Secret Token..."
+msgstr "Adja meg a GoPay ügyfél titkos tokenjét..."
+
+#: includes/class-woocommerce-gopay.php:340
+msgid "Insert Payment Title..."
+msgstr "Fizetési cím beillesztése..."
+
+#: includes/class-woocommerce-gopay.php:355
+#, fuzzy
+#| msgid "Description"
+msgid "Insert Description..."
+msgstr "Leírás beillesztése..."
+
+#: includes/class-woocommerce-gopay.php:479
+#, fuzzy
+#| msgid "Enable GoPay payment methods"
+msgid "Select GoPay Payment Methods..."
+msgstr "GoPay fizetési módok kiválasztása..."
+
+#: includes/class-woocommerce-gopay-options.php:391
+msgid "Payment card"
+msgstr "Fizetőkártya"
+
+#: includes/class-woocommerce-gopay-options.php:392
+msgid "Bank account"
+msgstr "Bankszámla"
+
+#: includes/class-woocommerce-gopay-options.php:622
+msgid "Another bank"
+msgstr "Egy másik bank"
+
+#: includes/class-woocommerce-gopay.php:487
+#, fuzzy
+#| msgid "Enable GoPay payment gateway"
+msgid "Enable only the selected banks on the GoPay payment gateway ."
+msgstr "Csak a kiválasztott bankok engedélyezése a GoPay fizetési átjárón."
+
+#: includes/class-woocommerce-gopay.php:492
+msgid "Select Available Banks..."
+msgstr "Válassza ki a rendelkezésre álló bankokat..."
+
+#: includes/class-woocommerce-gopay.php:988
+msgid ""
+"Unfortunately your order cannot be processed as the payment was not "
+"completed. Please attempt the payment or your purchase again."
+msgstr "Sajnos a megrendelését nem tudjuk feldolgozni, mivel a fizetés nem történt meg. Kérjük, próbálja meg újra a fizetést vagy a vásárlást."
+
+#: includes/class-woocommerce-gopay.php:1079
+msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
+msgstr "Rossz GoID. A kedvezményezett nem található. Kérjük, adjon meg egy érvényes GoID-t."
+
+#: includes/class-woocommerce-gopay.php:1086
+msgid "Wrong credentials. Please provide valid Client ID and Secret."
+msgstr "Rossz megbízólevél. Kérjük, adjon meg érvényes ügyfél azonosítót és titkot."
+
+#: includes/class-woocommerce-gopay.php:458
+#, fuzzy
+#| msgid ""
+#| "If enabled, customers cannot choose any specific payment method at the "
+#| "checkout but they have to select the payment method once the GoPay "
+#| "payment gateway is invoked."
+msgid ""
+"If enabled, customers cannot choose any specific bank at the checkout, they "
+"are grouped into one “Bank account” option, but they have to select the bank "
+"once the GoPay payment gateway is invoked."
+msgstr "Ha engedélyezve van, az ügyfelek nem választhatnak konkrét bankot a pénztárnál, azok egy 'Bankszámla' opcióba vannak csoportosítva, de a GoPay fizetési átjáró meghívása után ki kell választaniuk a bankot."
+
+#: includes/class-woocommerce-gopay.php:496
+#, fuzzy
+#| msgid "Payment retry payment method"
+msgid "Retry Payment Method"
+msgstr "Fizetési mód megismétlése"

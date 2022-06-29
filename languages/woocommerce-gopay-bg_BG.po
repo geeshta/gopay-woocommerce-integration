@@ -85,6 +85,10 @@ msgstr "Създаден в"
 msgid "Log level"
 msgstr "Ниво на дневника"
 
+#: admin/views/log.php:124
+msgid "Go to"
+msgstr "Отидете на"
+
 #: check_requirements.php:25
 msgid "WooCommerce GoPay gateway plugin requires WooCommerce to be active."
 msgstr ""
@@ -198,6 +202,18 @@ msgstr "Испански"
 msgid "Ukrainian"
 msgstr "Украински"
 
+#: includes/class-woocommerce-gopay-options.php:391
+msgid "Payment card"
+msgstr "Платежна карта"
+
+#: includes/class-woocommerce-gopay-options.php:392
+msgid "Bank account"
+msgstr "Банкова сметка"
+
+#: includes/class-woocommerce-gopay-options.php:622
+msgid "Another bank"
+msgstr "Друга банка"
+
 #: includes/class-woocommerce-gopay-subscriptions.php:93
 msgid ""
 "Products and subscriptions can not be purchased at the same time and only "
@@ -254,6 +270,64 @@ msgstr "Client Id"
 msgid "Client secret"
 msgstr "Client secret"
 
+#: includes/class-woocommerce-gopay.php:261
+#: includes/class-woocommerce-gopay.php:361
+#, php-format
+msgid ""
+"Enter your unique GoID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Въведете своя уникален GoID, който можете да намерите в настройките на профила си в GoPay."
+"%1$sПовече информация%2$s."
+
+#: includes/class-woocommerce-gopay.php:275
+#: includes/class-woocommerce-gopay.php:375
+#, php-format
+msgid ""
+"Enter your client ID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Въведете клиентския си идентификатор, който можете да намерите в настройките на профила си в GoPay."
+"%1$sПовече информация%2$s."
+
+#: includes/class-woocommerce-gopay.php:289
+#: includes/class-woocommerce-gopay.php:389
+#, php-format
+msgid ""
+"Enter your Client Secret Token, which can be found in your GoPay account "
+"settings. %1$sMore information%2$s."
+msgstr "Въведете тайния си клиентски токен, който можете да намерите в настройките на профила си в GoPay."
+"%1$sПовече информация%2$s."
+
+#: includes/class-woocommerce-gopay.php:269
+#: includes/class-woocommerce-gopay.php:369
+msgid "Insert Your GoID..."
+msgstr "Поставете вашия GoID..."
+
+#: includes/class-woocommerce-gopay.php:283
+#: includes/class-woocommerce-gopay.php:383
+msgid "Insert Your GoPay Client ID..."
+msgstr "Въведете идентификационния номер на клиента на GoPay..."
+
+#: includes/class-woocommerce-gopay.php:297
+#: includes/class-woocommerce-gopay.php:397
+msgid "Insert Your GoPay Client Secret Token..."
+msgstr "Поставете тайния токен на вашия клиент на GoPay..."
+
+#: includes/class-woocommerce-gopay.php:340
+msgid "Insert Payment Title..."
+msgstr "Въведете заглавието на плащането..."
+
+#: includes/class-woocommerce-gopay.php:355
+#, fuzzy
+#| msgid "Description"
+msgid "Insert Description..."
+msgstr "Вмъкване на описание..."
+
+#: includes/class-woocommerce-gopay.php:479
+#, fuzzy
+#| msgid "Enable GoPay payment methods"
+msgid "Select GoPay Payment Methods..."
+msgstr "Изберете методите за плащане на GoPay..."
+
 #: includes/class-woocommerce-gopay.php:244
 msgid "Enable GoPay payment gateway"
 msgstr "Активиране на шлюза за плащане GoPay"
@@ -290,13 +364,81 @@ msgstr "Активиране на тестовия режим на платеж�
 msgid "Default language of the GoPay interface"
 msgstr "Език по подразбиране на интерфейса на GoPay"
 
+#: includes/class-woocommerce-gopay.php:410
+msgid "Default Language"
+msgstr "Език по подразбиране"
+
+#: includes/class-woocommerce-gopay.php:415
+msgid ""
+"Default language is used when a customer of an e-commerce site is from a "
+"country whose language is not supported."
+msgstr "Езикът по подразбиране се използва, когато клиент на сайт за електронна търговия е от държава, чийто език не се поддържа."
+
+#: includes/class-woocommerce-gopay.php:422
+msgid "Select Default Language..."
+msgstr "Изберете език по подразбиране..."
+
 #: includes/class-woocommerce-gopay.php:305
 msgid "Enable shipping methods"
 msgstr "Активиране на методи за доставка"
 
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable Shipping Methods"
+msgstr "Активиране на методи за доставка"
+
+#: includes/class-woocommerce-gopay.php:430
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid ""
+"Enable the GoPay payment gateway only for the selected WooCommerce shipping "
+"methods."
+msgstr "Активирайте шлюза за плащане GoPay само за избраните методи за доставка на WooCommerce."
+
+#: includes/class-woocommerce-gopay.php:435
+#, fuzzy
+#| msgid "Enable shipping methods"
+msgid "Select Shipping Methods..."
+msgstr "Изберете методи за доставка..."
+
 #: includes/class-woocommerce-gopay.php:313
 msgid "Enable countries"
 msgstr "Разрешаване на държави"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable Countries"
+msgstr "Разрешаване на държави"
+
+#: includes/class-woocommerce-gopay.php:443
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid "Enable the GoPay payment gateway only for the selected countries."
+msgstr "Активирайте шлюза за плащане GoPay само за избраните държави."
+
+#: includes/class-woocommerce-gopay.php:448
+msgid "Select Available Countries..."
+msgstr "Изберете налични държави..."
+
+#: includes/class-woocommerce-gopay.php:451
+msgid "Bank Selection"
+msgstr "Избор на банка"
+
+#: includes/class-woocommerce-gopay.php:454
+#, fuzzy
+#| msgid "Enable simplified payment method selection"
+msgid "Enable simplified bank selection"
+msgstr "Разрешаване на опростен избор на банка"
+
+#: includes/class-woocommerce-gopay.php:458
+#, fuzzy
+#| msgid ""
+#| "If enabled, customers cannot choose any specific payment method at the "
+#| "checkout but they have to select the payment method once the GoPay "
+#| "payment gateway is invoked."
+msgid ""
+"If enabled, customers cannot choose any specific bank at the checkout, they "
+"are grouped into one “Bank account” option, but they have to select the bank "
+"once the GoPay payment gateway is invoked."
+msgstr "Ако тази опция е активирана, клиентите не могат да избират конкретна банка по време на поръчката, те са групирани в една опция 'Банкова сметка', но трябва да изберат банката, след като бъде задействан шлюзът за плащане GoPay."
 
 #: includes/class-woocommerce-gopay.php:321
 msgid "Payment method selection"
@@ -320,13 +462,43 @@ msgstr ""
 msgid "Enable GoPay payment methods"
 msgstr "Активиране на методите за плащане GoPay"
 
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay Payment Methods"
+msgstr "Активиране на методите за плащане GoPay"
+
+#: includes/class-woocommerce-gopay.php:474
+#, fuzzy
+#| msgid "Take payments via GoPay payment gateway."
+msgid "Enable only the selected payment methods on the GoPay payment gateway ."
+msgstr "Активирайте само избраните методи за плащане в платежния шлюз GoPay."
+
 #: includes/class-woocommerce-gopay.php:345
 msgid "Enable banks"
 msgstr "Разрешаване на банки"
 
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable Banks"
+msgstr "Разрешаване на банки"
+
+#: includes/class-woocommerce-gopay.php:487
+#, fuzzy
+#| msgid "Enable GoPay payment gateway"
+msgid "Enable only the selected banks on the GoPay payment gateway ."
+msgstr "Активирайте само избраните банки в платежния шлюз на GoPay."
+
+#: includes/class-woocommerce-gopay.php:492
+msgid "Select Available Banks..."
+msgstr "Изберете налични банки..."
+
 #: includes/class-woocommerce-gopay.php:354
 msgid "Payment retry payment method"
 msgstr "Метод за повторно плащане"
+
+#: includes/class-woocommerce-gopay.php:496
+#, fuzzy
+#| msgid "Payment retry payment method"
+msgid "Retry Payment Method"
+msgstr "Повторение на метода на плащане"
 
 #: includes/class-woocommerce-gopay.php:359
 msgid "Enable payment retry using the same payment method"
@@ -363,6 +535,20 @@ msgstr " Моля, платете абонамента си след пробн�
 msgid ""
 " However, we are still waiting for the confirmation or payment rejection."
 msgstr " Все още обаче чакаме потвърждение или отхвърляне на плащането."
+
+#: includes/class-woocommerce-gopay.php:988
+msgid ""
+"Unfortunately your order cannot be processed as the payment was not "
+"completed. Please attempt the payment or your purchase again."
+msgstr "За съжаление поръчката ви не може да бъде обработена, тъй като плащането не е завършено. Моля, опитайте да извършите плащането или да закупите отново."
+
+#: includes/class-woocommerce-gopay.php:1079
+msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
+msgstr "Грешен GoID. Получателят не е намерен. Моля, посочете валиден GoID."
+
+#: includes/class-woocommerce-gopay.php:1086
+msgid "Wrong credentials. Please provide valid Client ID and Secret."
+msgstr "Грешни пълномощия. Моля, посочете валидни идентификатор на клиент и тайна."
 
 #. Description of the plugin
 msgid "WooCommerce and GoPay payment gateway integration"

@@ -1,5 +1,5 @@
 === WooCommerce GoPay ===
-Contributors: argo22
+Contributors: GoPay
 Tags: WooCommerce, GoPay
 Requires at least: 5.0
 Tested up to: 5.9

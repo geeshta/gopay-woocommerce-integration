@@ -295,8 +295,16 @@ msgstr "Domyślny język interfejsu GoPay"
 msgid "Enable shipping methods"
 msgstr "Włącz metody wysyłki"
 
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable Shipping Methods"
+msgstr "Włącz metody wysyłki"
+
 #: includes/class-woocommerce-gopay.php:313
 msgid "Enable countries"
+msgstr "Umożliwić krajom"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable Countries"
 msgstr "Umożliwić krajom"
 
 #: includes/class-woocommerce-gopay.php:321
@@ -321,8 +329,16 @@ msgstr ""
 msgid "Enable GoPay payment methods"
 msgstr "Habilitować metody płatności"
 
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay Payment Methods"
+msgstr "Habilitować metody płatności"
+
 #: includes/class-woocommerce-gopay.php:345
 msgid "Enable banks"
+msgstr "Włącz banki"
+
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable Banks"
 msgstr "Włącz banki"
 
 #: includes/class-woocommerce-gopay.php:354
@@ -372,3 +388,173 @@ msgstr "Integracja z WooCommerce i bramą płatności GoPay"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+#: admin/views/log.php:124
+msgid "Go to"
+msgstr "Przejdź do"
+
+#: includes/class-woocommerce-gopay.php:410
+msgid "Default Language"
+msgstr "Domyślny język"
+
+#: includes/class-woocommerce-gopay.php:415
+msgid ""
+"Default language is used when a customer of an e-commerce site is from a "
+"country whose language is not supported."
+msgstr "Język domyślny jest używany, gdy klient witryny e-commerce pochodzi z kraju, którego język nie jest obsługiwany."
+
+#: includes/class-woocommerce-gopay.php:422
+msgid "Select Default Language..."
+msgstr "Wybierz język domyślny..."
+
+#: includes/class-woocommerce-gopay.php:430
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid ""
+"Enable the GoPay payment gateway only for the selected WooCommerce shipping "
+"methods."
+msgstr "Włącz bramkę płatności GoPay tylko dla wybranych metod wysyłki w sklepie WooCommerce."
+
+#: includes/class-woocommerce-gopay.php:435
+#, fuzzy
+#| msgid "Enable shipping methods"
+msgid "Select Shipping Methods..."
+msgstr "Wybierz metodę wysyłki..."
+
+#: includes/class-woocommerce-gopay.php:443
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid "Enable the GoPay payment gateway only for the selected countries."
+msgstr "Włącz bramę płatności GoPay tylko dla wybranych krajów."
+
+#: includes/class-woocommerce-gopay.php:448
+msgid "Select Available Countries..."
+msgstr "Wybierz dostępne kraje..."
+
+#: includes/class-woocommerce-gopay.php:451
+msgid "Bank Selection"
+msgstr "Wybór banku"
+
+#: includes/class-woocommerce-gopay.php:454
+#, fuzzy
+#| msgid "Enable simplified payment method selection"
+msgid "Enable simplified bank selection"
+msgstr "Umożliwienie uproszczonego wyboru banku"
+
+#: includes/class-woocommerce-gopay.php:474
+#, fuzzy
+#| msgid "Take payments via GoPay payment gateway."
+msgid "Enable only the selected payment methods on the GoPay payment gateway ."
+msgstr "Włącz tylko wybrane metody płatności na bramie płatności GoPay."
+
+#: includes/class-woocommerce-gopay.php:261
+#: includes/class-woocommerce-gopay.php:361
+#, php-format
+msgid ""
+"Enter your unique GoID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Wprowadź swój unikalny identyfikator GoID, który można znaleźć w ustawieniach konta GoPay. "
+"%1$sWięcej informacji%2$s."
+
+#: includes/class-woocommerce-gopay.php:275
+#: includes/class-woocommerce-gopay.php:375
+#, php-format
+msgid ""
+"Enter your client ID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Wprowadź swój identyfikator klienta, który można znaleźć w ustawieniach konta GoPay. "
+"%1$sWięcej informacji%2$s."
+
+#: includes/class-woocommerce-gopay.php:289
+#: includes/class-woocommerce-gopay.php:389
+#, php-format
+msgid ""
+"Enter your Client Secret Token, which can be found in your GoPay account "
+"settings. %1$sMore information%2$s."
+msgstr "Wprowadź swój token Client Secret, który można znaleźć w ustawieniach konta GoPay. "
+"%1$sWięcej informacji%2$s."
+
+#: includes/class-woocommerce-gopay.php:269
+#: includes/class-woocommerce-gopay.php:369
+msgid "Insert Your GoID..."
+msgstr "Włóż swój identyfikator GoID..."
+
+#: includes/class-woocommerce-gopay.php:283
+#: includes/class-woocommerce-gopay.php:383
+msgid "Insert Your GoPay Client ID..."
+msgstr "Wprowadź swój identyfikator klienta GoPay..."
+
+#: includes/class-woocommerce-gopay.php:297
+#: includes/class-woocommerce-gopay.php:397
+msgid "Insert Your GoPay Client Secret Token..."
+msgstr "Wprowadź swój tajny token klienta GoPay..."
+
+#: includes/class-woocommerce-gopay.php:340
+msgid "Insert Payment Title..."
+msgstr "Wstaw tytuł płatności..."
+
+#: includes/class-woocommerce-gopay.php:355
+#, fuzzy
+#| msgid "Description"
+msgid "Insert Description..."
+msgstr "Opis wkładki..."
+
+#: includes/class-woocommerce-gopay.php:479
+#, fuzzy
+#| msgid "Enable GoPay payment methods"
+msgid "Select GoPay Payment Methods..."
+msgstr "Wybierz metodę płatności GoPay..."
+
+#: includes/class-woocommerce-gopay-options.php:391
+msgid "Payment card"
+msgstr "Karta płatnicza"
+
+#: includes/class-woocommerce-gopay-options.php:392
+msgid "Bank account"
+msgstr "Rachunek bankowy"
+
+#: includes/class-woocommerce-gopay-options.php:622
+msgid "Another bank"
+msgstr "Inny bank"
+
+#: includes/class-woocommerce-gopay.php:487
+#, fuzzy
+#| msgid "Enable GoPay payment gateway"
+msgid "Enable only the selected banks on the GoPay payment gateway ."
+msgstr "Włącz tylko wybrane banki w bramie płatności GoPay."
+
+#: includes/class-woocommerce-gopay.php:492
+msgid "Select Available Banks..."
+msgstr "Wybierz dostępne banki..."
+
+#: includes/class-woocommerce-gopay.php:988
+msgid ""
+"Unfortunately your order cannot be processed as the payment was not "
+"completed. Please attempt the payment or your purchase again."
+msgstr "Niestety Twoje zamówienie nie może zostać zrealizowane, ponieważ płatność nie została zakończona. Prosimy o ponowną próbę dokonania płatności lub zakupu."
+
+#: includes/class-woocommerce-gopay.php:1079
+msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
+msgstr "Nieprawidłowy identyfikator GoID. Nie znaleziono odbiorcy płatności. Podaj prawidłowy identyfikator GoID."
+
+#: includes/class-woocommerce-gopay.php:1086
+msgid "Wrong credentials. Please provide valid Client ID and Secret."
+msgstr "Nieprawidłowe dane uwierzytelniające. Proszę podać prawidłowy identyfikator i sekret klienta."
+
+#: includes/class-woocommerce-gopay.php:458
+#, fuzzy
+#| msgid ""
+#| "If enabled, customers cannot choose any specific payment method at the "
+#| "checkout but they have to select the payment method once the GoPay "
+#| "payment gateway is invoked."
+msgid ""
+"If enabled, customers cannot choose any specific bank at the checkout, they "
+"are grouped into one “Bank account” option, but they have to select the bank "
+"once the GoPay payment gateway is invoked."
+msgstr "Jeśli funkcja ta jest włączona, klienci nie mogą wybrać żadnego konkretnego banku przy kasie, są oni zgrupowani w jednej opcji 'Konto bankowe', ale muszą wybrać bank po wywołaniu bramki płatności GoPay."
+
+#: includes/class-woocommerce-gopay.php:496
+#, fuzzy
+#| msgid "Payment retry payment method"
+msgid "Retry Payment Method"
+msgstr "Ponów próbę Metoda płatności"

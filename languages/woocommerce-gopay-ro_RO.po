@@ -297,8 +297,16 @@ msgstr "Limba implicită a interfeței GoPay"
 msgid "Enable shipping methods"
 msgstr "Activați metodele de expediere"
 
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable Shipping Methods"
+msgstr "Activați metodele de expediere"
+
 #: includes/class-woocommerce-gopay.php:313
 msgid "Enable countries"
+msgstr "Activați țările"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable Countries"
 msgstr "Activați țările"
 
 #: includes/class-woocommerce-gopay.php:321
@@ -323,8 +331,16 @@ msgstr ""
 msgid "Enable GoPay payment methods"
 msgstr "Activați metodele de plată GoPay"
 
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay Payment Methods"
+msgstr "Activați metodele de plată GoPay"
+
 #: includes/class-woocommerce-gopay.php:345
 msgid "Enable banks"
+msgstr "Activarea băncilor"
+
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable Banks"
 msgstr "Activarea băncilor"
 
 #: includes/class-woocommerce-gopay.php:354
@@ -374,3 +390,173 @@ msgstr "Integrarea gateway-ului de plată WooCommerce și GoPay"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+#: admin/views/log.php:124
+msgid "Go to"
+msgstr "Mergeți la"
+
+#: includes/class-woocommerce-gopay.php:410
+msgid "Default Language"
+msgstr "Limba implicită"
+
+#: includes/class-woocommerce-gopay.php:415
+msgid ""
+"Default language is used when a customer of an e-commerce site is from a "
+"country whose language is not supported."
+msgstr "Limba implicită este utilizată atunci când un client al unui site de comerț electronic provine dintr-o țară a cărei limbă nu este acceptată."
+
+#: includes/class-woocommerce-gopay.php:422
+msgid "Select Default Language..."
+msgstr "Selectați limba implicită..."
+
+#: includes/class-woocommerce-gopay.php:430
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid ""
+"Enable the GoPay payment gateway only for the selected WooCommerce shipping "
+"methods."
+msgstr "Activați gateway-ul de plată GoPay numai pentru metodele de expediere WooCommerce selectate."
+
+#: includes/class-woocommerce-gopay.php:435
+#, fuzzy
+#| msgid "Enable shipping methods"
+msgid "Select Shipping Methods..."
+msgstr "Selectați metodele de expediere..."
+
+#: includes/class-woocommerce-gopay.php:443
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid "Enable the GoPay payment gateway only for the selected countries."
+msgstr "Activați gateway-ul de plată GoPay numai pentru țările selectate."
+
+#: includes/class-woocommerce-gopay.php:448
+msgid "Select Available Countries..."
+msgstr "Selectați țările disponibile..."
+
+#: includes/class-woocommerce-gopay.php:451
+msgid "Bank Selection"
+msgstr "Selecția băncii"
+
+#: includes/class-woocommerce-gopay.php:454
+#, fuzzy
+#| msgid "Enable simplified payment method selection"
+msgid "Enable simplified bank selection"
+msgstr "Activați selecția simplificată a băncii"
+
+#: includes/class-woocommerce-gopay.php:474
+#, fuzzy
+#| msgid "Take payments via GoPay payment gateway."
+msgid "Enable only the selected payment methods on the GoPay payment gateway ."
+msgstr "Activați numai metodele de plată selectate pe gateway-ul de plată GoPay."
+
+#: includes/class-woocommerce-gopay.php:261
+#: includes/class-woocommerce-gopay.php:361
+#, php-format
+msgid ""
+"Enter your unique GoID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Introduceți GoID-ul dvs. unic, care poate fi găsit în setările contului dvs. GoPay. "
+"%1$sMai multe informații%2$s."
+
+#: includes/class-woocommerce-gopay.php:275
+#: includes/class-woocommerce-gopay.php:375
+#, php-format
+msgid ""
+"Enter your client ID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Introduceți ID-ul dvs. de client, care poate fi găsit în setările contului GoPay. "
+"%1$sMai multe informații%2$s."
+
+#: includes/class-woocommerce-gopay.php:289
+#: includes/class-woocommerce-gopay.php:389
+#, php-format
+msgid ""
+"Enter your Client Secret Token, which can be found in your GoPay account "
+"settings. %1$sMore information%2$s."
+msgstr "Introduceți Tokenul secret al clientului, care poate fi găsit în setările contului dumneavoastră GoPay. "
+"%1$sMai multe informații%2$s."
+
+#: includes/class-woocommerce-gopay.php:269
+#: includes/class-woocommerce-gopay.php:369
+msgid "Insert Your GoID..."
+msgstr "Introduceți GoID-ul dumneavoastră..."
+
+#: includes/class-woocommerce-gopay.php:283
+#: includes/class-woocommerce-gopay.php:383
+msgid "Insert Your GoPay Client ID..."
+msgstr "Introduceți ID-ul dvs. de client GoPay..."
+
+#: includes/class-woocommerce-gopay.php:297
+#: includes/class-woocommerce-gopay.php:397
+msgid "Insert Your GoPay Client Secret Token..."
+msgstr "Introduceți Tokenul secret al clientului GoPay..."
+
+#: includes/class-woocommerce-gopay.php:340
+msgid "Insert Payment Title..."
+msgstr "Introduceți titlul plății..."
+
+#: includes/class-woocommerce-gopay.php:355
+#, fuzzy
+#| msgid "Description"
+msgid "Insert Description..."
+msgstr "Introduceți descrierea..."
+
+#: includes/class-woocommerce-gopay.php:479
+#, fuzzy
+#| msgid "Enable GoPay payment methods"
+msgid "Select GoPay Payment Methods..."
+msgstr "Selectați metodele de plată GoPay..."
+
+#: includes/class-woocommerce-gopay-options.php:391
+msgid "Payment card"
+msgstr "Card de plată"
+
+#: includes/class-woocommerce-gopay-options.php:392
+msgid "Bank account"
+msgstr "Cont bancar"
+
+#: includes/class-woocommerce-gopay-options.php:622
+msgid "Another bank"
+msgstr "O altă bancă"
+
+#: includes/class-woocommerce-gopay.php:487
+#, fuzzy
+#| msgid "Enable GoPay payment gateway"
+msgid "Enable only the selected banks on the GoPay payment gateway ."
+msgstr "Activați doar băncile selectate pe gateway-ul de plată GoPay."
+
+#: includes/class-woocommerce-gopay.php:492
+msgid "Select Available Banks..."
+msgstr "Selectați băncile disponibile..."
+
+#: includes/class-woocommerce-gopay.php:988
+msgid ""
+"Unfortunately your order cannot be processed as the payment was not "
+"completed. Please attempt the payment or your purchase again."
+msgstr "Din păcate, comanda dvs. nu poate fi procesată deoarece plata nu a fost finalizată. Vă rugăm să încercați din nou să efectuați plata sau să cumpărați din nou."
+
+#: includes/class-woocommerce-gopay.php:1079
+msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
+msgstr "GoID greșit. Beneficiarul nu a fost găsit. Vă rugăm să furnizați un GoID valid."
+
+#: includes/class-woocommerce-gopay.php:1086
+msgid "Wrong credentials. Please provide valid Client ID and Secret."
+msgstr "Acreditări greșite. Vă rugăm să furnizați ID-ul și secretul clientului valide."
+
+#: includes/class-woocommerce-gopay.php:458
+#, fuzzy
+#| msgid ""
+#| "If enabled, customers cannot choose any specific payment method at the "
+#| "checkout but they have to select the payment method once the GoPay "
+#| "payment gateway is invoked."
+msgid ""
+"If enabled, customers cannot choose any specific bank at the checkout, they "
+"are grouped into one “Bank account” option, but they have to select the bank "
+"once the GoPay payment gateway is invoked."
+msgstr "Dacă este activată, clienții nu pot alege o anumită bancă la finalizarea comenzii, acestea sunt grupate într-o singură opțiune 'Cont bancar', dar trebuie să selecteze banca odată ce este invocat gateway-ul de plată GoPay."
+
+#: includes/class-woocommerce-gopay.php:496
+#, fuzzy
+#| msgid "Payment retry payment method"
+msgid "Retry Payment Method"
+msgstr "Reîncercați metoda de plată"

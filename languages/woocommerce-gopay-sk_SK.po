@@ -294,8 +294,16 @@ msgstr "Predvolený jazyk rozhrania GoPay"
 msgid "Enable shipping methods"
 msgstr "Povolenie spôsobov prepravy"
 
+#: includes/class-woocommerce-gopay.php:305
+msgid "Enable Shipping Methods"
+msgstr "Povolenie spôsobov prepravy"
+
 #: includes/class-woocommerce-gopay.php:313
 msgid "Enable countries"
+msgstr "Umožniť krajinám"
+
+#: includes/class-woocommerce-gopay.php:313
+msgid "Enable Countries"
 msgstr "Umožniť krajinám"
 
 #: includes/class-woocommerce-gopay.php:321
@@ -320,8 +328,16 @@ msgstr ""
 msgid "Enable GoPay payment methods"
 msgstr "Povolenie platobných metód GoPay"
 
+#: includes/class-woocommerce-gopay.php:335
+msgid "Enable GoPay Payment Methods"
+msgstr "Povolenie platobných metód GoPay"
+
 #: includes/class-woocommerce-gopay.php:345
 msgid "Enable banks"
+msgstr "Povolenie bánk"
+
+#: includes/class-woocommerce-gopay.php:345
+msgid "Enable Banks"
 msgstr "Povolenie bánk"
 
 #: includes/class-woocommerce-gopay.php:354
@@ -370,3 +386,173 @@ msgstr "Integrácia platobnej brány WooCommerce a GoPay"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+#: admin/views/log.php:124
+msgid "Go to"
+msgstr "Prejsť na"
+
+#: includes/class-woocommerce-gopay.php:410
+msgid "Default Language"
+msgstr "Predvolený jazyk"
+
+#: includes/class-woocommerce-gopay.php:415
+msgid ""
+"Default language is used when a customer of an e-commerce site is from a "
+"country whose language is not supported."
+msgstr "Predvolený jazyk sa používa, keď je zákazník stránky elektronického obchodu z krajiny, ktorej jazyk nie je podporovaný."
+
+#: includes/class-woocommerce-gopay.php:422
+msgid "Select Default Language..."
+msgstr "Vyberte predvolený jazyk..."
+
+#: includes/class-woocommerce-gopay.php:430
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid ""
+"Enable the GoPay payment gateway only for the selected WooCommerce shipping "
+"methods."
+msgstr "Povolenie platobnej brány GoPay len pre vybrané spôsoby dopravy WooCommerce."
+
+#: includes/class-woocommerce-gopay.php:435
+#, fuzzy
+#| msgid "Enable shipping methods"
+msgid "Select Shipping Methods..."
+msgstr "Vyberte spôsoby prepravy..."
+
+#: includes/class-woocommerce-gopay.php:443
+#, fuzzy
+#| msgid "Enable GoPay payment gateway test mode"
+msgid "Enable the GoPay payment gateway only for the selected countries."
+msgstr "Povoľte platobnú bránu GoPay len pre vybrané krajiny."
+
+#: includes/class-woocommerce-gopay.php:448
+msgid "Select Available Countries..."
+msgstr "Vyberte dostupné krajiny..."
+
+#: includes/class-woocommerce-gopay.php:451
+msgid "Bank Selection"
+msgstr "Výber banky"
+
+#: includes/class-woocommerce-gopay.php:454
+#, fuzzy
+#| msgid "Enable simplified payment method selection"
+msgid "Enable simplified bank selection"
+msgstr "Povolenie zjednodušeného výberu banky"
+
+#: includes/class-woocommerce-gopay.php:474
+#, fuzzy
+#| msgid "Take payments via GoPay payment gateway."
+msgid "Enable only the selected payment methods on the GoPay payment gateway ."
+msgstr "Povoľte iba vybrané platobné metódy na platobnej bráne GoPay."
+
+#: includes/class-woocommerce-gopay.php:261
+#: includes/class-woocommerce-gopay.php:361
+#, php-format
+msgid ""
+"Enter your unique GoID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Zadajte svoje jedinečné GoID, ktoré nájdete v nastaveniach svojho účtu GoPay. "
+"%1$sViac informácií%2$s."
+
+#: includes/class-woocommerce-gopay.php:275
+#: includes/class-woocommerce-gopay.php:375
+#, php-format
+msgid ""
+"Enter your client ID, which can be found in your GoPay account settings. "
+"%1$sMore information%2$s."
+msgstr "Zadajte svoje ID klienta, ktoré nájdete v nastaveniach svojho účtu GoPay. "
+"%1$sViac informácií%2$s."
+
+#: includes/class-woocommerce-gopay.php:289
+#: includes/class-woocommerce-gopay.php:389
+#, php-format
+msgid ""
+"Enter your Client Secret Token, which can be found in your GoPay account "
+"settings. %1$sMore information%2$s."
+msgstr "Zadajte svoj tajný klientsky token, ktorý nájdete v nastaveniach svojho účtu GoPay. "
+"%1$sViac informácií%2$s."
+
+#: includes/class-woocommerce-gopay.php:269
+#: includes/class-woocommerce-gopay.php:369
+msgid "Insert Your GoID..."
+msgstr "Vložte svoj GoID..."
+
+#: includes/class-woocommerce-gopay.php:283
+#: includes/class-woocommerce-gopay.php:383
+msgid "Insert Your GoPay Client ID..."
+msgstr "Vložte ID klienta GoPay..."
+
+#: includes/class-woocommerce-gopay.php:297
+#: includes/class-woocommerce-gopay.php:397
+msgid "Insert Your GoPay Client Secret Token..."
+msgstr "Vložte svoj tajný token klienta GoPay..."
+
+#: includes/class-woocommerce-gopay.php:340
+msgid "Insert Payment Title..."
+msgstr "Vložte názov platby..."
+
+#: includes/class-woocommerce-gopay.php:355
+#, fuzzy
+#| msgid "Description"
+msgid "Insert Description..."
+msgstr "Insert Popis..."
+
+#: includes/class-woocommerce-gopay.php:479
+#, fuzzy
+#| msgid "Enable GoPay payment methods"
+msgid "Select GoPay Payment Methods..."
+msgstr "Vyberte platobné metódy GoPay..."
+
+#: includes/class-woocommerce-gopay-options.php:391
+msgid "Payment card"
+msgstr "Platobná karta"
+
+#: includes/class-woocommerce-gopay-options.php:392
+msgid "Bank account"
+msgstr "Bankový účet"
+
+#: includes/class-woocommerce-gopay-options.php:622
+msgid "Another bank"
+msgstr "Iná banka"
+
+#: includes/class-woocommerce-gopay.php:487
+#, fuzzy
+#| msgid "Enable GoPay payment gateway"
+msgid "Enable only the selected banks on the GoPay payment gateway ."
+msgstr "Povoľte iba vybrané banky na platobnej bráne GoPay."
+
+#: includes/class-woocommerce-gopay.php:492
+msgid "Select Available Banks..."
+msgstr "Vyberte dostupné banky..."
+
+#: includes/class-woocommerce-gopay.php:988
+msgid ""
+"Unfortunately your order cannot be processed as the payment was not "
+"completed. Please attempt the payment or your purchase again."
+msgstr "Vaša objednávka bohužiaľ nemôže byť spracovaná, pretože platba nebola dokončená. Pokúste sa, prosím, vykonať platbu alebo nákup ešte raz."
+
+#: includes/class-woocommerce-gopay.php:1079
+msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
+msgstr "Nesprávne GoID. Príjemca nebol nájdený. Zadajte platný GoID."
+
+#: includes/class-woocommerce-gopay.php:1086
+msgid "Wrong credentials. Please provide valid Client ID and Secret."
+msgstr "Nesprávne poverenia. Zadajte platné ID klienta a Secret."
+
+#: includes/class-woocommerce-gopay.php:458
+#, fuzzy
+#| msgid ""
+#| "If enabled, customers cannot choose any specific payment method at the "
+#| "checkout but they have to select the payment method once the GoPay "
+#| "payment gateway is invoked."
+msgid ""
+"If enabled, customers cannot choose any specific bank at the checkout, they "
+"are grouped into one “Bank account” option, but they have to select the bank "
+"once the GoPay payment gateway is invoked."
+msgstr "Ak je táto možnosť povolená, zákazníci si pri pokladni nemôžu vybrať žiadnu konkrétnu banku, sú zoskupené do jednej možnosti 'Bankový účet', ale po vyvolaní platobnej brány GoPay si musia banku vybrať."
+
+#: includes/class-woocommerce-gopay.php:496
+#, fuzzy
+#| msgid "Payment retry payment method"
+msgid "Retry Payment Method"
+msgstr "Opakovanie spôsobu platby"

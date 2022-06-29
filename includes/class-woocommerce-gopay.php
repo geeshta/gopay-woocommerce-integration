@@ -224,7 +224,7 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		private function extract_payment_methods( $supported ): array {
 			foreach ( $supported as $key => $value ) {
-				$supported[ $key ] = $value['label'] .
+				$supported[ $key ] = __( $value['label'], 'woocommerce-gopay' ) .
 					( array_key_exists( 'country', $value ) ? ' ' . $value['country'] : '' );
 			}
 

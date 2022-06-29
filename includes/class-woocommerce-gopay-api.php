@@ -93,9 +93,9 @@ class Woocommerce_Gopay_API {
 		$options    = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
 		$gopay      = self::auth_GoPay( $options );
 
-		$allowed_swifts = array();
+		$default_swift = '';
 		if ( array_key_exists( $gopay_payment_method, Woocommerce_Gopay_Options::supported_banks() ) ) {
-			$allowed_swifts       = array( $gopay_payment_method );
+			$default_swift = $gopay_payment_method;
 			$gopay_payment_method = 'BANK_ACCOUNT';
 		}
 
@@ -107,9 +107,6 @@ class Woocommerce_Gopay_API {
 			}
 		} else {
 			$default_payment_instrument = $order->get_meta( '_GoPay_payment_method' );
-			$allowed_swifts             = ! empty( $order->get_meta( '_GoPay_bank_swift' ) ) ?
-											array( $order->get_meta( '_GoPay_bank_swift' ) ) :
-											$allowed_swifts;
 		}
 
 		$items = self::get_items( $order );
@@ -148,13 +145,19 @@ class Woocommerce_Gopay_API {
 		if ( ! empty( $default_payment_instrument ) ) {
 			$payer = array(
 				'default_payment_instrument'  => $default_payment_instrument,
-				'allowed_payment_instruments' => array( $default_payment_instrument ),
-				'allowed_swifts'              => $allowed_swifts,
+				'allowed_payment_instruments' => $options['enable_gopay_payment_methods'],
+				'allowed_swifts'              => !empty( $options['enable_banks'] ) ? $options['enable_banks'] : array(),
 				'contact'                     => $contact,
 			);
+
+			if ( !empty( $default_swift ) ) {
+				$payer['default_swift'] = $default_swift;
+			}
 		} else {
 			$payer = array(
-				'contact' => $contact,
+				'allowed_payment_instruments' => $options['enable_gopay_payment_methods'],
+				'allowed_swifts'              => !empty( $options['enable_banks'] ) ? $options['enable_banks'] : array(),
+				'contact'                     => $contact,
 			);
 		}
 
