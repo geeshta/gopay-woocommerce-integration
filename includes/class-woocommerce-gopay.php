@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WooCommerce GoPay gateway
  * Initialize the payment gateway between WooCommerce and GoPay
@@ -13,12 +12,23 @@
 
 add_action( 'plugins_loaded', 'init_woocommerce_gopay_gateway' );
 
+/**
+ * Init plugin
+ *
+ * @since  1.0.0
+ */
 function init_woocommerce_gopay_gateway() {
+	/**
+	 * Plugin main class
+	 *
+	 * @since  1.0.0
+	 */
 	class Woocommerce_Gopay_Gateway extends WC_Payment_Gateway {
 
 		/**
 		 * Instance of the class.
 		 *
+		 * @var object instance of the class.
 		 * @since 1.0.0
 		 */
 		protected static $instance = null;
@@ -29,7 +39,7 @@ function init_woocommerce_gopay_gateway() {
 		 * @since  1.0.0
 		 */
 		public function __construct() {
-            $this->id                = WOOCOMMERCE_GOPAY_ID;
+			$this->id                 = WOOCOMMERCE_GOPAY_ID;
 			$this->icon               = apply_filters(
 				'woocommerce_gopay_icon',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/images/gopay.png'
@@ -63,8 +73,8 @@ function init_woocommerce_gopay_gateway() {
 			$this->test          = ! $this->get_option( 'test' );
 			$this->instructions  = $this->get_option( 'instructions' );
 
-			$this->simplified_bank_selection    = $this->get_option( 'simplified_bank_selection' ) == 'yes';
-			$this->payment_retry                = $this->get_option( 'payment_retry' ) == 'yes';
+			$this->simplified_bank_selection    = $this->get_option( 'simplified_bank_selection' ) === 'yes';
+			$this->payment_retry                = $this->get_option( 'payment_retry' ) === 'yes';
 			$this->enable_countries             = $this->get_option( 'enable_countries', array() );
 			$this->enable_gopay_payment_methods = $this->get_option( 'enable_gopay_payment_methods', array() );
 			$this->enable_banks                 = $this->get_option( 'enable_banks', array() );
@@ -84,7 +94,7 @@ function init_woocommerce_gopay_gateway() {
 			);
 
 			add_action( 'admin_init', array( $this, 'update_payment_methods' ), 1 );
-			add_action( 'update_payment_methods_and_banks', array( $this, 'check_enabled_on_GoPay' ), 1 );
+			add_action( 'update_payment_methods_and_banks', array( $this, 'check_enabled_on_gopay' ), 1 );
 			add_action( 'template_redirect', array( $this, 'check_status_gopay_redirect' ) );
 			add_action( 'woocommerce_create_refund', array( $this, 'calculate_refund_amount' ), 10, 2 );
 			add_action(
@@ -95,12 +105,12 @@ function init_woocommerce_gopay_gateway() {
 				)
 			);
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
 			add_action( 'delete_user', array( $this, 'delete_user_logs' ), 10 );
 			add_action( 'after_delete_post', array( $this, 'delete_order_logs' ), 10, 1 );
 			add_action( 'woocommerce_thankyou', array( $this, 'thankyou_order_failed_text' ), 10, 1 );
 
-			// add_filter( 'woocommerce_currencies', array( 'Woocommerce_Gopay_Options', 'supported_currencies' ) );
 			add_filter(
 				'woocommerce_payment_complete_order_status',
 				array( $this, 'complete_order_status' ),
@@ -114,13 +124,12 @@ function init_woocommerce_gopay_gateway() {
 				2
 			);
 
-
-			// Load Woocommerce GoPay gateway admin page
+			// Load Woocommerce GoPay gateway admin page.
 			if ( is_admin() && ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) ) {
 				Woocommerce_Gopay_Admin_Menu::create_menu_actions();
 			}
 
-			// Check if WooCommerce Subscriptions is active
+			// Check if WooCommerce Subscriptions is active.
 			if ( check_is_plugin_active( 'woocommerce-subscriptions/woocommerce-subscriptions.php' ) ) {
 				Woocommerce_Gopay_Subscriptions::subscriptions_actions_filters();
 			}
@@ -170,16 +179,6 @@ function init_woocommerce_gopay_gateway() {
 			if ( ! wp_next_scheduled( 'update_payment_methods_and_banks' ) ) {
 				wp_schedule_event( time(), 'daily', 'update_payment_methods_and_banks' );
 			}
-
-//			if ( empty( $this->get_option( 'option_gopay_payment_methods' ) ) ||
-//				empty( $this->get_option( 'option_gopay_banks' ) ) ) {
-//				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
-//			}
-//
-//			if ( filter_input( INPUT_GET, 'page' ) == 'wc-settings' &&
-//				filter_input( INPUT_GET, 'section' ) == 'wc_gopay_gateway' ) {
-//				wp_schedule_single_event( time(), 'update_payment_methods_and_banks' );
-//			}
 		}
 
 		/**
@@ -188,11 +187,11 @@ function init_woocommerce_gopay_gateway() {
 		 *
 		 * @since 1.0.0
 		 */
-		function check_enabled_on_GoPay() {
-            $payment_methods = array();
-			$banks            = array();
+		public function check_enabled_on_gopay() {
+			$payment_methods = array();
+			$banks           = array();
 			foreach ( Woocommerce_Gopay_Options::supported_currencies() as $currency => $value ) {
-				$supported       = Woocommerce_Gopay_API::check_enabled_on_GoPay( $currency );
+				$supported       = Woocommerce_Gopay_API::check_enabled_on_gopay( $currency );
 				$payment_methods = $payment_methods + $supported[0];
 				$banks           = $banks + $supported[1];
 
@@ -205,7 +204,7 @@ function init_woocommerce_gopay_gateway() {
 			}
 			if ( ! empty( $banks ) ) {
 				if ( array_key_exists( 'OTHERS', $banks ) ) {
-					// Send 'Others' to the end
+					// Send 'Others' to the end.
 					$other = $banks['OTHERS'];
 					unset( $banks['OTHERS'] );
 					$banks['OTHERS'] = $other;
@@ -219,7 +218,7 @@ function init_woocommerce_gopay_gateway() {
 		 * Extract payment methods/banks from
 		 * list of supported
 		 *
-		 * @param array $supported either payment methods or banks
+		 * @param array $supported either payment methods or banks.
 		 * @return array
 		 */
 		private function extract_payment_methods( $supported ): array {
@@ -244,57 +243,82 @@ function init_woocommerce_gopay_gateway() {
 				$this->update_option( 'enabled', 'no' );
 
 				$this->form_fields = array(
-					'enabled' => array(
-						'title' => __( 'Enable/Disable', 'woocommerce-gopay' ),
-						'type' => 'checkbox',
-						'label' => __(
+					'enabled'       => array(
+						'title'   => __( 'Enable/Disable', 'woocommerce-gopay' ),
+						'type'    => 'checkbox',
+						'label'   => __(
 							'Inform goid, client id and secret to enable GoPay payment gateway and load the other options',
 							'woocommerce-gopay'
 						),
-						'css' => 'display: none;',
+						'css'     => 'display: none;',
 						'default' => 'no',
 					),
-					'goid' => array(
-						'title' => __( 'GoID', 'woocommerce-gopay' ),
-						'type' => 'text',
+					'goid'          => array(
+						'title'       => __( 'GoID', 'woocommerce-gopay' ),
+						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your unique GoID, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
-						'css' => 'width: 500px;',
+						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
 					),
-					'client_id' => array(
-						'title' => __( 'Client ID', 'woocommerce-gopay' ),
-						'type' => 'text',
+					'client_id'     => array(
+						'title'       => __( 'Client ID', 'woocommerce-gopay' ),
+						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your client ID, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
-						'css' => 'width: 500px;',
+						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
 					),
 					'client_secret' => array(
-						'title' => __( 'Client Secret', 'woocommerce-gopay' ),
-						'type' => 'text',
+						'title'       => __( 'Client Secret', 'woocommerce-gopay' ),
+						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your Client Secret Token, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
-						'css' => 'width: 500px;',
+						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
+					),
+					'test'                             => array(
+						'title'    => __( 'Test mode', 'woocommerce-gopay' ),
+						'type'     => 'checkbox',
+						'label'    => __(
+							'Enable GoPay payment gateway test mode',
+							'woocommerce-gopay'
+						),
+						'default'  => 'yes',
+						'desc_tip' => true,
 					),
 				);
 			}
@@ -302,7 +326,7 @@ function init_woocommerce_gopay_gateway() {
 			if ( ! empty( $this->settings['goid'] ) &&
 				! empty( $this->settings['client_id'] ) &&
 				! empty( $this->settings['client_secret'] ) ) {
-				// Set default parameters
+				// Set default parameters.
 				if ( empty( $this->settings['enabled'] ) ) {
 					$this->update_option( 'enabled', 'yes' );
 				}
@@ -315,10 +339,10 @@ function init_woocommerce_gopay_gateway() {
 				if ( empty( $this->settings['test'] ) ) {
 					$this->update_option( 'test', 'yes' );
 				}
-				// end
+				// end.
 
 				$this->form_fields = array(
-					'enabled' => array(
+					'enabled'                          => array(
 						'title'   => __( 'Enable/Disable', 'woocommerce-gopay' ),
 						'type'    => 'checkbox',
 						'label'   => __(
@@ -327,19 +351,19 @@ function init_woocommerce_gopay_gateway() {
 						),
 						'default' => 'yes',
 					),
-					'title' => array(
+					'title'                            => array(
 						'title'       => __( 'Title', 'woocommerce-gopay' ),
 						'type'        => 'text',
 						'description' => __(
 							'Name of the payment method that is displayed at the checkout',
 							'woocommerce-gopay'
 						),
-						'default'       => __( 'GoPay', 'woocommerce-gopay' ),
-						'css'           => 'width: 500px;',
-						'desc_tip'      => true,
-						'placeholder'   => __( 'Insert Payment Title...', 'woocommerce-gopay' ),
+						'default'     => __( 'GoPay', 'woocommerce-gopay' ),
+						'css'         => 'width: 500px;',
+						'desc_tip'    => true,
+						'placeholder' => __( 'Insert Payment Title...', 'woocommerce-gopay' ),
 					),
-					'description' => array(
+					'description'                      => array(
 						'title'       => __( 'Description', 'woocommerce-gopay' ),
 						'type'        => 'textarea',
 						'description' => __(
@@ -354,52 +378,67 @@ function init_woocommerce_gopay_gateway() {
 						'desc_tip'    => true,
 						'placeholder' => __( 'Insert Description...', 'woocommerce-gopay' ),
 					),
-					'goid' => array(
+					'goid'                             => array(
 						'title'       => __( 'GoID', 'woocommerce-gopay' ),
 						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your unique GoID, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your unique GoID, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
 						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoID...', 'woocommerce-gopay' ),
 					),
-					'client_id' => array(
+					'client_id'                        => array(
 						'title'       => __( 'Client ID', 'woocommerce-gopay' ),
 						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your client ID, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your client ID, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
 						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoPay Client ID...', 'woocommerce-gopay' ),
 					),
-					'client_secret' => array(
+					'client_secret'                    => array(
 						'title'       => __( 'Client Secret', 'woocommerce-gopay' ),
 						'type'        => 'text',
 						'description' => __(
-							sprintf( __( 'Enter your Client Secret Token, which can be found in your GoPay account settings.'
-								. ' %1$sMore information%2$s.', 'woocommerce-gopay' ),
+							sprintf(
+								__(
+									'Enter your Client Secret Token, which can be found in your GoPay account settings.'
+									. ' %1$sMore information%2$s.',
+									'woocommerce-gopay'
+								),
 								'<a href="https://help.gopay.com/en/knowledge-base/gopay-account/' .
 								'gopay-business-account/signing-in-password-reset-activating-and-deactivating' .
-								'-the-payment-gateway/how-to-activate-the-payment-gateway">', '</a>' )
-
+								'-the-payment-gateway/how-to-activate-the-payment-gateway">',
+								'</a>'
+							)
 						),
 						'css'         => 'width: 500px;',
 						'placeholder' => __( 'Insert Your GoPay Client Secret Token...', 'woocommerce-gopay' ),
 					),
-					'test' => array(
-						'title'   => __( 'Test mode', 'woocommerce-gopay' ),
-						'type'    => 'checkbox',
-						'label'   => __(
+					'test'                             => array(
+						'title'    => __( 'Test mode', 'woocommerce-gopay' ),
+						'type'     => 'checkbox',
+						'label'    => __(
 							'Enable GoPay payment gateway test mode',
 							'woocommerce-gopay'
 						),
@@ -421,7 +460,7 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select Default Language...', 'woocommerce-gopay' ),
 					),
-					'enable_shipping_methods' => array(
+					'enable_shipping_methods'          => array(
 						'title'       => __( 'Enable Shipping Methods', 'woocommerce-gopay' ),
 						'type'        => 'multiselect',
 						'class'       => 'chosen_select',
@@ -434,7 +473,7 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select Shipping Methods...', 'woocommerce-gopay' ),
 					),
-					'enable_countries' => array(
+					'enable_countries'                 => array(
 						'title'       => __( 'Enable Countries', 'woocommerce-gopay' ),
 						'type'        => 'multiselect',
 						'class'       => 'chosen_select',
@@ -447,7 +486,7 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select Available Countries...', 'woocommerce-gopay' ),
 					),
-					'simplified_bank_selection' => array(
+					'simplified_bank_selection'        => array(
 						'title'       => __( 'Bank Selection', 'woocommerce-gopay' ),
 						'type'        => 'checkbox',
 						'label'       => __(
@@ -462,7 +501,7 @@ function init_woocommerce_gopay_gateway() {
 						),
 						'desc_tip'    => true,
 					),
-					'enable_gopay_payment_methods' => array(
+					'enable_gopay_payment_methods'     => array(
 						'title'       => __(
 							'Enable GoPay Payment Methods',
 							'woocommerce-gopay'
@@ -478,7 +517,7 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select GoPay Payment Methods...', 'woocommerce-gopay' ),
 					),
-					'enable_banks' => array(
+					'enable_banks'                     => array(
 						'title'       => __( 'Enable Banks', 'woocommerce-gopay' ),
 						'type'        => 'multiselect',
 						'class'       => 'chosen_select',
@@ -491,22 +530,22 @@ function init_woocommerce_gopay_gateway() {
 						'css'         => 'width: 500px; min-height: 50px;',
 						'placeholder' => __( 'Select Available Banks...', 'woocommerce-gopay' ),
 					),
-					'payment_retry' => array(
-						'title'        => __(
+					'payment_retry'                    => array(
+						'title'       => __(
 							'Retry Payment Method',
 							'woocommerce-gopay'
 						),
-						'type'         => 'checkbox',
-						'label'        => __(
+						'type'        => 'checkbox',
+						'label'       => __(
 							'Enable payment retry using the same payment method',
 							'woocommerce-gopay'
 						),
-						'description'  => __(
+						'description' => __(
 							'If enabled, payment retry of a failed payment will be done using the same payment method' .
 							' that was selected when customer was placing an order.',
 							'woocommerce-gopay'
 						),
-						'desc_tip'     => true,
+						'desc_tip'    => true,
 					),
 				);
 			}
@@ -521,41 +560,36 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		public function is_available(): bool {
 
-			// Inline
-			if ( ! empty( $_GET['gopay_url'] ) ) {
-				$test = $this->get_option( 'test', '' );
-				if ( $test == 'yes' ) {
-					echo '<script type="text/javascript" src="https://gw.sandbox.gopay.com/gp-gw/js/embed.js"></script>';
-				} else {
-					echo '<script type="text/javascript" src="https://gate.gopay.cz/gp-gw/js/embed.js"></script>';
-				}
-
-				echo '<script>_gopay.checkout({gatewayUrl: "' . $_GET['gopay_url'] . '", inline: true});</script>';
+			// Inline.
+			$get = wp_unslash( $_GET );
+			if ( ! empty( $get['gopay_url'] ) && ! empty( $get['_wpnonce'] ) &&
+				wp_verify_nonce( $get['_wpnonce'], 'gw_url' ) ) {
+				echo '<script>_gopay.checkout({gatewayUrl: "' . esc_url( $get['gopay_url'] ) . '", inline: true});</script>';
 			}
-			// end Inline
+			// end Inline.
 
 			if ( ! empty( WC()->customer ) ) {
-				// Check countries
+				// Check countries.
 				$billing_country = WC()
 					->cart->get_customer()
 					->get_billing_country();
 
 				if ( empty( $this->enable_countries ) || empty( $billing_country ) ||
-					! in_array( $billing_country, (array) $this->enable_countries ) ) {
+					! in_array( $billing_country, (array) $this->enable_countries, true ) ) {
 					return false;
 				}
-				// end check countries
+				// end check countries.
 
-				// Check currency matches one of the supported currencies
+				// Check currency matches one of the supported currencies.
 				if ( ! get_woocommerce_currency() || ! array_key_exists(
 					get_woocommerce_currency(),
 					$this->enable_currencies
 				) ) {
 					return false;
 				}
-				// end check currency
+				// end check currency.
 
-				// Check if all products are either virtual or downloadable
+				// Check if all products are either virtual or downloadable.
 				$all_virtual_downloadable = true;
 				foreach ( WC()->cart->get_cart() as $item ) {
 					$product = wc_get_product( $item['product_id'] );
@@ -568,9 +602,9 @@ function init_woocommerce_gopay_gateway() {
 				if ( $all_virtual_downloadable ) {
 					return parent::is_available();
 				}
-				// end check virtual or downloadable
+				// end check virtual or downloadable.
 
-				// Check shipping methods
+				// Check shipping methods.
 				if ( is_page( wc_get_page_id( 'checkout' ) ) &&
 					! empty( get_query_var( 'order-pay' ) )
 				) {
@@ -581,7 +615,8 @@ function init_woocommerce_gopay_gateway() {
 					foreach ( $items_shipping as $item_shipping ) {
 						if ( ! in_array(
 							$item_shipping->get_method_title(),
-							(array) $this->enable_shipping_methods
+							(array) $this->enable_shipping_methods,
+							true
 						)
 						) {
 							return false;
@@ -601,7 +636,7 @@ function init_woocommerce_gopay_gateway() {
 						return false;
 					}
 				}
-				// end check shipping methods
+				// end check shipping methods.
 			}
 
 			return parent::is_available();
@@ -610,7 +645,6 @@ function init_woocommerce_gopay_gateway() {
 		/**
 		 * Extract banks by country code
 		 *
-		 * @param string $country
 		 * @since  1.0.0
 		 */
 		public function extract_banks_by_country() {
@@ -619,7 +653,7 @@ function init_woocommerce_gopay_gateway() {
 
 				$country = WC()->customer->get_billing_country();
 				foreach ( Woocommerce_Gopay_Options::supported_banks() as $swift => $value ) {
-					if ( $country == $value['country'] || $value['country'] == '' ) {
+					if ( $country === $value['country'] || '' === $value['country'] ) {
 						$supported_banks[ $swift ] = $value;
 					}
 				}
@@ -634,7 +668,7 @@ function init_woocommerce_gopay_gateway() {
 		 * @since  1.0.0
 		 */
 		public function payment_fields() {
-			echo wpautop( wptexturize( $this->description ) );
+			echo wp_kses( wpautop( wptexturize( $this->description ) ), wp_kses_allowed_html() );
 
 			$enabled_payment_methods = '';
 			$checked                 = 'checked="checked"';
@@ -642,7 +676,7 @@ function init_woocommerce_gopay_gateway() {
 				is_page( wc_get_page_id( 'checkout' ) ) &&
 				! empty( get_query_var( 'order-pay' ) ) );
 			if ( ! $payment_retry ) {
-				// Only supported by the currency
+				// Only supported by the currency.
 				$supported_payment_methods = $this->get_option(
 					'gopay_payment_methods_' . get_woocommerce_currency(),
 					array()
@@ -652,11 +686,11 @@ function init_woocommerce_gopay_gateway() {
 					array()
 				);
 
-				// All selected in the settings page
+				// All selected in the settings page.
 				$selected_payment_methods = $this->get_option( 'enable_gopay_payment_methods', array() );
 				$selected_banks           = $this->get_option( 'enable_banks', array() );
 
-				// Intersection of all selected and the supported by the currency
+				// Intersection of all selected and the supported by the currency.
 				$payment_methods = array_intersect_key(
 					$supported_payment_methods,
 					array_flip(
@@ -665,7 +699,7 @@ function init_woocommerce_gopay_gateway() {
 				);
 				$banks           = array_intersect_key( $supported_banks, array_flip( $selected_banks ) );
 
-				// Check if subscription - only card payment is enabled
+				// Check if subscription - only card payment is enabled.
 				if ( Woocommerce_Gopay_Subscriptions::cart_contains_subscription() ) {
 					if ( array_key_exists( 'PAYMENT_CARD', (array) $payment_methods ) ) {
 						$payment_methods = array( 'PAYMENT_CARD' => $payment_methods['PAYMENT_CARD'] );
@@ -686,8 +720,8 @@ function init_woocommerce_gopay_gateway() {
 					</div>';
 
 				foreach ( $payment_methods as $payment_method => $payment_method_label_image ) {
-					if ( $payment_method == 'BANK_ACCOUNT' ) {
-						if (! $this->simplified_bank_selection ) {
+					if ( 'BANK_ACCOUNT' === $payment_method ) {
+						if ( ! $this->simplified_bank_selection ) {
 							foreach ( $banks as $bank => $bank_label_image ) {
 								$span = __( $bank_label_image['label'], 'woocommerce-gopay' );
 								$img  = array_key_exists( 'image', $bank_label_image ) ?
@@ -725,19 +759,19 @@ function init_woocommerce_gopay_gateway() {
 				}
 			}
 
-			// Check if Apple pay is available
+			// Check if Apple pay is available.
 			?>
-            <script>
-                var applePayAvailable = false;
-                if(window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
-                    applePayAvailable = true;
-                }
+			<script>
+				var applePayAvailable = false;
+				if(window.ApplePaySession && window.ApplePaySession.canMakePayments()) {
+					applePayAvailable = true;
+				}
 
-                var applePay = document.getElementsByName('APPLE_PAY');
-                if (applePay.length !== 0 && !applePayAvailable) {
-                    applePay[0].remove();
-                }
-            </script>
+				var applePay = document.getElementsByName('APPLE_PAY');
+				if (applePay.length !== 0 && !applePayAvailable) {
+					applePay[0].remove();
+				}
+			</script>
 			<?php
 
 			echo $enabled_payment_methods;
@@ -765,7 +799,7 @@ function init_woocommerce_gopay_gateway() {
 				);
 			}
 
-			// Check if total is equal to zero
+			// Check if total is equal to zero.
 			$subscription = Woocommerce_Gopay_Subscriptions::get_subscription_data( $order );
 			if ( $order->get_total() == 0 ) {
 				if ( empty( $subscription ) ) {
@@ -793,7 +827,7 @@ function init_woocommerce_gopay_gateway() {
 										is_page( wc_get_page_id( 'checkout' ) ) &&
 										! empty( get_query_var( 'order-pay' ) );
 
-			// Add GoPay payment method to order
+			// Add GoPay payment method to order.
 			if ( $gopay_payment_method ) {
 				if ( array_key_exists( $gopay_payment_method, Woocommerce_Gopay_Options::supported_banks() ) ) {
 					$order->update_meta_data( '_GoPay_bank_swift', $gopay_payment_method );
@@ -803,8 +837,8 @@ function init_woocommerce_gopay_gateway() {
 				}
 			}
 
-			// GoPay API only considers cents
-			// Rounding total to 2 decimals
+			// GoPay API only considers cents.
+			// Rounding total to 2 decimals.
 			$order->set_total( wc_format_decimal( $order->get_total(), 2 ) );
 
 			$response = Woocommerce_Gopay_API::create_payment(
@@ -814,7 +848,7 @@ function init_woocommerce_gopay_gateway() {
 				$is_retry
 			);
 
-			if ( $response->statusCode != 200 ) {
+			if ( 200 != $response->statusCode ) {
 				$log = array(
 					'order_id'       => $order_id,
 					'transaction_id' => 0,
@@ -845,12 +879,12 @@ function init_woocommerce_gopay_gateway() {
 				);
 			}
 
-			// Add GoPay transaction id to order
-			// $order->set_status('on-hold');
+			// Add GoPay transaction id to order.
+			// $order->set_status('on-hold'); !
 			$order->update_meta_data( 'GoPay_Transaction_id', $response->json['id'] );
 			$order->save();
 
-			// Save log
+			// Save log.
 			$log = array(
 				'order_id'       => $order_id,
 				'transaction_id' => $response->json['id'],
@@ -862,7 +896,7 @@ function init_woocommerce_gopay_gateway() {
 
 			$redirect_url = wc_get_checkout_url();
 			$url_args     = array( 'gopay_url' => $response->json['gw_url'] );
-			if( !empty( $_GET['pay_for_order'] ) && $_GET['pay_for_order'] == 'true' ) {
+			if ( ! empty( $_GET['pay_for_order'] ) && $_GET['pay_for_order'] == 'true' ) {
 				$url_args     = array_merge( $_GET, $url_args );
 				$redirect_url = wc_get_endpoint_url( 'order-pay' );
 				$redirect_url = $redirect_url . $order_id . '/';
@@ -870,7 +904,9 @@ function init_woocommerce_gopay_gateway() {
 
 			return array(
 				'result'   => 'success',
-				'redirect' => add_query_arg( $url_args, $redirect_url ),
+				'redirect' => htmlspecialchars_decode(
+					wp_nonce_url( add_query_arg( $url_args, $redirect_url ), 'gw_url' )
+				),
 			);
 		}
 
@@ -884,8 +920,8 @@ function init_woocommerce_gopay_gateway() {
 		 * @return boolean if succeeded, or a WP_Error object.
 		 */
 		public function process_refund( $order_id, $amount = null, $reason = '' ): bool {
-			// GoPay API only considers cents
-			// Rounding amount to be refunded to 2 decimals
+			// GoPay API only considers cents.
+			// Rounding amount to be refunded to 2 decimals.
 			$amount         = wc_format_decimal( $amount, 2 );
 			$transaction_id = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
 			$response       = Woocommerce_Gopay_API::refund_payment( $transaction_id, $amount * 100 );
@@ -894,7 +930,7 @@ function init_woocommerce_gopay_gateway() {
 			$log = array(
 				'order_id'       => $order_id,
 				'transaction_id' => $transaction_id,
-				'message'        => $status->statusCode == 200 ? ( $status->json['state'] == 'PARTIALLY_REFUNDED' ?
+				'message'        => 200 == $status->statusCode ? ( 'PARTIALLY_REFUNDED' === $status->json['state'] ?
 					'Payment partially refunded' : 'Payment refunded' ) : 'Payment refund executed',
 				'log_level'      => 'INFO',
 				'log'            => $status,
@@ -910,7 +946,7 @@ function init_woocommerce_gopay_gateway() {
 			}
 			Woocommerce_Gopay_Log::insert_log( $log );
 
-			if ( $response->json['result'] == 'FINISHED' ) {
+			if ( 'FINISHED' === $response->json['result'] ) {
 				return true;
 			} else {
 				return false;
@@ -920,8 +956,8 @@ function init_woocommerce_gopay_gateway() {
 		/**
 		 * Calculate refund without rounding up/down.
 		 *
-		 * @param object $refund an object with refund info
-		 * @param array  $args   refund's arguments
+		 * @param object $refund an object with refund info.
+		 * @param array  $args   refund's arguments.
 		 */
 		public static function calculate_refund_amount( $refund, array $args ) {
 			$amount = 0;
@@ -944,8 +980,8 @@ function init_woocommerce_gopay_gateway() {
 		 * @since 1.0.0
 		 */
 		public function check_status_gopay_redirect() {
-            $gopay_api = filter_input( INPUT_GET, 'gopay-api' );
-            $id        = filter_input( INPUT_GET, 'id' );
+			$gopay_api = filter_input( INPUT_GET, 'gopay-api' );
+			$id        = filter_input( INPUT_GET, 'id' );
 			if ( $gopay_api && $id ) {
 				Woocommerce_Gopay_API::check_payment_status( $id );
 			}
@@ -954,6 +990,8 @@ function init_woocommerce_gopay_gateway() {
 		/**
 		 * Message order received page.
 		 *
+		 * @param string $message Message.
+		 * @param object $order Order.
 		 * @since  1.0.0
 		 */
 		public function thankyou_page( $message, $order ) {
@@ -982,18 +1020,21 @@ function init_woocommerce_gopay_gateway() {
 		 * @param int $order_id Order ID.
 		 * @since  1.0.0
 		 */
-		function thankyou_order_failed_text( int $order_id ) {
-			$order=new WC_Order( $order_id );
+		public function thankyou_order_failed_text( int $order_id ) {
+			$order = new WC_Order( $order_id );
 			if ( $order->has_status( 'failed' ) ) {
-				$message = __( 'Unfortunately your order cannot be processed as the payment was not completed.'
-							. ' Please attempt the payment or your purchase again.', 'woocommerce-gopay' );
+				$message = __(
+					'Unfortunately your order cannot be processed as the payment was not completed.'
+					. ' Please attempt the payment or your purchase again.',
+					'woocommerce-gopay'
+				);
 
 				?>
 				<script>
-                    if (typeof failed_message === 'undefined') {
-                        let failed_message = document.getElementsByClassName('woocommerce-thankyou-order-failed');
-                        failed_message[0].textContent = <?php echo json_encode($message); ?>;
-                    }
+					if (typeof failed_message === 'undefined') {
+						let failed_message = document.getElementsByClassName('woocommerce-thankyou-order-failed');
+						failed_message[0].textContent = <?php echo wp_json_encode( $message ); ?>;
+					}
 				</script>
 				<?php
 			}
@@ -1026,64 +1067,86 @@ function init_woocommerce_gopay_gateway() {
 			$saved = parent::process_admin_options();
 			$this->init_form_fields();
 
-			// Check payment methods and banks enabled on GoPay account
-			if ( //empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
+			// Check payment methods and banks enabled on GoPay account.
+			if ( // empty( $this->get_option( 'option_gopay_payment_methods', '' ) ) &&
 				! empty( $this->get_option( 'goid', '' ) ) &&
 				! empty( $this->get_option( 'test', '' ) ) ) {
-				$this->check_enabled_on_GoPay();
+				$this->check_enabled_on_gopay();
 			}
 
-			// Check credentials (GoID, Client ID and Client Secret)
-			$options  = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
-			if ( array_key_exists( 'test', $options ) ) {
-				$gopay = Woocommerce_Gopay_API::auth_GoPay( $options );
+			// Check credentials (GoID, Client ID and Client Secret).
+            if ( empty( $this->get_option( 'goid', '' ) ) ||
+                empty( $this->get_option( 'client_id', '' ) ) ||
+	            empty( $this->get_option( 'client_secret', '' ) )
+            ) {
+	            if ( empty( $this->get_option( 'admin_notice_credentials_empty' ) ) ) {
+		            add_action( 'admin_notices', array( $this, 'admin_notice_credentials_empty' ) );
+		            $this->update_option( 'admin_notice_credentials_empty', true );
+	            } else {
+		            $this->update_option( 'admin_notice_credentials_empty', false );
+	            }
+            } else {
+	            $options = get_option( 'woocommerce_' . WOOCOMMERCE_GOPAY_ID . '_settings' );
+	            if ( array_key_exists( 'test', $options ) ) {
+		            $gopay = Woocommerce_Gopay_API::auth_gopay( $options );
 
-				$response = $gopay->getPaymentInstruments(
-					$this->get_option( 'goid', '' ), 'CZK' );
-				if ( !empty( $this->get_option( 'goid', '' ) ) &&
-					array_key_exists( 'errors', $response->json ) &&
-					$response->json['errors'][0]['error_name'] == 'INVALID' ) {
-					$this->update_option( 'goid', '' );
+		            $response = $gopay->getPaymentInstruments(
+			            $this->get_option( 'goid', '' ), 'CZK' );
+		            if ( !$response->hasSucceed() ) {
 
-					if ( empty( $this->get_option( 'admin_notice_goid' ) ) ) {
-						add_action( 'admin_notices', array( $this, 'admin_notice_goid' ) );
-						$this->update_option( 'admin_notice_goid', true );
-					} else {
-						$this->update_option( 'admin_notice_goid', false );
-					}
-				}
+			            if ( empty( $this->get_option( 'admin_notice_credentials_error' ) ) ) {
+				            add_action( 'admin_notices', array( $this, 'admin_notice_credentials_error' ) );
+				            $this->update_option( 'admin_notice_credentials_error', true );
+			            } else {
+				            $this->update_option( 'admin_notice_credentials_error', false );
+			            }
+		            }
 
-				$response = $gopay->getAuth()->authorize()->response;
-				if ( !empty( $this->get_option( 'client_id', '' ) ) &&
-					!empty( $this->get_option( 'client_secret', '' ) ) &&
-					array_key_exists( 'errors', $response->json ) &&
-					$response->json['errors'][0]['error_name'] == 'AUTH_WRONG_CREDENTIALS' ) {
-					$this->update_option( 'client_id', '' );
-					$this->update_option( 'client_secret', '' );
+		            $response = $gopay->getPaymentInstruments(
+			            $this->get_option( 'goid', '' ), 'CZK' );
+		            if ( array_key_exists( 'errors', $response->json ) &&
+			            $response->json['errors'][0]['error_name'] == 'INVALID' ) {
+			            $this->update_option( 'goid', '' );
+		            }
 
-					if ( empty( $this->get_option( 'admin_notice_credentials' ) ) ) {
-						add_action( 'admin_notices', array( $this, 'admin_notice_credentials' ) );
-						$this->update_option( 'admin_notice_credentials', true );
-					} else {
-						$this->update_option( 'admin_notice_credentials', false );
-					}
-				}
-			}
-			// END
+		            $response = $gopay->getAuth()->authorize()->response;
+		            if ( array_key_exists( 'errors', $response->json ) &&
+			            $response->json['errors'][0]['error_name'] == 'AUTH_WRONG_CREDENTIALS' ) {
+			            $this->update_option( 'client_id', '' );
+			            $this->update_option( 'client_secret', '' );
+		            }
+
+	            }
+            }
+			// END.
 
 			return $saved;
 		}
 
-		public function admin_notice_goid() {
-			$class = 'notice notice-error';
-			$message = __( 'Wrong GoID. Payee not found. Please provide a valid GoID.', 'woocommerce-gopay' );
+		/**
+		 * Admin notice message GoID
+		 *
+		 * @since 1.0.0
+		 */
+		public function admin_notice_credentials_empty() {
+			$class   = 'notice notice-error';
+			$message = __(
+                    'GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret.',
+                    'woocommerce-gopay' );
 
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}
 
-		public function admin_notice_credentials() {
-			$class = 'notice notice-error';
-			$message = __( 'Wrong credentials. Please provide valid Client ID and Secret.', 'woocommerce-gopay' );
+		/**
+		 * Admin notice message GoID
+		 *
+		 * @since 1.0.0
+		 */
+		public function admin_notice_credentials_error() {
+			$class   = 'notice notice-error';
+			$message = __(
+                    'Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret.',
+                    'woocommerce-gopay' );
 
 			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
 		}
@@ -1095,7 +1158,7 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		public function enqueue_styles() {
 			wp_enqueue_style(
-				'woocommerce-gopay' . '-payment-methods-styles',
+				'woocommerce-gopay-payment-methods-styles',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/payment_methods.css'
 			);
 		}
@@ -1107,29 +1170,51 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		public function admin_enqueue_styles() {
 			wp_enqueue_style(
-				'woocommerce-gopay' . '-payment-methods-styles',
+				'woocommerce-gopay-payment-methods-styles',
 				WOOCOMMERCE_GOPAY_URL . 'includes/assets/css/form_fields.css'
 			);
+		}
+
+		/**
+		 * Enqueue scripts
+		 *
+		 * @since 1.0.0
+		 */
+		public function enqueue_scripts() {
+			$test = $this->get_option( 'test', '' );
+			if ( 'yes' === $test ) {
+				wp_enqueue_script(
+					'woocommerce-gopay-inline-scripts',
+					'https://gw.sandbox.gopay.com/gp-gw/js/embed.js'
+				);
+			} else {
+				wp_enqueue_script(
+					'woocommerce-gopay-inline-scripts',
+					'https://gate.gopay.cz/gp-gw/js/embed.js'
+				);
+			}
 		}
 
 		/**
 		 * Delete customer logs when
 		 * the user is deleted
 		 *
-		 * @param $user_id
+		 * @param int $user_id User id.
 		 * @since 1.0.0
 		 */
-		function delete_user_logs( $user_id ) {
-			$args = array(
+		public function delete_user_logs( $user_id ) {
+			$args   = array(
 				'customer_id' => $user_id,
-				'limit' => -1,
+				'limit'       => -1,
 			);
 			$orders = wc_get_orders( $args );
 
 			foreach ( $orders as $key => $order ) {
 				global $wpdb;
-				$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . ' WHERE order_id = ' .
-					$order->get_id() );
+				$wpdb->query(
+					'DELETE FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . ' WHERE order_id = ' .
+					$order->get_id()
+				);
 			}
 		}
 
@@ -1137,20 +1222,22 @@ function init_woocommerce_gopay_gateway() {
 		 * Delete Order logs when
 		 * the order is deleted
 		 *
-		 * @param $order_id
+		 * @param int $order_id Order id.
 		 * @since 1.0.0
 		 */
-		function delete_order_logs( $order_id ) {
+		public function delete_order_logs( int $order_id ) {
 			global $wpdb;
-			$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . ' WHERE order_id = ' .
-				$order_id );
+			$wpdb->query(
+				'DELETE FROM ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME . ' WHERE order_id = ' .
+				$order_id
+			);
 		}
 	}
 
 	/**
 	 *  Add the Gateway to WooCommerce
 	 *
-	 * @param array $methods
+	 * @param array $methods methods.
 	 *
 	 * @return array
 	 */

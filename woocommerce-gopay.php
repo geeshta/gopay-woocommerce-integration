@@ -38,11 +38,11 @@ define( 'WOOCOMMERCE_GOPAY_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WOOCOMMERCE_GOPAY_BASENAME_DIR', dirname( plugin_basename( __FILE__ ) ) );
 define( 'WOOCOMMERCE_GOPAY_LOG_TABLE_NAME', 'woocommerce_gopay_log' );
 
-// Check requirements
+// Check requirements.
 require WOOCOMMERCE_GOPAY_DIR .
 	'check-requirements.php';
 
-// Load files
+// Load files.
 require_once WOOCOMMERCE_GOPAY_DIR .
 	'vendor/autoload.php';
 require_once WOOCOMMERCE_GOPAY_DIR .
@@ -62,11 +62,11 @@ require_once WOOCOMMERCE_GOPAY_DIR .
 require_once WOOCOMMERCE_GOPAY_DIR .
 	'includes/class-woocommerce-gopay.php';
 
-// Register activation/deactivation hook
+// Register activation/deactivation hook.
 register_activation_hook( __FILE__, array( 'Woocommerce_Gopay_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'Woocommerce_Gopay_Deactivator', 'deactivate' ) );
 
-// Check if Woocommerce GoPay Gateway was instantiated
+// Check if Woocommerce GoPay Gateway was instantiated.
 add_action( 'plugins_loaded', array( 'Woocommerce_Gopay_Gateway', 'get_instance' ) );
-// Load text domain for translations
+// Load text domain for translations.
 add_action( 'init', array( 'Woocommerce_Gopay_Gateway', 'load_textdomain' ), 99 );

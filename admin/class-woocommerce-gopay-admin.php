@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WooCommerce GoPay admin menu
  * Initialize plugin admin menu
@@ -11,6 +10,11 @@
  * @since     1.0.0
  */
 
+/**
+ * Admin menu
+ *
+ * @since  1.0.0
+ */
 class Woocommerce_Gopay_Admin_Menu {
 
 
@@ -20,7 +24,6 @@ class Woocommerce_Gopay_Admin_Menu {
 	 * @since 1.0.0
 	 */
 	public static function create_menu_actions() {
-		// $this->$options = $options;
 		add_action( 'admin_menu', array( 'Woocommerce_Gopay_Admin_Menu', 'create_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( 'Woocommerce_Gopay_Admin_Menu', 'admin_enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( 'Woocommerce_Gopay_Admin_Menu', 'admin_enqueue_scripts' ) );
@@ -34,7 +37,9 @@ class Woocommerce_Gopay_Admin_Menu {
 	public static function admin_enqueue_styles() {
 		wp_enqueue_style(
 			WOOCOMMERCE_GOPAY_DOMAIN . '-menu-styles',
-			WOOCOMMERCE_GOPAY_URL . 'admin/css/menu.css'
+			WOOCOMMERCE_GOPAY_URL . 'admin/css/menu.css',
+			array(),
+			'1.0.0'
 		);
 	}
 
@@ -46,7 +51,9 @@ class Woocommerce_Gopay_Admin_Menu {
 	public static function admin_enqueue_scripts() {
 		wp_enqueue_script(
 			WOOCOMMERCE_GOPAY_DOMAIN . '-menu-scripts',
-			WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js'
+			WOOCOMMERCE_GOPAY_URL . 'admin/js/menu.js',
+			array(),
+			'1.0.0'
 		);
 	}
 
@@ -82,7 +89,7 @@ class Woocommerce_Gopay_Admin_Menu {
 				array( 'Woocommerce_Gopay_Admin_Menu', 'load_admin_log_page' )
 			);
 
-			  define( 'WOOCOMMERCE_GOPAY_ADMIN_MENU', true );
+			define( 'WOOCOMMERCE_GOPAY_ADMIN_MENU', true );
 		}
 	}
 
@@ -92,7 +99,7 @@ class Woocommerce_Gopay_Admin_Menu {
 	 * @since 1.0.0
 	 */
 	public static function load_admin_info_page() {
-		 include_once 'views/admin.php';
+		include_once 'views/admin.php';
 	}
 
 	/**

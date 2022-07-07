@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WooCommerce GoPay gateway log
  * Insert log into database
@@ -11,6 +10,11 @@
  * @since     1.0.0
  */
 
+/**
+ * Plugin log
+ *
+ * @since 1.0.0
+ */
 class Woocommerce_Gopay_Log {
 
 
@@ -24,7 +28,7 @@ class Woocommerce_Gopay_Log {
 	/**
 	 * Insert log into the database
 	 *
-	 * @param array $log
+	 * @param array $log Log text.
 	 *
 	 * @since  1.0.0
 	 */
@@ -38,7 +42,7 @@ class Woocommerce_Gopay_Log {
 			'message'        => $log['message'],
 			'created_at'     => gmdate( 'Y-m-d H:i:s' ),
 			'log_level'      => $log['log_level'],
-			'log'            => json_encode( $log['log'] ),
+			'log'            => wp_json_encode( $log['log'] ),
 		);
 		$where      = array(
 			'order_id'       => $log['order_id'],
@@ -47,7 +51,7 @@ class Woocommerce_Gopay_Log {
 		);
 
 		$response = $wpdb->update( $table_name, $data, $where );
-		if ( $response === false || $response < 1 ) {
+		if ( false === $response || $response < 1 ) {
 			$wpdb->insert( $table_name, $data );
 		}
 	}

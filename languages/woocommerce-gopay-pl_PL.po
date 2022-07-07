@@ -533,13 +533,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Niestety Twoje zamówienie nie może zostać zrealizowane, ponieważ płatność nie została zakończona. Prosimy o ponowną próbę dokonania płatności lub zakupu."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Nieprawidłowy identyfikator GoID. Nie znaleziono odbiorcy płatności. Podaj prawidłowy identyfikator GoID."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Nieprawidłowy GoID i/lub dane uwierzytelniające. Proszę podać prawidłowy GoID, Client ID i Client Secret."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Nieprawidłowe dane uwierzytelniające. Proszę podać prawidłowy identyfikator i sekret klienta."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID, Client ID i Client Secret są obowiązkowe. Proszę podać prawidłowy GoID, Client ID i Client Secret."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy

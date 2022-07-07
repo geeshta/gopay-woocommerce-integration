@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Plugin deactivation
  *
@@ -8,6 +7,12 @@
  * @link      https://www.gopay.com/
  * @copyright 2022 GoPay
  * @since     1.0.0
+ */
+
+/**
+ * Plugin deactivator
+ *
+ * @since 1.0.0
  */
 class Woocommerce_Gopay_Deactivator {
 
@@ -18,7 +23,7 @@ class Woocommerce_Gopay_Deactivator {
 	 * @since 1.0.0
 	 */
 	public static function deactivate() {
-		// self::delete_log_table();
+		// self::delete_log_table(); !
 	}
 
 	/**
@@ -29,6 +34,6 @@ class Woocommerce_Gopay_Deactivator {
 	private static function delete_log_table() {
 		global $wpdb;
 
-		$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . WOOCOMMERCE_GOPAY_LOG_TABLE_NAME );
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %s%s', array( $wpdb->prefix, WOOCOMMERCE_GOPAY_LOG_TABLE_NAME ) ) );
 	}
 }

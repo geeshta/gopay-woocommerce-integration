@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WooCommerce GoPay gateway lists of supported
  * options default
@@ -14,6 +13,11 @@
  * @since     1.0.0
  */
 
+/**
+ * GoPay available options
+ *
+ * @since 1.0.0
+ */
 class Woocommerce_Gopay_Options {
 
 
@@ -71,7 +75,7 @@ class Woocommerce_Gopay_Options {
 	 * @return array
 	 */
 	public static function country_to_language(): array {
-		// Extracted from geonames.org (http://download.geonames.org/export/dump/countryInfo.txt)
+		// Extracted from geonames.org (http://download.geonames.org/export/dump/countryInfo.txt).
 		return array(
 			'AD' => 'CA',
 			'AE' => 'AR',
@@ -328,10 +332,10 @@ class Woocommerce_Gopay_Options {
 	/**
 	 * Get languages by country
 	 *
-	 * @param string $country country code
+	 * @param string $country country code.
 	 * @return array
 	 */
-	public static function get_languages_by_country( $country ) {
+	public static function get_languages_by_country( string $country ) {
 		$locales = ResourceBundle::getLocales( '' );
 
 		$matches = array();
@@ -386,7 +390,7 @@ class Woocommerce_Gopay_Options {
 	 * @return array
 	 */
 	public static function supported_payment_methods(): array {
-		// Supported payment methods according to https://doc.gopay.com/#payment-instrument
+		// Supported payment methods according to https://doc.gopay.com/#payment-instrument !
 		$payment_methods = array(
 			'PAYMENT_CARD' => array( 'label' => __( 'Payment card', 'woocommerce-gopay' ) ),
 			'BANK_ACCOUNT' => array( 'label' => __( 'Bank account', 'woocommerce-gopay' ) ),
@@ -416,7 +420,7 @@ class Woocommerce_Gopay_Options {
 	 */
 	public static function supported_banks(): array {
 
-		// Supported banks according to https://doc.gopay.com/#swift
+		// Supported banks according to https://doc.gopay.com/#swift !
 		$banks = array(
 			'GIBACZPX'     => array(
 				'label'   => __( 'Česká Spořitelna', 'woocommerce-gopay' ),
@@ -637,7 +641,7 @@ class Woocommerce_Gopay_Options {
 	 * @return array
 	 */
 	public static function iso2_to_iso3(): array {
-		// Extracted from geonames.org (http://download.geonames.org/export/dump/countryInfo.txt)
+		// Extracted from geonames.org (http://download.geonames.org/export/dump/countryInfo.txt) !
 		return array(
 			'AD' => 'AND',
 			'AE' => 'ARE',

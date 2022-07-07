@@ -530,13 +530,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Vaše objednávka bohužel nemůže být zpracována, protože platba nebyla dokončena. Zkuste prosím provést platbu nebo nákup znovu."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Špatné GoID. Příjemce nebyl nalezen. Zadejte prosím platné GoID."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Špatné GoID a/nebo pověření. Uveďte platné GoID, ID klienta a Client Secret."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Špatné pověření. Zadejte prosím platné ID klienta a Secret."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID, Client ID a Client Secret jsou povinné. Uveďte platné GoID, ID klienta a Client Secret."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy

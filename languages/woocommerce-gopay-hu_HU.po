@@ -534,13 +534,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Sajnos a megrendelését nem tudjuk feldolgozni, mivel a fizetés nem történt meg. Kérjük, próbálja meg újra a fizetést vagy a vásárlást."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Rossz GoID. A kedvezményezett nem található. Kérjük, adjon meg egy érvényes GoID-t."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Rossz GoID és/vagy hitelesítő adatok. Kérjük, adjon meg érvényes GoID-t, ügyfél-azonosítót és ügyféltitkot."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Rossz megbízólevél. Kérjük, adjon meg érvényes ügyfél azonosítót és titkot."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "A GoID, az ügyfél azonosító és az ügyfél titok kötelező. Kérjük, adjon meg érvényes GoID-t, ügyfél-azonosítót és ügyféltitkot."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy

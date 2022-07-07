@@ -532,13 +532,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Na žalost vašega naročila ni mogoče obdelati, ker plačilo ni bilo zaključeno. Prosimo, da še enkrat poskusite opraviti plačilo ali nakup."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Napačen GoID. Prejemnik plačila ni bil najden. Navedite veljavni GoID."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Napačen GoID in/ali poverilnice. Navedite veljavne GoID, Client ID in Client Secret."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Napačna pooblastila. Navedite veljavno ID in skrivnost stranke."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID, Client ID in Client Secret so obvezni. Navedite veljavne GoID, Client ID in Client Secret."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy

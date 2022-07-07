@@ -542,13 +542,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "За съжаление поръчката ви не може да бъде обработена, тъй като плащането не е завършено. Моля, опитайте да извършите плащането или да закупите отново."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Грешен GoID. Получателят не е намерен. Моля, посочете валиден GoID."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Грешен GoID и/или пълномощия. Моля, посочете валидни GoID, Client ID и Client Secret."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Грешни пълномощия. Моля, посочете валидни идентификатор на клиент и тайна."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID, Client ID и Client Secret са задължителни. Моля, посочете валидни GoID, Client ID и Client Secret."
 
 #. Description of the plugin
 msgid "WooCommerce and GoPay payment gateway integration"

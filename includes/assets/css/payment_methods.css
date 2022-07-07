@@ -1,3 +1,8 @@
+/*
+	Theme Name: Payment methods
+	Version: 1.0.0
+*/
+
 .woocommerce #payment .payment_methods.methods label[for="payment_method_wc_gopay_gateway"] {
 	position: relative;
 	overflow: hidden;

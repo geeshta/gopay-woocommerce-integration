@@ -402,7 +402,7 @@ msgstr "Língua predefinida"
 msgid ""
 "Default language is used when a customer of an e-commerce site is from a "
 "country whose language is not supported."
-msgstr "Língua predefinida é usada quando o cliente do site é de um país cuja a língua não é suportada"
+msgstr "Língua predefinida é usada quando o cliente do site é de um país cuja a língua não é suportada."
 
 #: includes/class-woocommerce-gopay.php:422
 msgid "Select Default Language..."
@@ -534,13 +534,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Infezlimente seu pedido não pode ser processado pois o pagamento não foi completado. Por favor tente o pagamento ou a compra novamente."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "GoID incorreto. Recebedor do pagamento não encontrado. Por favor informe um GoID válido."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID and/ou credenciais informado(s) está(ão) incorretos. Por favor informe válido GoID, Client ID e Client Secret."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Credenciais incorretas, Por favor informe válidos Client ID e Secret."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoID, Client ID e Client Secret são obrigatórios. Por favor informe válido GoID, Client ID e Client Secret."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy

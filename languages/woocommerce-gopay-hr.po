@@ -509,7 +509,7 @@ msgstr "Kartica za plaćanje"
 
 #: includes/class-woocommerce-gopay-options.php:392
 msgid "Bank account"
-msgstr "bankovni račun"
+msgstr "Bankovni račun"
 
 #: includes/class-woocommerce-gopay-options.php:622
 msgid "Another bank"
@@ -531,13 +531,13 @@ msgid ""
 "completed. Please attempt the payment or your purchase again."
 msgstr "Nažalost, vaša narudžba nije moguće obraditi jer plaćanje nije izvršeno. Pokušajte ponovno izvršiti plaćanje ili kupnju."
 
-#: includes/class-woocommerce-gopay.php:1079
-msgid "Wrong GoID. Payee not found. Please provide a valid GoID."
-msgstr "Pogrešan GoID. Primatelj plaćanja nije pronađen. Navedite važeći GoID."
+#: includes/class-woocommerce-gopay.php:1048
+msgid "Wrong GoID and/or credentials. Please provide valid GoID, Client ID and Client Secret."
+msgstr "Pogrešan GoID i/ili vjerodajnice. Navedite važeći GoID, ID klijenta i tajnu tajnu klijenta."
 
-#: includes/class-woocommerce-gopay.php:1086
-msgid "Wrong credentials. Please provide valid Client ID and Secret."
-msgstr "Pogrešne vjerodajnice. Navedite važeći ID klijenta i Tajnu."
+#: includes/class-woocommerce-gopay.php:1134
+msgid "GoID, Client ID and Client Secret are mandatory. Please provide valid GoID, Client ID and Client Secret."
+msgstr "GoOD, Client ID i Client Secret su obavezni. Navedite važeći GoID, ID klijenta i tajnu tajnu klijenta."
 
 #: includes/class-woocommerce-gopay.php:458
 #, fuzzy
