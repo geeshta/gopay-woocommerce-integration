@@ -917,12 +917,22 @@ function init_woocommerce_gopay_gateway() {
 		 * @param float|null $amount   amount.
 		 * @param string     $reason   reason.
 		 *
-		 * @return boolean if succeeded, or a WP_Error object.
+		 * @return boolean|WP_Error if succeeded, or a WP_Error object.
 		 */
-		public function process_refund( $order_id, $amount = null, $reason = '' ): bool {
+		public function process_refund( $order_id, $amount = null, $reason = '' ) {
+
 			// GoPay API only considers cents.
 			// Rounding amount to be refunded to 2 decimals.
-			$amount         = wc_format_decimal( $amount, 2 );
+			$amount = wc_format_decimal( $amount, 2 );
+
+            // Check if refund can be made
+			$order = wc_get_order( $order_id );
+			if ( $amount != wc_format_decimal( $order->get_total(), 2 ) && ! ( $order->get_date_modified()
+                        ->getTimestamp() < time() - 86400 ) ) {
+				return new WP_Error( 'error',
+                    __( 'You can only issue a partial refund 24 hours after the payment.', 'woocommerce-gopay' ) );
+			}
+
 			$transaction_id = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
 			$response       = Woocommerce_Gopay_API::refund_payment( $transaction_id, $amount * 100 );
 			$status         = Woocommerce_Gopay_API::get_status( $order_id );
@@ -942,14 +952,14 @@ function init_woocommerce_gopay_gateway() {
 				$log['log']       = $response;
 				Woocommerce_Gopay_Log::insert_log( $log );
 
-				return false;
+				return new WP_Error( 'error', __( 'Refund failed.', 'woocommerce-gopay' ) );
 			}
 			Woocommerce_Gopay_Log::insert_log( $log );
 
 			if ( 'FINISHED' === $response->json['result'] ) {
 				return true;
 			} else {
-				return false;
+				return new WP_Error( 'error', __( 'Refund failed.', 'woocommerce-gopay' ) );
 			}
 		}
 
