@@ -559,3 +559,9 @@ msgstr "Se habilitado, clientes não podem escolher um banco específico no chec
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Tentar novamente o mesmo método de pagamento"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Só pode emitir um reembolso parcial 24 horas após o pagamento."
+
+msgid "Refund failed."
+msgstr "O reembolso falhou."

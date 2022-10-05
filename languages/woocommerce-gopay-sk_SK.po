@@ -556,3 +556,9 @@ msgstr "Ak je táto možnosť povolená, zákazníci si pri pokladni nemôžu vy
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Opakovanie spôsobu platby"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Čiastočnú refundáciu môžete vystaviť len 24 hodín po platbe."
+
+msgid "Refund failed."
+msgstr "Vrátenie peňazí sa nepodarilo."

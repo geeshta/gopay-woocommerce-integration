@@ -558,3 +558,9 @@ msgstr "Jeśli funkcja ta jest włączona, klienci nie mogą wybrać żadnego ko
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Ponów próbę Metoda płatności"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Zwrot częściowy możesz wystawić tylko 24 godziny po dokonaniu płatności."
+
+msgid "Refund failed."
+msgstr "Refundacja nie powiodła się."

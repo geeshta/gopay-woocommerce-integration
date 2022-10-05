@@ -549,3 +549,9 @@ msgid ""
 "are grouped into one “Bank account” option, but they have to select the bank "
 "once the GoPay payment gateway is invoked."
 msgstr "Pokud je tato možnost povolena, zákazníci si při placení nemohou vybrat žádnou konkrétní banku, jsou seskupeni do jedné možnosti 'Bankovní účet', ale po vyvolání platební brány GoPay musí banku vybrat."
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Částečné vrácení peněz je možné pouze 24 hodin po provedení platby."
+
+msgid "Refund failed."
+msgstr "Vrácení peněz se nezdařilo."

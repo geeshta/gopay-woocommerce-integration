@@ -556,3 +556,9 @@ msgstr "Ako je omogućeno, klijenti ne mogu birati nijednu određenu banku na bl
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Ponovi metodu plaćanja"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Djelomičan povrat možete izvršiti samo 24 sata nakon uplate."
+
+msgid "Refund failed."
+msgstr "Povrat nije uspio."

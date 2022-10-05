@@ -558,3 +558,9 @@ msgstr "Integration von WooCommerce und GoPay-Zahlungsgateway"
 #. Name of the plugin
 msgid "WooCommerce GoPay gateway"
 msgstr "Woocommerce GoPay gateway"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Eine Teilerstattung kann nur 24 Stunden nach der Zahlung erfolgen."
+
+msgid "Refund failed."
+msgstr "Die Erstattung ist fehlgeschlagen."

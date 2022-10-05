@@ -557,3 +557,9 @@ msgstr "Če je ta možnost omogočena, stranke na blagajni ne morejo izbrati dol
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Ponovitev načina plačila"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Delno vračilo lahko izdate le 24 ur po plačilu."
+
+msgid "Refund failed."
+msgstr "Vračilo ni bilo uspešno."

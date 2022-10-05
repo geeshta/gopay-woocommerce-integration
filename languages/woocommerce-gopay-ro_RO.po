@@ -560,3 +560,9 @@ msgstr "Dacă este activată, clienții nu pot alege o anumită bancă la finali
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Reîncercați metoda de plată"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Puteți emite o rambursare parțială numai după 24 de ore de la efectuarea plății."
+
+msgid "Refund failed."
+msgstr "Rambursarea a eșuat."

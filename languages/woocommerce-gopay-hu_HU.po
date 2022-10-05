@@ -559,3 +559,9 @@ msgstr "Ha engedélyezve van, az ügyfelek nem választhatnak konkrét bankot a 
 #| msgid "Payment retry payment method"
 msgid "Retry Payment Method"
 msgstr "Fizetési mód megismétlése"
+
+msgid "You can only issue a partial refund 24 hours after the payment."
+msgstr "Részleges visszatérítést csak a kifizetést követő 24 órán belül adhat ki."
+
+msgid "Refund failed."
+msgstr "A visszatérítés sikertelen."
