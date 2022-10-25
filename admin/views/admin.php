@@ -29,10 +29,11 @@ $settings_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wc_g
 				<th><?php echo wp_kses_post( __( 'Settings', 'woocommerce-gopay' ) ); ?></th>
 			</tr>
 			<tr>
-				<td><?php echo wp_kses_post( __( $plugin_data['Title'], 'woocommerce-gopay' ) ); ?></td>
-				<td><?php echo wp_kses_post( __( $plugin_data['Version'], 'woocommerce-gopay' ) ); ?></td>
-				<td><?php echo wp_kses_post( __( $plugin_data['Description'], 'woocommerce-gopay' ) ); ?></td>
-				<td><?php echo wp_kses_post( __( $plugin_data['Author'], 'woocommerce-gopay' ) ); ?></td>
+				<td><a href="https://github.com/argo22packages/gopay-woocommerce-integration">
+                    <?php echo wp_kses_post( __( 'GoPay gateway', 'woocommerce-gopay' ) ); ?></a></td>
+				<td><?php echo wp_kses_post( __( '1.0', 'woocommerce-gopay' ) ); ?></td>
+				<td><?php echo wp_kses_post( __( 'WooCommerce and GoPay payment gateway integration', 'woocommerce-gopay' ) ); ?></td>
+				<td><a href="https://www.gopay.com/"><?php echo wp_kses_post( __( 'GoPay', 'woocommerce-gopay' ) ); ?></a></td>
 				<?php
 				echo wp_kses_post(
 					'<td><a href="' . $settings_url . '">' . __(

@@ -223,7 +223,7 @@ function init_woocommerce_gopay_gateway() {
 		 */
 		private function extract_payment_methods( $supported ): array {
 			foreach ( $supported as $key => $value ) {
-				$supported[ $key ] = __( $value['label'], 'woocommerce-gopay' ) .
+				$supported[ $key ] = $value['label'] .
 					( array_key_exists( 'country', $value ) ? ' ' . $value['country'] : '' );
 			}
 
@@ -724,7 +724,7 @@ function init_woocommerce_gopay_gateway() {
 					if ( 'BANK_ACCOUNT' === $payment_method ) {
 						if ( ! $this->simplified_bank_selection ) {
 							foreach ( $banks as $bank => $bank_label_image ) {
-								$span = __( $bank_label_image['label'], 'woocommerce-gopay' );
+								$span = $bank_label_image['label'];
 								$img  = array_key_exists( 'image', $bank_label_image ) ?
 									$bank_label_image['image'] : '';
 
@@ -742,7 +742,7 @@ function init_woocommerce_gopay_gateway() {
 						}
 					}
 
-					$span = __( $payment_method_label_image['label'], 'woocommerce-gopay' );
+					$span = $payment_method_label_image['label'];
 					$img  = array_key_exists( 'image', $payment_method_label_image ) ?
 						$payment_method_label_image['image'] : '';
 

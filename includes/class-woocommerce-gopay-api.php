@@ -313,17 +313,14 @@ class Woocommerce_Gopay_API {
 		if ( 200 == $enabled_payments->statusCode ) {
 			foreach ( $enabled_payments->json['enabledPaymentInstruments'] as $key => $payment_method ) {
 				$payment_methods[ $payment_method['paymentInstrument'] ] = array(
-					'label' => __( $payment_method['label']['cs'], 'woocommerce-gopay' ),
+					'label' => $payment_method['label']['cs'],
 					'image' => $payment_method['image']['normal'],
 				);
 
 				if ( 'BANK_ACCOUNT' === $payment_method['paymentInstrument'] ) {
 					foreach ( $payment_method['enabledSwifts'] as $bank ) {
 						$banks[ $bank['swift'] ] = array(
-							'label'   => __(
-								$bank['label']['cs'],
-								'woocommerce-gopay'
-							),
+							'label'   => $bank['label']['cs'],
 							'country' => 'OTHERS' !== $bank['swift'] ? substr( $bank['swift'], 4, 2 ) : '',
 							'image'   => $bank['image']['normal'],
 						);

@@ -409,7 +409,7 @@ class Woocommerce_Gopay_Options {
 		$key     = 'option_gopay_payment_methods';
 
 		return ! empty( $options ) && array_key_exists( $key, $options ) && ! empty( $options[ $key ] ) ?
-			$options[ $key ] : $payment_methods;
+			array_intersect_key( $payment_methods, $options[ $key ] ) : $payment_methods;
 	}
 
 	/**
@@ -632,7 +632,7 @@ class Woocommerce_Gopay_Options {
 		$key     = 'option_gopay_banks';
 
 		return ! empty( $options ) && array_key_exists( $key, $options ) && ! empty( $options[ $key ] ) ?
-			$options[ $key ] : $banks;
+			array_intersect_key( $banks, $options[ $key ] ) : $banks;
 	}
 
 	/**
