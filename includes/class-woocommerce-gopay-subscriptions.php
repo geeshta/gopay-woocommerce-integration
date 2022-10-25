@@ -313,6 +313,7 @@ class Woocommerce_Gopay_Subscriptions {
 			'WooCommerce GoPay gateway plugin requires WooCommerce Subscriptions Mixed Checkout option to be disabled.',
 			'woocommerce-gopay'
 		);
-		echo '<div class="notice notice-error"><p>' . esc_attr( $message ) . '</p></div>';
+		echo wp_kses( '<div class="notice notice-error"><p>' . esc_attr( $message ) . '</p></div>',
+		array( 'div' => array( 'class' => 1 ), 'p' => array() ) );
 	}
 }

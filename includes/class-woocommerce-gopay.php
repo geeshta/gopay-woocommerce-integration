@@ -564,7 +564,8 @@ function init_woocommerce_gopay_gateway() {
 			$get = wp_unslash( $_GET );
 			if ( ! empty( $get['gopay_url'] ) && ! empty( $get['_wpnonce'] ) &&
 				wp_verify_nonce( $get['_wpnonce'], 'gw_url' ) ) {
-				echo '<script>_gopay.checkout({gatewayUrl: "' . esc_url( $get['gopay_url'] ) . '", inline: true});</script>';
+				echo wp_kses( '<script>_gopay.checkout({gatewayUrl: "' . esc_url( $get['gopay_url'] ) . '", inline: true});</script>',
+                array( 'script' => array() ) );
 			}
 			// end Inline.
 
@@ -774,7 +775,9 @@ function init_woocommerce_gopay_gateway() {
 			</script>
 			<?php
 
-			echo $enabled_payment_methods;
+			echo wp_kses( $enabled_payment_methods, array( 'div' => array( 'class' => 1, 'name' => 1 ),
+                'input' => array( 'class' => 1, 'name' => 1, 'type' => 1, 'id' => 1, 'value' => 1, 'checked' => 1 ),
+                'span' => array(), 'img' => array( 'src' => 1, 'alt' => 1, 'style' => 1 ) ) );
 		}
 
 		/**
@@ -1034,8 +1037,8 @@ function init_woocommerce_gopay_gateway() {
 			$order = new WC_Order( $order_id );
 			if ( $order->has_status( 'failed' ) ) {
 				$message = __(
-					'Unfortunately your order cannot be processed as the payment was not completed.'
-					. ' Please attempt the payment or your purchase again.',
+					esc_attr( 'Unfortunately your order cannot be processed as the payment was not completed.'
+					. ' Please attempt the payment or your purchase again.' ),
 					'woocommerce-gopay'
 				);
 

@@ -80,16 +80,19 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 										property_exists( $log_decoded->json, 'gw_url' ) ) ?
 										$log_decoded->json->gw_url : '#';
 
-					echo '<tr>';
-					echo '<td>' . esc_attr( $log->id ) . '</td>';
-					echo '<td><a href="' . esc_attr( $order_url ) . '">' . esc_attr( $log->order_id ) . '</a></td>';
-					echo '<td><a href="' . esc_attr( $gw_url ) . '">' . esc_attr( $log->transaction_id ) . '</a></td>';
-					echo '<td>' . esc_attr( $log->message ) . '</td>';
-					echo '<td>' . esc_attr( $log->created_at ) . ' (GMT)</td>';
-					echo '<td>' . esc_attr( $log->log_level ) . '</td>';
-					echo '<td><a href="#" onClick="openPopup(' .
-						wp_kses_post( htmlspecialchars( $log->log, ENT_QUOTES ) ) . ');">Open log</a></td>';
-					echo '</tr>';
+					echo wp_kses_post( '<tr>' );
+					echo wp_kses_post( '<td>' . esc_attr( $log->id ) . '</td>' );
+					echo wp_kses_post( '<td><a href="' . esc_attr( $order_url ) . '">' . esc_attr( $log->order_id ) .
+                        '</a></td>' );
+					echo wp_kses_post( '<td><a href="' . esc_attr( $gw_url ) . '">' . esc_attr( $log->transaction_id
+                        ) . '</a></td>' );
+					echo wp_kses_post( '<td>' . esc_attr( $log->message ) . '</td>' );
+					echo wp_kses_post( '<td>' . esc_attr( $log->created_at ) . ' (GMT)</td>' );
+					echo wp_kses_post( '<td>' . esc_attr( $log->log_level ) . '</td>' );
+					echo wp_kses( '<td><a href="#" onClick="openPopup(' .
+						wp_kses_post( htmlspecialchars( $log->log, ENT_QUOTES ) ) . ');">Open log</a></td>',
+                    array( 'td' => array(), 'a' => array( 'href' => 1, 'onclick' => 1 ) ) );
+					echo wp_kses_post( '</tr>' );
 				}
 				?>
 			</tbody>
@@ -114,7 +117,7 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 
 		<nav>
 			<ul class="woocommerce-gopay-menu-pagination">
-				<li class="woocommerce-gopay-menu-<?php echo $pagenum > 1 ? 'enabled' : 'disabled'; ?>">
+				<li class="woocommerce-gopay-menu-<?php echo wp_kses_post( $pagenum > 1 ? 'enabled' : 'disabled' ); ?>">
 					<a href="<?php echo wp_kses_post( add_query_arg( 'pagenum', $pagenum - 1 ) ); ?>">Previous</a>
 				</li>
 				<?php
@@ -133,12 +136,13 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 				}
 
 				foreach ( $pages_log as $page_log ) {
-					echo '<li class="woocommerce-gopay-menu-' .
-						( $pagenum === $page_log ? 'active' : 'inactive' ) . '"><a href = "'
-						. wp_kses_post( add_query_arg( 'pagenum', $page_log ) ) . '">' . wp_kses_post( $page_log ) . ' </a>';
+					echo wp_kses( '<li class="woocommerce-gopay-menu-' .
+						( $pagenum == $page_log ? 'active' : 'inactive' ) . '"><a href = "'
+						. wp_kses_post( add_query_arg( 'pagenum', $page_log ) ) . '">' . wp_kses_post( $page_log ) . ' </a>',
+                    array( 'li' => array( 'class' => 1 ), 'a' => array( 'href' => 1 ) ) );
 				}
 				?>
-				<li class="woocommerce-gopay-menu-<?php echo $pagenum < $number_of_pages ? 'enabled' : 'disabled'; ?>">
+				<li class="woocommerce-gopay-menu-<?php echo wp_kses_post( $pagenum < $number_of_pages ? 'enabled' : 'disabled' ); ?>">
 					<a href="<?php echo wp_kses_post( add_query_arg( 'pagenum', $pagenum + 1 ) ); ?>">Next</a>
 				</li>
 			</ul>
