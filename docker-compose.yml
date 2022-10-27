@@ -15,5 +15,5 @@ services:
             - ./composer.lock:/usr/src/myapp/composer.lock
             - ./index.php:/usr/src/myapp/index.php
             - ./uninstall.php:/usr/src/myapp/uninstall.php
-            - ./woocommerce-gopay.php:/usr/src/myapp/woocommerce-gopay.php
+            - ./gopay-gateway.php:/usr/src/myapp/gopay-gateway.php
         tty: true

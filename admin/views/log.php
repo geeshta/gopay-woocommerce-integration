@@ -2,7 +2,7 @@
 /**
  * Plugin admin log
  *
- * @package   WooCommerce GoPay gateway
+ * @package   GoPay gateway
  * @author    GoPay
  * @link      https://www.gopay.com/
  * @copyright 2022 GoPay
@@ -18,7 +18,7 @@ $rows = $wpdb->get_results(
 		"SELECT COUNT(*) as num_rows FROM %s%s WHERE UPPER(CONCAT(order_id, transaction_id, message, created_at, log_level, log))
                 REGEXP '[\w\W]*%s[\w\W]*'",
 		$wpdb->prefix,
-		WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
+		GOPAY_GATEWAY_LOG_TABLE_NAME,
 		strtoupper( $log_table_filter )
 	)
 );
@@ -37,7 +37,7 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 		"SELECT * FROM %s%s WHERE UPPER(CONCAT(order_id, transaction_id, message, created_at, log_level, log))
                 REGEXP '[\w\W]*%s[\w\W]*' ORDER BY created_at DESC LIMIT %d,%d",
 		$wpdb->prefix,
-		WOOCOMMERCE_GOPAY_LOG_TABLE_NAME,
+		GOPAY_GATEWAY_LOG_TABLE_NAME,
 		strtoupper( $log_table_filter ),
 		$page_pagination,
 		$results_per_page
@@ -47,21 +47,21 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 ?>
 
 <div class="wrap">
-	<div class="woocommerce-gopay-menu">
-		<h1><?php echo wp_kses_post( __( 'Woocommerce GoPay gateway', 'woocommerce-gopay' ) ); ?></h1>
+	<div class="gopay-gateway-menu">
+		<h1><?php echo wp_kses_post( __( 'GoPay gateway', 'gopay-gateway' ) ); ?></h1>
 	</div>
 
-	<div class="woocommerce-gopay-menu">
+	<div class="gopay-gateway-menu">
 		<table>
 			<thead>
 				<tr>
-					<th><?php echo wp_kses_post( __( 'Id', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Order id', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Transaction id', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Message', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Created at', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Log level', 'woocommerce-gopay' ) ); ?></th>
-					<th><?php echo wp_kses_post( __( 'Log', 'woocommerce-gopay' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Id', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Order id', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Transaction id', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Message', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Created at', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Log level', 'gopay-gateway' ) ); ?></th>
+					<th><?php echo wp_kses_post( __( 'Log', 'gopay-gateway' ) ); ?></th>
 				</tr>
 			</thead>
 			<tbody id="log_table_body">
@@ -100,24 +100,24 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 
 		<form action="">
 			<label for="page"></label>
-			<input type="hidden" id="page" name="page" value="woocommerce-gopay-menu-log">
-			<label for="log_table_filter"><?php _e( 'Filter table by any column:', 'woocommerce-gopay' ); ?></label>
+			<input type="hidden" id="page" name="page" value="gopay-gateway-menu-log">
+			<label for="log_table_filter"><?php _e( 'Filter table by any column:', 'gopay-gateway' ); ?></label>
 			<input type="text" id="log_table_filter" name="log_table_filter"
-				   placeholder="<?php echo wp_kses_post( __( 'Search here', 'woocommerce-gopay' ) ); ?>">
-			<input type="submit" value="<?php echo wp_kses_post( __( 'Search', 'woocommerce-gopay' ) ); ?>">
+				   placeholder="<?php echo wp_kses_post( __( 'Search here', 'gopay-gateway' ) ); ?>">
+			<input type="submit" value="<?php echo wp_kses_post( __( 'Search', 'gopay-gateway' ) ); ?>">
 		</form>
 
 		<?php
 		if ( ! empty( $log_data ) ) {
 			?>
 
-		<div id="woocommerce-gopay-menu-popup" class="woocommerce-gopay-menu-popup">
-			<div class="woocommerce-gopay-menu-close" onclick="closePopup();"></div>
+		<div id="gopay-gateway-menu-popup" class="gopay-gateway-menu-popup">
+			<div class="gopay-gateway-menu-close" onclick="closePopup();"></div>
 		</div>
 
 		<nav>
-			<ul class="woocommerce-gopay-menu-pagination">
-				<li class="woocommerce-gopay-menu-<?php echo wp_kses_post( $pagenum > 1 ? 'enabled' : 'disabled' ); ?>">
+			<ul class="gopay-gateway-menu-pagination">
+				<li class="gopay-gateway-menu-<?php echo wp_kses_post( $pagenum > 1 ? 'enabled' : 'disabled' ); ?>">
 					<a href="<?php echo wp_kses_post( add_query_arg( 'pagenum', $pagenum - 1 ) ); ?>">Previous</a>
 				</li>
 				<?php
@@ -136,20 +136,20 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 				}
 
 				foreach ( $pages_log as $page_log ) {
-					echo wp_kses( '<li class="woocommerce-gopay-menu-' .
+					echo wp_kses( '<li class="gopay-gateway-menu-' .
 						( $pagenum == $page_log ? 'active' : 'inactive' ) . '"><a href = "'
 						. wp_kses_post( add_query_arg( 'pagenum', $page_log ) ) . '">' . wp_kses_post( $page_log ) . ' </a>',
                     array( 'li' => array( 'class' => 1 ), 'a' => array( 'href' => 1 ) ) );
 				}
 				?>
-				<li class="woocommerce-gopay-menu-<?php echo wp_kses_post( $pagenum < $number_of_pages ? 'enabled' : 'disabled' ); ?>">
+				<li class="gopay-gateway-menu-<?php echo wp_kses_post( $pagenum < $number_of_pages ? 'enabled' : 'disabled' ); ?>">
 					<a href="<?php echo wp_kses_post( add_query_arg( 'pagenum', $pagenum + 1 ) ); ?>">Next</a>
 				</li>
 			</ul>
 		</nav>
 		<form action="">
 			<label for="page"></label>
-			<input type="hidden" id="page" name="page" value="woocommerce-gopay-menu-log">
+			<input type="hidden" id="page" name="page" value="gopay-gateway-menu-log">
 			<label for="pagenum">Page (
 			<?php
 			echo wp_kses_post( $pagenum ) . ' of ' . wp_kses_post( $number_of_pages );
@@ -161,7 +161,7 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
 			?>
 			"
 				   style="width: 65px;">
-			<input type="submit" value="<?php echo wp_kses_post( __( 'Go to', 'woocommerce-gopay' ) ); ?>">
+			<input type="submit" value="<?php echo wp_kses_post( __( 'Go to', 'gopay-gateway' ) ); ?>">
 		</form>
 
 			<?php

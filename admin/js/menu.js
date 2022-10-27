@@ -15,7 +15,7 @@
  * Version: 1.0.0
  */
 function openPopup(log) {
-	const popup = document.getElementById( 'woocommerce-gopay-menu-popup' );
+	const popup = document.getElementById( 'gopay-gateway-menu-popup' );
 	popup.querySelectorAll( 'span' ).forEach( e => e.remove() );
 	const span     = document.createElement( 'span' );
 	span.innerHTML = JSON.stringify( log );
@@ -30,7 +30,7 @@ function openPopup(log) {
  * Version: 1.0.0
  */
 function closePopup() {
-	const popup = document.getElementById( 'woocommerce-gopay-menu-popup' );
+	const popup = document.getElementById( 'gopay-gateway-menu-popup' );
 	const elem  = popup.querySelectorAll( 'span' );
 	elem.forEach( e => e.remove() );
 

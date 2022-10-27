@@ -2,7 +2,7 @@
 /**
  * Fired when the plugin is uninstalled.
  *
- * @package   WooCommerce GoPay gateway
+ * @package   GoPay gateway
  * @author    GoPay
  * @link      https://www.gopay.com/
  * @copyright 2022 GoPay
@@ -15,4 +15,4 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 global $wpdb;
-$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woocommerce_gopay_log' );
+$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'gopay_gateway_log' );

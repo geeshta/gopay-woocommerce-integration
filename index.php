@@ -2,7 +2,7 @@
 /**
  * Silence is golden.
  *
- * @package   WooCommerce GoPay gateway
+ * @package   GoPay gateway
  * @author    GoPay
  * @link      https://www.gopay.com/
  * @copyright 2022 GoPay
