@@ -11,7 +11,16 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WooCommerce and GoPay payment gateway integration
 
 == Description ==
-* GoPay payment gateway integration with the WooCommerce plugin eCommerce platform built on WordPress.
+This is the official plugin for connecting GoPay payment gateway to your e-shop. GoPay is already used by over 18,000 e-shops in the Czech Republic, Slovakia and all over the world. Start accepting payments today! 
+
+= Plugin functions: =
+* 56 payment methods including Google Pay, Apple Pay, Click to Pay and PSD2 bank transfers
+* 9 currencies and 13 language localizations
+* mobile and desktop payment gateway
+* remember mode on the payment gateway - customer can remember payment card details and pay just by one click
+* payment cancellation
+* recurring payments
+* payment restart 
 
 == Installation ==
 First of all, install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
@@ -19,6 +28,29 @@ First of all, install WordPress and WooCommerce, then upload and configure the p
 2. Activate the plugin through the Plugins screen in WordPress.
 3. Configure the plugin by providing goid, client id and secret to load the other options (they can be found on your GoPay account).
 4. Finally, choose the options you want to be available in the payment gateway (payment methods and banks must also be enabled in your GoPay account).
+
+== Frequently Asked Questions ==
+
+= How will I receive my payments? =
+Successful payments will be automatically credited to the GoPay merchant account. We will send it from the merchant account to the registered bank account at the time of clearing.
+
+= How often is clearing done? =
+We offer 3 clearing frequencies - daily, weekly and monthly.
+
+= Do I need to have a bank account to receive payments? =
+Yes, it is necessary to register a bank account to receive a clearing.
+
+= How do I know that the customer has successfully paid? =
+After a successful payment, we send a notification about the change of the payment status. You can also check the payment status in your GoPay merchant account.
+
+== Screenshots ==
+
+1. Card payment - desktop version
+2. Card payment - mobile version
+3. Saved cards - desktop version
+4. Saved cards - mobile version
+5. Payment method selection - desktop version
+6. Payment methods selection - mobile version
 
 = Minimum requirements =
 * WordPress 5.0
