@@ -1,9 +1,9 @@
 === GoPay for WooCommerce ===
 Contributors: GoPay
 Tags: WooCommerce, GoPay
-Requires at least: 5.5
+Requires at least: 5.4
 Tested up to: 6.0
-Requires PHP: 7.0
+Requires PHP: 7.4
 Stable tag: 1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -53,9 +53,9 @@ After a successful payment, we send a notification about the change of the payme
 6. Payment methods selection - mobile version
 
 = Minimum requirements =
-* WordPress 5.0
-* PHP version 7.0
-* WooCommerce version 6.0
+* WordPress 5.4
+* PHP version 7.4
+* WooCommerce version 5.0
 * WooCommerce Subscriptions¹ 4.0
 
 1 - WooCommerce Subscriptions must be installed if you need to deal with recurring payments.
