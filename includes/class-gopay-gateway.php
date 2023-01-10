@@ -593,7 +593,7 @@ function init_gopay_gateway_gateway() {
 				// Check if all products are either virtual or downloadable.
 				$all_virtual_downloadable = true;
 				foreach ( WC()->cart->get_cart() as $item ) {
-					$product = wc_get_product( $item['product_id'] );
+					$product = $item["data"];
 					if ( ! $product->is_virtual() && ! $product->is_downloadable() ) {
 						$all_virtual_downloadable = false;
 						break;
