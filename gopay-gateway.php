@@ -3,13 +3,13 @@
  * The plugin bootstrap file
  *
  * @link                 https://www.gopay.com/
- * @since                1.0.1
+ * @since                1.0.0
  * @package              gopay-gateway
  * @wordpress-plugin
  * Plugin Name:          GoPay gateway
  * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
- * Version:              1.0
+ * Version:              1.0.1
  * Author:               GoPay
  * Author URI:           https://www.gopay.com/
  * Text Domain:          gopay-gateway
