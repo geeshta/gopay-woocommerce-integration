@@ -3,7 +3,7 @@
  * The plugin bootstrap file
  *
  * @link                 https://www.gopay.com/
- * @since                1.0.0
+ * @since                1.0.1
  * @package              gopay-gateway
  * @wordpress-plugin
  * Plugin Name:          GoPay gateway
