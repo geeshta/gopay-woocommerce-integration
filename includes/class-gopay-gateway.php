@@ -625,11 +625,13 @@ function init_gopay_gateway_gateway() {
 					}
 				} else {
 					$chosen_shipping_methods = array();
-					foreach ( WC()->session->get( 'chosen_shipping_methods' ) as $key => $value ) {
-						if ( ! is_null( $value ) ) {
-							$chosen_shipping_methods[ $key ] = explode( ':', $value )[0];
-						}
-					}
+                    if ( ! empty( WC()->session->get( 'chosen_shipping_methods' ) ) ) {
+	                    foreach ( WC()->session->get( 'chosen_shipping_methods' ) as $key => $value ) {
+		                    if ( ! is_null( $value ) ) {
+			                    $chosen_shipping_methods[ $key ] = explode( ':', $value )[0];
+		                    }
+	                    }
+                    }
 
 					if ( empty( $chosen_shipping_methods ) ||
 						array_diff( $chosen_shipping_methods, (array) $this->enable_shipping_methods )
