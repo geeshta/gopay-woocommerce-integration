@@ -68,5 +68,5 @@ WooCommerce and GoPay gateway integration.
 = 1.0.1 =
 Fixed variable products error
 
-= 1.0.1 =
+= 1.0.2 =
 Fixed issues when enabled payment instruments was empty
