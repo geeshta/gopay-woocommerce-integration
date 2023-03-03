@@ -12,6 +12,7 @@
 	height: auto;
 	width: auto;
 	margin-left: auto;
+    float: right;
 }
 
 .payment_method_wc_gopay_gateway_selection {
