@@ -726,7 +726,7 @@ function init_gopay_gateway_gateway() {
 					if ( 'BANK_ACCOUNT' === $payment_method ) {
 						if ( ! $this->simplified_bank_selection ) {
 							foreach ( $banks as $bank => $bank_label_image ) {
-								$span = $bank_label_image['label'];
+								$span = __( $bank_label_image['label'], 'gopay-gateway' ); 
 								$img  = array_key_exists( 'image', $bank_label_image ) ?
 									$bank_label_image['image'] : '';
 
@@ -744,7 +744,7 @@ function init_gopay_gateway_gateway() {
 						}
 					}
 
-					$span = $payment_method_label_image['label'];
+					$span = __( $payment_method_label_image['label'], 'gopay-gateway' ); 
 					$img  = array_key_exists( 'image', $payment_method_label_image ) ?
 						$payment_method_label_image['image'] : '';
 
