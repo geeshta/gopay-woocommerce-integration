@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The plugin bootstrap file
  *
@@ -9,7 +10,7 @@
  * Plugin Name:          GoPay gateway
  * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
- * Version:              1.0.2
+ * Version:              1.0.3
  * Author:               GoPay
  * Author URI:           https://www.gopay.com/
  * Text Domain:          gopay-gateway
@@ -22,21 +23,21 @@
 
 // If this file is called directly, abort.
 // Preventing direct access to your WordPress.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die();
 }
 
 /**
  * Constants.
  */
-define( 'GOPAY_GATEWAY_DOMAIN', 'gopay-gateway' );
-define( 'GOPAY_GATEWAY_ID', 'wc_gopay_gateway' );
-define( 'GOPAY_GATEWAY_FULLPATH', __FILE__ );
-define( 'GOPAY_GATEWAY_URL', plugin_dir_url( __FILE__ ) );
-define( 'GOPAY_GATEWAY_DIR', plugin_dir_path( __FILE__ ) );
-define( 'GOPAY_GATEWAY_BASENAME', plugin_basename( __FILE__ ) );
-define( 'GOPAY_GATEWAY_BASENAME_DIR', dirname( plugin_basename( __FILE__ ) ) );
-define( 'GOPAY_GATEWAY_LOG_TABLE_NAME', 'gopay_gateway_log' );
+define('GOPAY_GATEWAY_DOMAIN', 'gopay-gateway');
+define('GOPAY_GATEWAY_ID', 'wc_gopay_gateway');
+define('GOPAY_GATEWAY_FULLPATH', __FILE__);
+define('GOPAY_GATEWAY_URL', plugin_dir_url(__FILE__));
+define('GOPAY_GATEWAY_DIR', plugin_dir_path(__FILE__));
+define('GOPAY_GATEWAY_BASENAME', plugin_basename(__FILE__));
+define('GOPAY_GATEWAY_BASENAME_DIR', dirname(plugin_basename(__FILE__)));
+define('GOPAY_GATEWAY_LOG_TABLE_NAME', 'gopay_gateway_log');
 
 // Check requirements.
 require GOPAY_GATEWAY_DIR .
@@ -63,10 +64,10 @@ require_once GOPAY_GATEWAY_DIR .
 	'includes/class-gopay-gateway.php';
 
 // Register activation/deactivation hook.
-register_activation_hook( __FILE__, array( 'Gopay_Gateway_Activator', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Gopay_Gateway_Deactivator', 'deactivate' ) );
+register_activation_hook(__FILE__, array('Gopay_Gateway_Activator', 'activate'));
+register_deactivation_hook(__FILE__, array('Gopay_Gateway_Deactivator', 'deactivate'));
 
 // Check if Woocommerce GoPay Gateway was instantiated.
-add_action( 'plugins_loaded', array( 'Gopay_Gateway', 'get_instance' ) );
+add_action('plugins_loaded', array('Gopay_Gateway', 'get_instance'));
 // Load text domain for translations.
-add_action( 'init', array( 'Gopay_Gateway', 'load_textdomain' ), 99 );
+add_action('init', array('Gopay_Gateway', 'load_textdomain'), 99);
