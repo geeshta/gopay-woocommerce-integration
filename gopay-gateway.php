@@ -10,7 +10,7 @@
  * Plugin Name:          GoPay gateway
  * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
- * Version:              1.0.3
+ * Version:              1.0.4
  * Author:               GoPay
  * Author URI:           https://www.gopay.com/
  * Text Domain:          gopay-gateway
