@@ -1011,19 +1011,22 @@ function init_gopay_gateway_gateway() {
 		 */
 		public function thankyou_page( $message, $order ) {
 			$message      = __( 'Thank you. Your order has been received.', 'gopay-gateway' );
-			$subscription = Gopay_Gateway_Subscriptions::get_subscription_data( $order );
-			if ( ! empty( $subscription ) && $order->get_total() == 0 ) {
-				return $message . __(
-					' Please pay for your subscription after the trial period.',
-					'gopay-gateway'
-				);
-			}
 
-			if ( $order->has_status( array( 'pending', 'on-hold' ) ) ) {
-				return $message . __(
-					' However, we are still waiting for the confirmation or payment rejection.',
-					'gopay-gateway'
-				);
+			if ( is_object( $order ) ) {
+				$subscription = Gopay_Gateway_Subscriptions::get_subscription_data( $order );
+				if ( ! empty( $subscription ) && $order->get_total() == 0 ) {
+					return $message . __(
+						' Please pay for your subscription after the trial period.',
+						'gopay-gateway'
+					);
+				}
+
+				if ( $order->has_status( array( 'pending', 'on-hold' ) ) ) {
+					return $message . __(
+						' However, we are still waiting for the confirmation or payment rejection.',
+						'gopay-gateway'
+					);
+				}
 			}
 
 			return $message;
