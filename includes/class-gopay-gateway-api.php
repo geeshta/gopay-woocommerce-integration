@@ -180,7 +180,7 @@ class Gopay_Gateway_API {
 
 		$data = array(
 			'payer'             => $payer,
-			'amount'            => $order->get_total() * 100,
+			'amount'            => wc_format_decimal($order->get_total() * 100, 0),
 			'currency'          => $order->get_currency(),
 			'order_number'      => $order->get_order_number(),
 			'order_description' => 'order',
