@@ -32,6 +32,24 @@ function init_gopay_gateway_gateway() {
 		 * @since 1.0.0
 		 */
 		protected static $instance = null;
+        private $enable_currencies;
+        private $supported_languages;
+        private $supported_countries;
+        private $supported_shipping_methods;
+        private $supported_payment_methods;
+        private $supported_banks;
+        private $iso2_to_iso3;
+        private $goid;
+        private $client_id;
+        private $client_secret;
+        private $test;
+        private $instructions;
+        private $simplified_bank_selection;
+        private $payment_retry;
+        private $enable_countries;
+        private $enable_gopay_payment_methods;
+        private $enable_banks;
+        private $enable_shipping_methods;
 
 		/**
 		 * Constructor for the gateway
