@@ -18,17 +18,21 @@ class OAuth2 implements Auth
     {
         $credentials = "{$this->gopay->getConfig('clientId')}:{$this->gopay->getConfig('clientSecret')}";
         $response = $this->gopay->call(
-            'oauth2/token',
-            GoPay::FORM,
+            '/oauth2/token',
             'Basic ' . base64_encode($credentials),
             RequestMethods::POST,
+            GoPay::FORM,
             ['grant_type' => 'client_credentials', 'scope' => $this->gopay->getConfig('scope')]
         );
         $t = new AccessToken;
         $t->response = $response;
         if ($response->hasSucceed()) {
             $t->token = $response->json['access_token'];
-            $t->expirationDate = new \DateTime("now + {$response->json['expires_in']} seconds");
+            $expSuffix = "";
+            if ($response->json['expires_in'] > 0) {
+                $expSuffix .= " + {$response->json['expires_in']} seconds";
+            }
+            $t->expirationDate = new \DateTime("now {$expSuffix}");
         }
         return $t;
     }
@@ -37,7 +41,7 @@ class OAuth2 implements Auth
     {
         $ids = [
             $this->gopay->getConfig('clientId'),
-            (int) $this->gopay->getConfig('isProductionMode'),
+            $this->gopay->getConfig('gatewayUrl'),
             $this->gopay->getConfig('scope'),
         ];
         return implode('-', $ids);

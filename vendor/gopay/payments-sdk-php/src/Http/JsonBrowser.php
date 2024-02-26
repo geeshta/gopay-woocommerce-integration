@@ -51,7 +51,13 @@ class JsonBrowser
             $this->logger->logHttpCommunication($r, $response);
             return $response;
         }
-
     }
 
+    /**
+     * @return Logger
+     */
+    public function getLogger(): Logger
+    {
+        return $this->logger;
+    }
 }
