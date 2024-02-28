@@ -4,7 +4,7 @@ Tags: WooCommerce, GoPay
 Requires at least: 5.4
 Tested up to: 8.2.1
 Requires PHP: 7.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,3 +82,6 @@ Correction added for inconsistency of total amount in cents
 
 = 1.0.6 =
 Update PHP version and libraries to the latest supported releases
+
+= 1.0.7 =
+Removed Docker files and updated readme-dev
