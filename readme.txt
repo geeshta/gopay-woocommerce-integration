@@ -2,9 +2,9 @@
 Contributors: GoPay
 Tags: WooCommerce, GoPay
 Requires at least: 5.4
-Tested up to: 6.0
+Tested up to: 8.2.1
 Requires PHP: 7.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,3 +79,6 @@ Add fix when the order is not Object type
 
 = 1.0.5 =
 Correction added for inconsistency of total amount in cents
+
+= 1.0.6 =
+Update PHP version and libraries to the latest supported releases
