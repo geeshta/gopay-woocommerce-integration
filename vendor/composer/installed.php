@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-feature/php-version-upgrade',
         'version' => 'dev-feature/php-version-upgrade',
-        'reference' => '804ea66f11dc63e099a266b4471c440d491d955b',
+        'reference' => 'c4bddd7fcf6d498c98d34624e9aa91f4fe8e6f39',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-feature/php-version-upgrade',
             'version' => 'dev-feature/php-version-upgrade',
-            'reference' => '804ea66f11dc63e099a266b4471c440d491d955b',
+            'reference' => 'c4bddd7fcf6d498c98d34624e9aa91f4fe8e6f39',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
