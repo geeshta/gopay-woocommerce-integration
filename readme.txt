@@ -11,7 +11,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WooCommerce and GoPay payment gateway integration
 
 == Description ==
-This is the official plugin for connecting GoPay payment gateway to your e-shop. GoPay is already used by over 18,000 e-shops in the Czech Republic, Slovakia and all over the world. Start accepting payments today! 
+This is the official plugin for connecting GoPay payment gateway to your e-shop. GoPay is already used by over 18,000 e-shops in the Czech Republic, Slovakia and all over the world. Start accepting payments today!
 
 = Plugin functions: =
 * 56 payment methods including Google Pay, Apple Pay, Click to Pay and PSD2 bank transfers
@@ -20,7 +20,7 @@ This is the official plugin for connecting GoPay payment gateway to your e-shop.
 * remember mode on the payment gateway - customer can remember payment card details and pay just by one click
 * payment cancellation
 * recurring payments
-* payment restart 
+* payment restart
 
 == Installation ==
 First of all, install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
