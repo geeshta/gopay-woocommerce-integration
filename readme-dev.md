@@ -129,25 +129,6 @@ $ git push <remote> <source>:<destination>
 
 Upon completing synchronization, proceed to push the changes to the GoPay repository using the same terminal command, making sure to modify the `remote` and specify the `source` and `destination`.
 
-## Deployment
-
-This plugin uses [Git Updater](https://github.com/afragen/git-updater/) to manage updates.
-
-Before deploy change Version in the `woocommerce-gopay.php`, then commit & push. Staging site uses staging branch.
-
-To fetch the new update:
-
-- Git Updater:
-  1) Log into WP admin.
-  2) Go to Settings > Git Updater
-  3) Click Refresh Cache
-  4) Go to Plugins and Update plugin
-- WP checks for new version every 12 hours based on the latest versions hosted on WordPress.org.
-- You can force the update on the plugin's page by using the "Check for updates" action.
-- Or you can download the latest version from the [GitHub repository](https://github.com/argo22packages/gopay-woocommerce-integration) and install it manually by clicking on "Add New" and "Upload Plugin".
-
-## Internationalization
-
 ### Add new language
 
 Create a new file inside the languages folder and name it with the plugin's name and locale of the new language (e.g., woocommerce-gopay-it_IT.po for italian). Open the new file with [PoEdit](https://poedit.net), go to the 'translation' tab and click on 'Update from Source Code' to load all phrases to be translated (the phrases must follow [Wordpress internationalization standards](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/) to be found by [PoEdit](https://poedit.net)). After finding them, PoEdit interface can be used to translate the phrases. Finally, the file must be compiled by going to the 'file' tab and clicking on 'Compile to MO...'. Alternatively, woocommerce-gopay-sample.po can be used to create the translation. First it needs to be renamed to the locale of the new language, then it can be opened in any text editor and for each msgid (orignal phrase) use the msgstr to put the translated phrase. After that, the file must be compiled using any tool for conversion from po to mo format.
@@ -155,7 +136,3 @@ Create a new file inside the languages folder and name it with the plugin's name
 ### Update an existing language
 
 Open the translation file with [PoEdit](https://poedit.net) and use the interface to update an existing translation. Alternatively, the translation file can be opened on any text editor and for each msgid (orignal phrase) change the msgstr to the new translated phrase. In both alternatives the updated file must be compiled using any tool for po to mo conversion.
-
-## Documentation
-
-## Other useful links
