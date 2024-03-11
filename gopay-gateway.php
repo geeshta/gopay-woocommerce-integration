@@ -28,6 +28,12 @@ if (!defined('WPINC')) {
 }
 
 /**
+ * Plugin version.
+ * Rename this and update it as you release new versions.
+ */
+define( 'GOPAY_WOOCOMMERCE_VERSION', '1.0.8' );
+
+/**
  * Constants.
  */
 define('GOPAY_GATEWAY_DOMAIN', 'gopay-gateway');

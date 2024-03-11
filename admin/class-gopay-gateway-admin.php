@@ -39,7 +39,7 @@ class Gopay_Gateway_Admin_Menu {
 			GOPAY_GATEWAY_DOMAIN . '-menu-styles',
 			GOPAY_GATEWAY_URL . 'admin/css/menu.css',
 			array(),
-			'1.0.0'
+			GOPAY_WOOCOMMERCE_VERSION
 		);
 	}
 
@@ -53,7 +53,7 @@ class Gopay_Gateway_Admin_Menu {
 			GOPAY_GATEWAY_DOMAIN . '-menu-scripts',
 			GOPAY_GATEWAY_URL . 'admin/js/menu.js',
 			array(),
-			'1.0.0'
+			GOPAY_WOOCOMMERCE_VERSION
 		);
 	}
 
