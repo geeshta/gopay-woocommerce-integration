@@ -32,6 +32,24 @@ function init_gopay_gateway_gateway() {
 		 * @since 1.0.0
 		 */
 		protected static $instance = null;
+        private $enable_currencies;
+        private $supported_languages;
+        private $supported_countries;
+        private $supported_shipping_methods;
+        private $supported_payment_methods;
+        private $supported_banks;
+        private $iso2_to_iso3;
+        private $goid;
+        private $client_id;
+        private $client_secret;
+        private $test;
+        private $instructions;
+        private $simplified_bank_selection;
+        private $payment_retry;
+        private $enable_countries;
+        private $enable_gopay_payment_methods;
+        private $enable_banks;
+        private $enable_shipping_methods;
 
 		/**
 		 * Constructor for the gateway
@@ -726,7 +744,7 @@ function init_gopay_gateway_gateway() {
 					if ( 'BANK_ACCOUNT' === $payment_method ) {
 						if ( ! $this->simplified_bank_selection ) {
 							foreach ( $banks as $bank => $bank_label_image ) {
-								$span = __( $bank_label_image['label'], 'gopay-gateway' ); 
+								$span = __( $bank_label_image['label'], 'gopay-gateway' );
 								$img  = array_key_exists( 'image', $bank_label_image ) ?
 									$bank_label_image['image'] : '';
 
@@ -744,7 +762,7 @@ function init_gopay_gateway_gateway() {
 						}
 					}
 
-					$span = __( $payment_method_label_image['label'], 'gopay-gateway' ); 
+					$span = __( $payment_method_label_image['label'], 'gopay-gateway' );
 					$img  = array_key_exists( 'image', $payment_method_label_image ) ?
 						$payment_method_label_image['image'] : '';
 

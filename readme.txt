@@ -1,17 +1,17 @@
 === GoPay for WooCommerce ===
 Contributors: GoPay
 Tags: WooCommerce, GoPay
-Requires at least: 5.4
-Tested up to: 6.0
-Requires PHP: 7.4
-Stable tag: 1.0.5
+Requires at least: 5.8
+Tested up to: 6.4
+Requires PHP: 8.1
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 WooCommerce and GoPay payment gateway integration
 
 == Description ==
-This is the official plugin for connecting GoPay payment gateway to your e-shop. GoPay is already used by over 18,000 e-shops in the Czech Republic, Slovakia and all over the world. Start accepting payments today! 
+This is the official plugin for connecting GoPay payment gateway to your e-shop. GoPay is already used by over 18,000 e-shops in the Czech Republic, Slovakia and all over the world. Start accepting payments today!
 
 = Plugin functions: =
 * 56 payment methods including Google Pay, Apple Pay, Click to Pay and PSD2 bank transfers
@@ -20,7 +20,7 @@ This is the official plugin for connecting GoPay payment gateway to your e-shop.
 * remember mode on the payment gateway - customer can remember payment card details and pay just by one click
 * payment cancellation
 * recurring payments
-* payment restart 
+* payment restart
 
 == Installation ==
 First of all, install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
@@ -54,8 +54,8 @@ After a successful payment, we send a notification about the change of the payme
 
 = Minimum requirements =
 * WordPress 5.4
-* PHP version 7.4
-* WooCommerce version 5.0
+* PHP version 8.1
+* WooCommerce version 7.0
 * WooCommerce Subscriptions¹ 4.0
 
 1 - WooCommerce Subscriptions must be installed if you need to deal with recurring payments.
@@ -79,3 +79,12 @@ Add fix when the order is not Object type
 
 = 1.0.5 =
 Correction added for inconsistency of total amount in cents
+
+= 1.0.6 =
+Update PHP version and libraries to the latest supported releases
+
+= 1.0.7 =
+Removed Docker files and updated readme-dev
+
+= 1.0.8 =
+Add HPOS support

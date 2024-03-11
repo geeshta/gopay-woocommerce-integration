@@ -2,7 +2,10 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=sublimetext
 
 # folders
-vendor/
+vendor/bin
+vendor/dealerdirect
+vendor/squizlabs
+vendor/wp-coding-standards
 .idea/
 /nbproject
 

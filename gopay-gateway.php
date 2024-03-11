@@ -10,15 +10,15 @@
  * Plugin Name:          GoPay gateway
  * Plugin URI:           https://github.com/argo22packages/gopay-woocommerce-integration
  * Description:          WooCommerce and GoPay payment gateway integration
- * Version:              1.0.5
+ * Version:              1.0.8
  * Author:               GoPay
  * Author URI:           https://www.gopay.com/
  * Text Domain:          gopay-gateway
  * License:              GPLv2 or later
  * License URI:          https://www.gnu.org/licenses/gpl-2.0.html
  * Domain Path:          /languages
- * WC requires at least: 5.0
- * WC tested up to:      6.9
+ * WC requires at least: 7.0.0
+ * WC tested up to:      8.6.1
  */
 
 // If this file is called directly, abort.
@@ -26,6 +26,12 @@
 if (!defined('WPINC')) {
 	die();
 }
+
+/**
+ * Plugin version.
+ * Rename this and update it as you release new versions.
+ */
+define( 'GOPAY_WOOCOMMERCE_VERSION', '1.0.8' );
 
 /**
  * Constants.
@@ -71,3 +77,11 @@ register_deactivation_hook(__FILE__, array('Gopay_Gateway_Deactivator', 'deactiv
 add_action('plugins_loaded', array('Gopay_Gateway', 'get_instance'));
 // Load text domain for translations.
 add_action('init', array('Gopay_Gateway', 'load_textdomain'), 99);
+
+
+// Declaring HPOS compatibility
+add_action( 'before_woocommerce_init', function() {
+	if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+} );

@@ -10,11 +10,16 @@
   - [Run project](#run-project)
   - [Project Structure](#project-structure)
   - [Migrations](#migrations)
-  - [Dependencies](#dependencies)
-  - [Coding Standard](#coding-standard)
+  - [Library update](#library-update)
   - [Testing](#testing)
 - [Versioning](#versioning)
+  - [Contribution](#contribution)
+  - [Contribution process in details](#contribution-process-in-details)
+  - [Branch consistency across repositories](#branch-consistency-across-repositories)
 - [Deployment](#deployment)
+- [Internationalization](#internationalization)
+  - [Add new language](#add-new-language)
+  - [Update an existing language](#update-an-existing-language)
 - [Documentation](#documentation)
 - [Other useful links](#other-useful-links)
 
@@ -37,17 +42,17 @@ Running project on local machine for development and testing purposes.
 - [WordPress](https://wordpress.org/)
 - [WooCommerce](https://woocommerce.com)
 - [WooCommerce Subscriptions](https://woocommerce.com/document/subscriptions/)*
-- [Docker Desktop](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/) _(is part of Docker Desktop)_
 
 ###### * *WooCommerce Subscriptions must be installed if you need to deal with recurring payments.*
 
 ### Instalation
 
-### Run project
-
 For local project execution, first install WordPress and WooCommerce, then upload and configure the plugin by following the steps below:
-1. Copy the plugin files to the '/wp-content/plugins/' directory, or install the plugin through the WordPress plugins screen directly.
+1. Clone GitHub repository to your local machine.
+2. Copy the plugin files to the '/wp-content/plugins/' directory, or install the plugin through the WordPress plugins screen directly.
+
+### Run project
+1. Once the plugin is installed to the project, proceed with activating and performing basic configuration.
 2. Activate the plugin through the Plugins screen in WordPress.
 3. Configure the plugin by providing goid, client id and secret to load the other options (follow these [steps](https://help.gopay.com/en/knowledge-base/gopay-account/gopay-business-account/signing-in-password-reset-activating-and-deactivating-the-payment-gateway/how-to-activate-the-payment-gateway) to activate the payment gateway and get goid, client id and secret).
 4. Finally, choose the options you want to be available in the payment gateway (payment methods and banks must be enabled in your GoPay account).
@@ -66,51 +71,37 @@ For local project execution, first install WordPress and WooCommerce, then uploa
 
 ### Migrations
 
-### Dependencies
-
-Use Composer inside Docker container to install or upgrade dependencies.
-
-Run docker-compose.
-
+### Library update
+1. Open Terminal: Navigate to your project directory using Terminal.
+2. Run composer update command for the library: Use the following command, replacing 'library-name' with the actual name of the library you want to update:
 ```sh
-make run-dev
+$ composer update vendor/library-name
 ```
-
-Run update.
-
+For example:
 ```sh
-make update
+$ composer update guzzlehttp/guzzle
 ```
+Command will update the specified library to the latest version.
 
-See `makefile` for more commands.
-
-### Coding Standard
-
-The project contains [WordPress Coding Standards for PHP_CodeSniffer](https://github.com/WordPress/WordPress-Coding-Standards). Use Docker container to check code.
-
-Run docker-compose.
-
-```sh
-make run-dev
-```
-
-Check and fix code.
-
-```sh
-make format-check
-```
-
-```sh
-make format-fix
-```
-
-See `makefile` for more commands.
+3. Review changes: After running the composer update command, review the changes made to your composer.lock file and your vendor directory. The composer.lock file will contain the exact versions of all libraries and dependencies installed in your project.
+4. Test plugin: Once the libraries are updated, it's essential to thoroughly test the plugin to ensure that everything is working as expected with the updated dependencies.
+5. Commit changes: Don't forget to commit the changes to composer.json, composer.lock, and vendor directory after updating library.
+6. Update README (if necessary): If any significant changes occur due to the library updates, make sure to update your README file to reflect those changes. This could include new dependencies, updated requirements, or any other relevant information.
 
 ### Testing
+1. Perform test transactions: Execute a variety of test transactions using different scenarios. Access the URL provided for all product [requirements](https://argo22.atlassian.net/wiki/spaces/GPY020/pages/2932703233/Product+requirements). Verify that the plugin handles each scenario appropriately and provides accurate behaviour to the end-user.
+2. Exploring the utilization of monitoring plugins like [Query Monitor](https://wordpress.org/plugins/query-monitor), [Debug Log Manager](https://wordpress.org/plugins/debug-log-manager) or other viable alternatives is recommended, given their substantial utility in debugging scenarios.
+3. Check order processing: After completing test transactions, verify that orders are processed correctly within WooCommerce. Ensure that order details, payment statuses, and transaction logs are accurately recorded and reflected in the WooCommerce dashboard.
+4. Inspect and review the `debug.log` file within your project directory. The log file often contains valuable information regarding errors, warnings, and other debug messages generated during the testing process. Pay close attention to any entries related to the functionality being tested.
+5. In the Wordpress admin panel, navigate to the GoPay gateway's Log section for comprehensive transaction insights. This dedicated Log section provides detailed records of all transactions processed through the GoPay gateway, offering valuable insights into payment statuses, transaction IDs, timestamps, and any potential errors encountered during the payment process.
+6. Test compatibility: Ensuring compatibility with WooCommerce is our primary objective during the development and testing phases of the plugin. However, due to the diverse ecosystem of WordPress plugins and the unique configurations that users may employ, we cannot guarantee seamless compatibility with every plugin or user setting.
+7. Review error handling: Test the plugin's error handling capabilities by deliberately triggering errors, such as invalid payment credentials or network timeouts. Verify that error messages are clear, expected and guide users toward resolution steps.
+8. Test results: Take note of the findings from your testing, specifically regarding any encountered issues like unexpected behaviors, warnings, errors, deprecated functions, identified bugs and implemented solutions. Maintain comprehensive your test notes for future reference and troubleshooting.
 
 ## Versioning
 
 This plugin uses [SemVer](http://semver.org/) for versioning scheme.
+To initiate a new version release, navigate to the `gopay-gateway.php` file. Here, update the current plugin version and ensure compatibility with the latest WooCommerce release by adjusting the minimum required and maximum tested versions accordingly. Subsequently, proceed to update the `readme.txt` file with the revised plugin version and provide a summary of the changes in the patch notes section.
 
 ### Contribution
 
@@ -127,24 +118,16 @@ This plugin uses [SemVer](http://semver.org/) for versioning scheme.
 5. Upload to staging for testing.
 6. When the feature is tested and approved on staging, pull you changes to master.
 
-## Deployment
+### Branch consistency across repositories
+After implementing all alterations and updating the version, it is necessary to synchronize these updates with the GoPay GitHub repository. Ensure our repository mirrors any supplementary changes made by GoPay. Should there be new changes, perform the synchronization using the provided terminal command:
+```sh
+$ git push <remote> <source>:<destination>
+```
+- `remote`: This specifies the remote repository where you want to push your changes. This points to a remote Git repository, often hosted on a GitHub platform. The remote address, which should follow the format `git@github.com:organization/example-repository.git`, can be fetched from SSH GitHub.
+- `source`: This represents the local branch you want to push to the remote repository. If you're using "development" as the source, it means you want to push the changes from the local "development" branch to the remote repository.
+- `destination`: This denotes the branch in the remote repository where you want to push your changes. Since you're also using "development" as the destination branch, it means you are pushing changes from the local "development" branch to the remote "development" branch.
 
-This plugin uses [Git Updater](https://github.com/afragen/git-updater/) to manage updates.
-
-Before deploy change Version in the `woocommerce-gopay.php`, then commit & push. Staging site uses staging branch.
-
-To fetch the new update:
-
-- Git Updater:
-  1) Log into WP admin.
-  2) Go to Settings > Git Updater
-  3) Click Refresh Cache
-  4) Go to Plugins and Update plugin
-- WP checks for new version every 12 hours based on the latest versions hosted on WordPress.org.
-- You can force the update on the plugin's page by using the "Check for updates" action.
-- Or you can download the latest version from the [GitHub repository](https://github.com/argo22packages/gopay-woocommerce-integration) and install it manually by clicking on "Add New" and "Upload Plugin".
-
-## Internationalization
+Upon completing synchronization, proceed to push the changes to the GoPay repository using the same terminal command, making sure to modify the `remote` and specify the `source` and `destination`.
 
 ### Add new language
 
@@ -153,7 +136,3 @@ Create a new file inside the languages folder and name it with the plugin's name
 ### Update an existing language
 
 Open the translation file with [PoEdit](https://poedit.net) and use the interface to update an existing translation. Alternatively, the translation file can be opened on any text editor and for each msgid (orignal phrase) change the msgstr to the new translated phrase. In both alternatives the updated file must be compiled using any tool for po to mo conversion.
-
-## Documentation
-
-## Other useful links

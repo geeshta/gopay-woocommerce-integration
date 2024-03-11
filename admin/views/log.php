@@ -19,7 +19,7 @@ $rows = $wpdb->get_results(
                 REGEXP '[\w\W]*%s[\w\W]*'",
 		$wpdb->prefix,
 		GOPAY_GATEWAY_LOG_TABLE_NAME,
-		strtoupper( $log_table_filter )
+        $log_table_filter !== null ? strtoupper($log_table_filter) : null
 	)
 );
 
@@ -38,7 +38,7 @@ $log_data        = $page_pagination >= 0 ? $wpdb->get_results(
                 REGEXP '[\w\W]*%s[\w\W]*' ORDER BY created_at DESC LIMIT %d,%d",
 		$wpdb->prefix,
 		GOPAY_GATEWAY_LOG_TABLE_NAME,
-		strtoupper( $log_table_filter ),
+		$log_table_filter !== null ? strtoupper($log_table_filter) : null,
 		$page_pagination,
 		$results_per_page
 	)
