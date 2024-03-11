@@ -12,6 +12,6 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         },
-        "platform-check": false
+        "platform-check": true
     }
 }
