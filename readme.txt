@@ -4,7 +4,7 @@ Tags: WooCommerce, GoPay
 Requires at least: 5.8
 Tested up to: 6.4
 Requires PHP: 8.1
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,3 +88,6 @@ Removed Docker files and updated readme-dev
 
 = 1.0.8 =
 Add HPOS support
+
+= 1.0.9 =
+Fix transport method settings for downloadable products
