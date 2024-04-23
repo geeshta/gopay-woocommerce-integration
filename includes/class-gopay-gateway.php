@@ -608,11 +608,11 @@ function init_gopay_gateway_gateway() {
 				}
 				// end check currency.
 
-				// Check if all products are either virtual or downloadable.
+				// Check if all products are both virtual and downloadable.
 				$all_virtual_downloadable = true;
 				foreach ( WC()->cart->get_cart() as $item ) {
 					$product = $item["data"];
-					if ( ! $product->is_virtual() && ! $product->is_downloadable() ) {
+					if ( ! $product->is_virtual() || ! $product->is_downloadable() ) {
 						$all_virtual_downloadable = false;
 						break;
 					}
