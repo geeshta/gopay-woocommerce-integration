@@ -370,17 +370,28 @@ class Gopay_Gateway_Options {
 			return array();
 		}
 
-		return array_reduce(
-			WC()->shipping->load_shipping_methods(),
-			function ( $supported_shipping_methods, $shipping_method ) {
-				$supported_shipping_methods[ $shipping_method->id ] = __(
-					$shipping_method->get_method_title(),
-					'gopay-gateway'
-				);
-				return $supported_shipping_methods;
-			},
-			array()
-		);
+		// Get all shipping zones
+		$shipping_zones = WC_Shipping_Zones::get_zones();
+		$all_enabled_shipping_methods = array();
+	
+		foreach ($shipping_zones as $zone_data) {
+			$zone = WC_Shipping_Zones::get_zone($zone_data['zone_id']);
+	
+			// Get enabled shipping methods for zone
+			$enabled_shipping_methods = $zone->get_shipping_methods(true);
+	
+			foreach ($enabled_shipping_methods as $shipping_method) {
+				// Check if the method is already added
+				if (!isset($all_enabled_shipping_methods[$shipping_method->id])) {
+					$all_enabled_shipping_methods[$shipping_method->id] = __(
+						$shipping_method->get_method_title(),
+						'gopay-gateway'
+					);
+				}
+			}
+		}
+	
+		return $all_enabled_shipping_methods;
 	}
 
 	/**
