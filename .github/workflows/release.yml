@@ -1,0 +1,22 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Package plugin
+        run: |
+          mkdir -p gopay-gateway
+          rsync -av --exclude='gopay-gateway' . gopay-gateway/
+          zip -r gopay-gateway.zip gopay-gateway
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gopay-gateway.zip
