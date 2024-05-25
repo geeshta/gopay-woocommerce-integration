@@ -15,8 +15,8 @@ jobs:
         run: |
           mkdir -p gopay-gateway
           rsync -av --exclude='gopay-gateway' . gopay-gateway/
-          zip -r gopay-gateway.zip gopay-gateway
+          zip -r gopay-gateway-${{ github.ref }}.zip gopay-gateway
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: gopay-gateway.zip
+          files: gopay-gateway-${{ github.ref }}.zip
