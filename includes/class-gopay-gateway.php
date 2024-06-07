@@ -956,7 +956,7 @@ function init_gopay_gateway_gateway() {
                     __( 'You can only issue a partial refund 24 hours after the payment.', 'gopay-gateway' ) );
 			}
 
-			$transaction_id = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
+			$transaction_id = $order->get_meta( 'GoPay_Transaction_id', true );
 			$response       = Gopay_Gateway_API::refund_payment( $transaction_id, $amount * 100 );
 			$status         = Gopay_Gateway_API::get_status( $order_id );
 

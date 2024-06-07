@@ -94,3 +94,6 @@ Fix transport method settings for downloadable products
 
 = 1.0.10 =
 Fix available supported shipping methods in plugin configuration
+
+= 1.0.11 =
+Replace get_post_meta with get_meta to fully leverage the performance benefits of HPOS and prevent issues with payment refunds if compatibility mode is disabled.

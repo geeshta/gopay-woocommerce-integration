@@ -442,9 +442,10 @@ class Gopay_Gateway_API {
 	 * @since  1.0.0
 	 */
 	public static function get_status( int $order_id ): Response {
+		$order                = wc_get_order( $order_id );
 		$options              = get_option( 'woocommerce_' . GOPAY_GATEWAY_ID . '_settings' );
 		$gopay                = self::auth_gopay( $options );
-		$gopay_transaction_id = get_post_meta( $order_id, 'GoPay_Transaction_id', true );
+		$gopay_transaction_id = $order->get_meta( 'GoPay_Transaction_id', true );
 		$response             = $gopay->getStatus( $gopay_transaction_id );
 
 		return $response;
