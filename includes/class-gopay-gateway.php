@@ -1016,6 +1016,11 @@ function init_gopay_gateway_gateway() {
 			$gopay_api = filter_input( INPUT_GET, 'gopay-api' );
 			$id        = filter_input( INPUT_GET, 'id' );
 			if ( $gopay_api && $id ) {
+				static $has_run = false;
+				if ($has_run) {
+					return;
+				}
+				$has_run = true;
 				Gopay_Gateway_API::check_payment_status( $id );
 			}
 		}
